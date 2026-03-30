@@ -1,0 +1,2017 @@
+\documentclass[12pt,a4paper]{article}
+
+% Поддержка русского языка
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+
+\usepackage{tikz}
+\usetikzlibrary{hobby, arrows.meta}
+\usetikzlibrary{decorations.pathreplacing}
+% Современный шрифт, поддерживающий кириллицу (Charter)
+\usepackage{XCharter}
+
+% Математика
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+
+% Улучшенный межстрочный интервал
+\usepackage{setspace}
+\onehalfspacing
+
+% Настройка полей страницы
+\usepackage{geometry}
+\geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
+
+% --- Настройка современных пастельных цветов (HEX) ---
+\usepackage{xcolor}
+% Цвета для определений (сtиний)
+\definecolor{defbg}{HTML}{F0F8FF}    % Очень светлый голубой фон
+\definecolor{defframe}{HTML}{5DADE2} % Мягкий синий для акцента
+
+% Цвета для теорем (зеленый)
+\definecolor{thmbg}{HTML}{F4FCF4}    % Очень светлый мятный фон
+\definecolor{thmframe}{HTML}{7DCEA0} % Мягкий зеленый для акцента
+
+% Цвета для лемм (желтый/оранжевый)
+\definecolor{lembg}{HTML}{FFF9F0}    % Кремовый фон
+\definecolor{lemframe}{HTML}{F5B041} % Мягкий оранжевый для акцента
+
+% Цвета для примеров (серый)
+\definecolor{exbg}{HTML}{F8F9F9}     % Светло-серый фон
+\definecolor{exframe}{HTML}{BFC9CA}  % Пепельно-серый для акцента
+
+% Цвета для текста и ссылок
+\definecolor{darkblue}{HTML}{154360}
+
+% --- Настройка tcolorbox в современном стиле "Material Design" ---
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+
+% Общие настройки для всех блоков (скрываем рамку, делаем полосу слева)
+\tcbset{
+    modernbox/.style={
+        enhanced,
+        breakable,
+        frame hidden,
+        boxrule=0pt,
+        arc=2mm,
+        top=3mm, bottom=3mm, left=4mm, right=4mm,
+        fonttitle=\bfseries\sffamily,
+        coltitle=black!80,
+        attach title to upper={\vspace{0.5em}\par}, % Заголовок внутри блока над текстом
+    }
+}
+
+% Определение
+\newtcbtheorem{Definition}{Определение}{
+    modernbox,
+    colback=defbg,
+    borderline west={3pt}{0pt}{defframe},
+    coltitle=defframe!60!black
+}{def}
+
+% Теорема
+\newtcbtheorem{Theorem}{Теорема}{
+    modernbox,
+    colback=thmbg,
+    borderline west={3pt}{0pt}{thmframe},
+    coltitle=thmframe!60!black
+}{thm}
+
+% Лемма
+\newtcbtheorem{Lemma}{Лемма}{
+    modernbox,
+    colback=lembg,
+    borderline west={3pt}{0pt}{lemframe},
+    coltitle=lemframe!60!black
+}{lem}
+
+% Пример
+\newtcolorbox{Example}[1][]{
+    modernbox,
+    colback=exbg,
+    borderline west={3pt}{0pt}{exframe},
+    title=\textbf{Пример(ы) #1},
+    coltitle=exframe!60!black
+}
+
+% Среда для доказательств (делаем курсивный заголовок и небольшой отступ слева)
+\newenvironment{Proof}[1][Доказательство]{\vspace{0.5em}\noindent\textit{#1.}\hspace{0.5em}\ignorespaces}{\hfill$\blacksquare$\vspace{1em}}
+
+% Красивые гиперссылки
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkblue,
+    filecolor=magenta,      
+    urlcolor=darkblue,
+    pdftitle={Конспект по теории меры},
+}
+\begin{document}
+Если заметили ошибку пишите в tg: @fadmar
+\tableofcontents
+\section{§ Система множеств, алгебра, $\sigma$-алгебра, кольца}
+
+\begin{Definition}{Симметричная система}{}
+Система множеств $\mathcal{U}$ называется \textbf{симметричной}, если из того, что $A \in \mathcal{U}$, следует, что $A^c \in \mathcal{U}$ (где $A^c$ — дополнение множества $A$).
+\end{Definition}
+
+\begin{Example}
+\begin{itemize}
+    \item $\mathcal{U} = 2^X$ — булеан (множество всех подмножеств множества $X$).
+    \item $\mathcal{U} = \{\emptyset, X\}$.
+    \item $\mathcal{U}$ — множество всех ограниченных множеств в $\mathbb{R}$ и их дополнений.
+\end{itemize}
+\end{Example}
+
+\begin{Theorem}{Эквивалентность свойств в симметричной системе}{}
+Пусть $\mathcal{U}$ — симметричная система множеств. Тогда справедливы следующие эквивалентности:
+$$ \sigma_0 \Leftrightarrow \delta_0, \quad \sigma \Leftrightarrow \delta $$
+где свойства определяются следующим образом:
+\begin{align*}
+    \sigma_0 &: A, B \in \mathcal{U} \Rightarrow A \cup B \in \mathcal{U} \\
+    \delta_0 &: A, B \in \mathcal{U} \Rightarrow A \cap B \in \mathcal{U} \\
+    \sigma &: A_i \in \mathcal{U}, \; i \in \{1, 2, \dots\} \Rightarrow \bigcup_{i=1}^{\infty} A_i \in \mathcal{U} \\
+    \delta &: A_i \in \mathcal{U}, \; i \in \{1, 2, \dots\} \Rightarrow \bigcap_{i=1}^{\infty} A_i \in \mathcal{U}
+\end{align*}
+\end{Theorem}
+
+\begin{Proof}
+Докажем импликацию $\sigma_0 \Rightarrow \delta_0$. Пусть $A, B \in \mathcal{U}$. 
+По законам де Моргана справедливо равенство:
+$$ A \cap B = (A^c \cup B^c)^c $$
+Так как система $\mathcal{U}$ симметрична, множества $A^c$ и $B^c$ принадлежат $\mathcal{U}$. Из свойства $\sigma_0$ следует, что их объединение $(A^c \cup B^c)$ также принадлежит $\mathcal{U}$. Вновь применяя свойство симметричности, получаем, что дополнение этого объединения, то есть $(A^c \cup B^c)^c$, принадлежит $\mathcal{U}$. Следовательно, $A \cap B \in \mathcal{U}$.
+
+Остальные эквивалентности доказываются аналогичным образом путём перехода к дополнениям (дальнейшее очевидно).
+\end{Proof}
+
+\begin{Definition}{Алгебра и $\sigma$-алгебра}{}
+Непустая симметричная система множеств $\mathcal{U}$ называется \textbf{алгеброй} (соответственно, \textbf{$\sigma$-алгеброй}), если $\mathcal{U}$ обладает любым из равносильных свойств: $\sigma_0 \Leftrightarrow \delta_0$ (соответственно, $\sigma \Leftrightarrow \delta$).
+\end{Definition}
+
+\begin{Example}[и контрпример]
+Рассмотрим систему множеств $\mathcal{U}$, состоящую из всех ограниченных подмножеств $\mathbb{R}$ и их дополнений. Это семейство является \textbf{алгеброй}, но \textbf{не является $\sigma$-алгеброй}.
+
+\textbf{Обоснование:} Пусть $A_n = [n, n+1]$. Каждое $A_n$ ограничено, а значит $A_n \in \mathcal{U}$. Однако их счетное объединение:
+$$ \bigcup_{n=1}^{\infty} [n, n+1] = [1, +\infty) $$
+не принадлежит $\mathcal{U}$, так как множество $[1, +\infty)$ не является ограниченным, и его дополнение $(-\infty, 1)$ также не ограничено в $\mathbb{R}$.
+\end{Example}
+
+\begin{Lemma}{Свойства алгебры и $\sigma$-алгебры}{}
+Пусть $\mathcal{U}$ — алгебра (или $\sigma$-алгебра) подмножеств базового множества $X$. Тогда выполняются следующие свойства:
+\begin{enumerate}
+    \item $\emptyset \in \mathcal{U}, \; X \in \mathcal{U}$.
+    \item $A, B \in \mathcal{U} \Rightarrow A \setminus B \in \mathcal{U}$.
+    \item Всякая $\sigma$-алгебра является алгеброй.
+\end{enumerate}
+\end{Lemma}
+
+\begin{Proof} \\
+1) Так как $\mathcal{U}$ непустая, то $\exists A \in \mathcal{U} \Rightarrow A^c \in \mathcal{U}$. \\
+Тогда $A \cap A^c = \emptyset \in \mathcal{U}$. \\
+Следовательно, $\emptyset^c = X \in \mathcal{U}$.
+
+2) $A \setminus B = A \cap B^c \in \mathcal{U}$ (так как $B^c \in \mathcal{U}$ и алгебра замкнута относительно пересечений).
+
+3) Очевидно (по определению $\sigma$-алгебры).
+\end{Proof}
+
+\begin{Lemma}{О пересечении семейства алгебр}{}
+Пусть $\mathcal{U}_\alpha, \; \alpha \in \mathcal{A}$ — семейство алгебр (или $\sigma$-алгебр), являющихся подмножествами $2^X$. Тогда их пересечение $\bigcap\limits_{\alpha \in \mathcal{A}} \mathcal{U}_\alpha$ также является алгеброй (или $\sigma$-алгеброй).
+\end{Lemma}
+
+\begin{Proof}
+1) $\emptyset \in \mathcal{U}_\alpha \Rightarrow \emptyset \in \bigcap\limits_{\alpha \in \mathcal{A}} \mathcal{U}_\alpha$.
+
+2) ($A \in \bigcap\limits_{\alpha \in \mathcal{A}} \mathcal{U}_\alpha \Rightarrow (\forall \alpha \in \mathcal{A} : A \in \mathcal{U}_\alpha) \Rightarrow (\forall \alpha \in \mathcal{A} : A^c \in \mathcal{U}_\alpha) \Rightarrow A^c \in \bigcap\limits_{\alpha \in \mathcal{A}} \mathcal{U}_\alpha$.
+
+3) $A, B \in \bigcap\limits_{\alpha \in \mathcal{A}} \mathcal{U}_\alpha \Rightarrow (\forall \alpha \in \mathcal{A} : A, B \in \mathcal{U}_\alpha) \Rightarrow (\forall \alpha \in \mathcal{A} : A \cup B \in \mathcal{U}_\alpha) \Rightarrow A \cup B \in \bigcap\limits_{\alpha \in \mathcal{A}} \mathcal{U}_\alpha$.
+\end{Proof}
+
+\begin{Theorem}{О существовании минимальной $\sigma$-алгебры}{}
+Для любой системы подмножеств $\mathcal{E}$ множества $X$ существует минимальная $\sigma$-алгебра, содержащая все элементы $\mathcal{E}$.
+\end{Theorem}
+
+\begin{Proof}
+Существует $\mathcal{U} = 2^X$ — $\sigma$-алгебра, содержащая все элементы $\mathcal{E}$. Согласно предыдущей лемме, искомая минимальная $\sigma$-алгебра — это пересечение всех $\sigma$-алгебр, содержащих все элементы $\mathcal{E}$.
+\end{Proof}
+
+\begin{Definition}{Борелевская оболочка}{}
+Минимальная $\sigma$-алгебра из предыдущей теоремы называется \textbf{борелевской оболочкой} системы множеств $\mathcal{E}$ и обозначается $\mathcal{B}(\mathcal{E})$.
+\end{Definition}
+
+% ==========================================
+
+\begin{Definition}{Кольцо и $\sigma$-кольцо}{}
+\textbf{Кольцом} $\mathcal{K}$ подмножеств множества $X$ называется непустая система множеств, замкнутая относительно объединения, пересечения и разности.
+
+Кольцо $\mathcal{K}$ называется \textbf{$\sigma$-кольцом} (или \textbf{$\delta$-кольцом}), если оно замкнуто относительно объединения (или пересечения) не более чем счётного числа множеств.
+\end{Definition}
+
+\begin{Example}
+Пусть $X = \{a, b\}$. Тогда $\mathcal{K} = \{\emptyset, \{a\}\}$ — кольцо.
+\end{Example}
+
+\begin{Lemma}{Свойства кольца}{}
+1) $\emptyset \in \mathcal{K}$. \\
+2) Кольцо $\mathcal{K}$ является алгеброй $\Leftrightarrow X \in \mathcal{K}$.
+\end{Lemma}
+
+\begin{Proof}
+1) Пусть $A \in \mathcal{K}$. Тогда $A \setminus A = \emptyset \in \mathcal{K}$. \\
+2) Очевидно (из определений кольца и алгебры).
+\end{Proof}
+
+\section{§ Полукольцо и его свойства}
+
+\begin{Definition}{Полукольцо}{}
+Система подмножеств $\mathcal{P}$ множества $X$ называется \textbf{полукольцом}, если:
+\begin{enumerate}
+    \item $\emptyset \in \mathcal{P}$
+    \item $A, B \in \mathcal{P} \Rightarrow A \cap B \in \mathcal{P}$
+    \item $A, B \in \mathcal{P} \Rightarrow A \setminus B = \bigsqcup\limits_{i=1}^n Q_i$, где $Q_i \in \mathcal{P}$ (конечное дизъюнктное объединение).
+\end{enumerate}
+\end{Definition}
+
+\begin{Example}
+Система полуинтервалов $[a, b)$, где $a \le b$ — образует полукольцо. (Можно считать, что $a, b \in \mathbb{Q}$).
+\end{Example}
+
+\begin{Lemma}{О дизъюнктном представлении объединения («про нарезку»)}{}
+Пусть $A_i$ — последовательность множеств. Тогда их объединение можно представить в виде дизъюнктного объединения:
+$$ \bigcup_{i=1}^{\infty} A_i = \bigsqcup_{i=1}^{\infty} \left( A_i \setminus \bigcup_{j=0}^{i-1} A_j \right), \quad \text{где } A_0 = \emptyset $$
+\end{Lemma}
+
+\begin{Proof}
+Обозначим $B_i = A_i \setminus \bigcup_{j=0}^{i-1} A_j$. Докажем, что $B_i$ дизъюнктны. \\
+Пусть $\exists i > k$. Тогда $B_k \subset A_k$. По построению $B_i \cap A_k = \emptyset$, следовательно, $B_i \cap B_k = \emptyset$.
+
+Докажем равенство множеств: включение $\bigcup B_i \subset \bigcup A_i$ очевидно. \\
+В обратную сторону: пусть $x \in \bigcup_{i=1}^{\infty} A_i$. Значит, существует наименьший индекс $i_0$ такой, что $x \in A_{i_0}$. По определению множества $B_{i_0}$, $x$ не принадлежит предыдущим $A_j$, а значит $x \in B_{i_0}$. Включение доказано.
+\end{Proof}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.1, >=latex]
+    % --- Определение пастельных цветов ---
+    \definecolor{blobB1}{HTML}{5DADE2} 
+    \definecolor{blobB2}{HTML}{AED6F1} 
+    \definecolor{blobB3}{HTML}{EBF5FB} 
+    \definecolor{darktext}{HTML}{154360} 
+
+    % --- Слой 3 (самый большой, B3) ---
+    \filldraw[fill=blobB3, draw=darktext, thick] plot [smooth cycle, tension=0.7] coordinates {
+        (0, 3) (2.5, 2.5) (3.5, 0) (3, -2) (0, -2.8) (-3, -2) (-3.5, 0) (-2.5, 2.5)
+    };
+
+    % --- Слой 2 (средний, B2) ---
+    \filldraw[fill=blobB2, draw=darktext, thick] plot [smooth cycle, tension=0.7] coordinates {
+        (0, 2) (1.8, 1.3) (2.3, 0) (1.6, -1.4) (0, -2) (-1.6, -1.4) (-2.3, 0) (-1.8, 1.3)
+    };
+
+    % --- Слой 1 (центр, B1) ---
+    \filldraw[fill=blobB1, draw=darktext, thick] plot [smooth cycle, tension=0.7] coordinates {
+        (0, 1) (1, 0.7) (1.4, 0) (1, -0.7) (0, -1) (-1, -0.7) (-1.4, 0) (-1, 0.7)
+    };
+
+    % --- Подписи исходных множеств A_i (снаружи) ---
+    \node[darktext, font=\bfseries] (A3) at (4.5, 1.5) {$A_3$};
+    \draw[->, darktext, thick] (A3) -- (3.2, 1);
+
+    \node[darktext, font=\bfseries] (A2) at (3.5, 2.8) {$A_2$};
+    \draw[->, darktext, thick] (A2) -- (2.2, 1.5);
+
+    \node[darktext, font=\bfseries] (A1) at (2.2, 3.2) {$A_1$};
+    \draw[->, darktext, thick] (A1) -- (1.2, 0.8);
+
+    % --- Подписи дизъюнктных кусков B_i (внутри) ---
+    \node[darktext, font=\Large\bfseries] at (0, 0) {$B_1$};
+    \node[darktext, font=\Large\bfseries] at (0, -1.5) {$B_2$};
+    \node[darktext, font=\Large\bfseries] at (0, -2.4) {$B_3$};
+
+    % --- Легенда снизу ---
+    \node[darktext, align=left, anchor=north] at (0, -3.2) {
+        $B_1 = A_1$  \\
+        $B_2 = A_2 \setminus A_1$  \\
+        $B_3 = A_3 \setminus (A_1 \cup A_2)$ 
+    };
+\end{tikzpicture}
+\end{center}
+
+\begin{Theorem}{Свойства полукольца}{}
+Пусть $P, P_1, \dots, P_n \in \mathcal{P}$, где $\mathcal{P}$ — полукольцо. Тогда:
+\begin{enumerate}
+    \item $P \setminus \bigcup\limits_{i=1}^n P_i = \bigsqcup\limits_{i=1}^m Q_i$, где $Q_i \in \mathcal{P}$.
+    \item $\bigcup\limits_{i=1}^n P_i = \bigsqcup\limits_{i=1}^n \bigsqcup\limits_{j=1}^m Q_{ij}$, где $Q_{ij} \in \mathcal{P}$ и $Q_{ij} \subset P_i$.
+    \item В пункте 2 число множеств $n$ может быть равно $\infty$.
+\end{enumerate}
+\end{Theorem}
+
+\begin{Proof}
+\textbf{1) Индукция по $n$:} \\
+\textit{База:} Для $n=1$ следует из определения полукольца. \\
+\textit{Индукционный переход (от $n$ к $n+1$):}
+$$ P \setminus \bigcup_{i=1}^{n+1} P_i = \left( P \setminus \bigcup_{i=1}^n P_i \right) \setminus P_{n+1} = \left( \bigsqcup_{j=1}^k Q_j \right) \setminus P_{n+1} = \bigsqcup_{j=1}^k (Q_j \setminus P_{n+1}) = \bigsqcup_{j=1}^k \bigsqcup_{l=1}^m Q_{jl} $$
+где $Q_{jl} \in \mathcal{P}$.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.3, >=latex]
+    % --- Определение пастельных цветов ---
+    \definecolor{colorP}{HTML}{EBF5FB}     % Светло-голубой для оставшейся части (Q_i)
+    \definecolor{colorSub}{HTML}{FADBD8}   % Светло-красный для вырезаемых P_i
+    \definecolor{darktext}{HTML}{154360}   % Темно-синий для текста и линий
+
+    % 1. Рисуем базовый большой прямоугольник P (сначала заливаем всё голубым)
+    \filldraw[fill=colorP, draw=darktext, thick] (0,0) rectangle (6,4);
+    
+    % 2. Вырезаем (закрашиваем красным) прямоугольники P1 и P2
+    \filldraw[fill=colorSub, draw=darktext, thick] (1,1) rectangle (3,3);
+    \filldraw[fill=colorSub, draw=darktext, thick] (2,2) rectangle (5,3.5);
+    
+    % Обводим контуры P1 и P2 еще раз, чтобы граница была четкой
+    \draw[darktext, thick] (1,1) rectangle (3,3);
+    \draw[darktext, thick] (2,2) rectangle (5,3.5);
+
+    % 3. Делаем "нарезку" пунктирными линиями.
+    % Продлеваем стороны P1 и P2 до краев большого прямоугольника P
+    
+    % Вертикальные разрезы
+    \draw[dashed, darktext] (1,0) -- (1,4);
+    \draw[dashed, darktext] (2,0) -- (2,4);
+    \draw[dashed, darktext] (3,0) -- (3,4);
+    \draw[dashed, darktext] (5,0) -- (5,4);
+
+    % Горизонтальные разрезы
+    \draw[dashed, darktext] (0,1) -- (6,1);
+    \draw[dashed, darktext] (0,2) -- (6,2);
+    \draw[dashed, darktext] (0,3) -- (6,3);
+    \draw[dashed, darktext] (0,3.5) -- (6,3.5);
+
+    % --- Подписи множеств ---
+    
+    % Подписываем вырезанные множества
+    \node[darktext, font=\Large\bfseries] at (1.5, 2.5) {$P_1$};
+    \node[darktext, font=\Large\bfseries] at (4, 2.75) {$P_2$};
+    
+    % Подписываем сам прямоугольник P
+    \node[darktext, font=\Large\bfseries, above right] at (0,4) {$P$};
+
+    % Расставляем подписи для оставшихся "кусочков" Q_j (голубая зона)
+    \node[darktext] at (0.5, 0.5) {$Q_1$};
+    \node[darktext] at (1.5, 0.5) {$Q_2$};
+    \node[darktext] at (2.5, 0.5) {$Q_3$};
+    \node[darktext] at (4.0, 0.5) {$Q_4$};
+    \node[darktext] at (5.5, 0.5) {$Q_5$};
+    
+    \node[darktext] at (0.5, 1.5) {$Q_6$};
+    \node[darktext] at (4.0, 1.5) {$Q_7$};
+    \node[darktext] at (5.5, 1.5) {$Q_8$};
+    
+    \node[darktext] at (0.5, 2.5) {$Q_9$};
+    \node[darktext] at (5.5, 2.5) {$Q_{10}$};
+    
+    \node[darktext] at (0.5, 3.25) {$\dots$};
+    \node[darktext] at (1.5, 3.25) {$Q_k$};
+    \node[darktext] at (5.5, 3.75) {$Q_m$};
+
+    % --- Легенда снизу ---
+    \node[darktext, align=left, anchor=north] at (3, -0.2) {
+        $P \setminus (P_1 \cup P_2) = \bigsqcup\limits_{j=1}^m Q_j$ \\
+        \small Оставшаяся площадь (голубая) разбивается на конечную сетку \\
+        \small из непересекающихся прямоугольников $Q_j \in \mathcal{P}$.
+    };
+\end{tikzpicture}
+\end{center}
+
+\textbf{2) Применяем лемму «про нарезку»:}
+$$ \bigcup_{i=1}^n P_i = \bigsqcup_{i=1}^n \left( P_i \setminus \bigcup_{j=0}^{i-1} P_j \right) $$
+где $P_0 = \emptyset$. По доказанному пункту 1, разность в скобках можно представить как дизъюнктное объединение элементов полукольца:
+$$ P_i \setminus \bigcup_{j=0}^{i-1} P_j = \bigsqcup_{j=1}^{m_i} Q_{ij}, \quad \text{где } Q_{ij} \in \mathcal{P}, \; Q_{ij} \subset P_i $$
+Отсюда следует требуемое равенство.
+\end{Proof}
+
+\begin{Lemma}{Об упрощении структуры объединения}{}
+Пункт 2 предыдущей теоремы можно упростить до вида: $\bigcup\limits_{i=1}^n P_i = \bigsqcup\limits_{j=1}^m Q_j$, причем для любой пары $(i, j)$ справедливо: либо $Q_j \subset P_i$, либо $Q_j \cap P_i = \emptyset$.
+\end{Lemma}
+
+\begin{Proof}
+Доказывается по индукции. Для двух множеств:
+$$ P_1 \cup P_2 = (P_1 \setminus P_2) \cup (P_1 \cap P_2) \cup (P_2 \setminus P_1) = \left( \bigsqcup\limits_{j=1}^{n_1} Q_j \right) \sqcup (P_1 \cap P_2) \sqcup \left( \bigsqcup\limits_{j=1}^{n_2} Q'_j \right) $$
+Все эти элементы лежат в полукольце и попарно не пересекаются.
+\end{Proof}
+
+\section{§ Объём и его свойства}
+
+\begin{Definition}{Объём}{}
+Функция $\varphi : \mathcal{P} \to [0, +\infty]$ называется \textbf{объёмом}, если:
+\begin{enumerate}
+    \item $\varphi(\emptyset) = 0$
+    \item Если $A, B \in \mathcal{P}$ и их дизъюнктное объединение $A \sqcup B \in \mathcal{P}$, то $\varphi(A \sqcup B) = \varphi(A) + \varphi(B)$.
+\end{enumerate}
+\end{Definition}
+
+\begin{Example}
+\begin{enumerate}
+    \item Пусть $\mathcal{P}$ — полукольцо полуинтервалов $[a, b)$. Функция $\varphi([a, b)) = b - a$ является объёмом (\textbf{мера Лебега}).
+    \item На том же полукольце $\mathcal{P}$, пусть $f$ — возрастающая функция. Тогда $\varphi([a, b)) = f(b) - f(a)$ является объёмом (\textbf{мера Лебега-Стилтьеса}).
+    \item Пусть $\Omega = \{\omega_1, \dots, \omega_n, \dots\}$ — пространство элементарных исходов (не более чем счётное), $\mathcal{U} = 2^\Omega$. Каждому исходу $\omega_i$ сопоставим вероятность $p_i \ge 0$, причем $\sum p_i = 1$. Тогда функция
+    $$ \mathbb{P}(A) = \sum_{i: \omega_i \in A} p_i $$
+    является объёмом (вероятностной мерой).
+\end{enumerate}
+\end{Example}
+
+\setcounter{section}{3} % Продолжаем нумерацию параграфов, если нужно
+
+\begin{Example}
+Пусть $\varphi: \mathcal{P} \to [0, +\infty]$, $\varphi(\emptyset) = 0$, $\varphi(A \sqcup B) = \varphi(A) + \varphi(B)$.
+Рассмотрим дискретное пространство элементарных исходов $\Omega = \{\omega_1, \dots, \omega_n, \dots\}$. Каждому исходу сопоставим вес $p_i \ge 0$. Пусть $\mathcal{U} = 2^\Omega$. Для $A \in \mathcal{U}$ определим:
+$$ \varphi(A) = \sum\limits_{i: \omega_i \in A} p_i $$
+\begin{enumerate}
+    \item Считающая мера: если $p_i = 1$, то $\varphi(A)$ — количество элементов в $A$.
+    \item Вероятностный объём: требуется, чтобы $\sum\limits_{i} p_i = 1$.
+    \begin{itemize}
+        \item $\Omega = \{\text{ребро, решка, орёл}\}$.
+        \item \textbf{Распределение Пуассона:} $p_i = \frac{e^{-\lambda}\lambda^i}{i!}$, где $\lambda > 0$, $i \in \mathbb{N} \cup \{0\}$. Сумма $\sum\limits_{i=0}^{\infty} p_i = 1$.
+        \item \textbf{Геометрическое распределение:} $p_i = p(1-p)^{i-1}$, $i \in \{1, 2, \dots\}$, $p \in (0, 1)$.
+        \item \textbf{Биномиальное распределение} (вероятности Бернулли): $\Omega = \{\omega_1, \dots, \omega_n\}$, $p_i = C_n^i p^i (1-p)^{n-i}$, $p \in (0, 1)$.
+    \end{itemize}
+\end{enumerate}
+\end{Example}
+
+\begin{center}
+\begin{tikzpicture}[>=latex, x=0.75cm, y=8cm] % Настройка масштаба: 1 единица X = 0.75 см, 1 единица Y (100%) = 8 см
+
+    % --- Определение пастельных цветов ---
+    \definecolor{darktext}{HTML}{154360}
+    \definecolor{colorPoi}{HTML}{7DCEA0}  % Мятно-зеленый
+    \definecolor{colorGeo}{HTML}{F5B041}  % Оранжево-желтый
+    \definecolor{colorBin}{HTML}{5DADE2}  % Небесно-голубой
+
+    % ==========================================
+    % 1. Распределение Пуассона (СЛЕВА СВЕРХУ)
+    % ==========================================
+    \begin{scope}[shift={(0cm, 0cm)}] % Позиция левого верхнего графика
+        % Оси
+        \draw[->, thick, darktext] (-0.5, 0) -- (9, 0) node[right] {$i$};
+        \draw[->, thick, darktext] (0, -0.05) -- (0, 0.55) node[above] {$p_i$};
+        
+        % Разметка оси X (от 0 до 8)
+        \foreach \x in {0,1,2,3,4,5,6,7,8} {
+            \draw[darktext] (\x, 0) -- (\x, -0.015) node[below=2pt] {\scriptsize $\x$};
+        }
+        % Разметка оси Y (от 0.1 до 0.5)
+        \foreach \y in {0.1, 0.2, 0.3, 0.4, 0.5} {
+            \draw[darktext] (0, \y) -- (-0.15, \y) node[left=1pt] {\scriptsize $\y$};
+        }
+        
+        % Линии и точки (точные значения для lambda = 3)
+        \foreach \x/\y in {0/0.050, 1/0.149, 2/0.224, 3/0.224, 4/0.168, 5/0.101, 6/0.050, 7/0.021, 8/0.008} {
+            \draw[thick, colorPoi] (\x, 0) -- (\x, \y);
+            \fill[colorPoi] (\x, \y) circle (2.5pt);
+        }
+        
+        % Заголовки
+        \node[darktext, font=\bfseries] at (4, 0.65) {Распределение Пуассона};
+        \node[darktext] at (4, 0.58) {$p_i = \frac{e^{-\lambda}\lambda^i}{i!}$ \quad $(\lambda=3)$};
+    \end{scope}
+
+    % ==========================================
+    % 2. Геометрическое распределение (СПРАВА СВЕРХУ)
+    % ==========================================
+    \begin{scope}[shift={(8.5cm, 0cm)}] % Сдвиг вправо на 8.5 см
+        % Оси
+        \draw[->, thick, darktext] (-0.5, 0) -- (9, 0) node[right] {$i$};
+        \draw[->, thick, darktext] (0, -0.05) -- (0, 0.55) node[above] {$p_i$};
+        
+        % Разметка оси X
+        \foreach \x in {0,1,2,3,4,5,6,7,8} {
+            \draw[darktext] (\x, 0) -- (\x, -0.015) node[below=2pt] {\scriptsize $\x$};
+        }
+        % Разметка оси Y
+        \foreach \y in {0.1, 0.2, 0.3, 0.4, 0.5} {
+            \draw[darktext] (0, \y) -- (-0.15, \y) node[left=1pt] {\scriptsize $\y$};
+        }
+        
+        % Линии и точки (точные значения для p = 0.4)
+        % Начинается с 1, так как геометрическое распределение считает число попыток ДО первого успеха
+        \foreach \x/\y in {1/0.400, 2/0.240, 3/0.144, 4/0.086, 5/0.052, 6/0.031, 7/0.018, 8/0.011} {
+            \draw[thick, colorGeo] (\x, 0) -- (\x, \y);
+            \fill[colorGeo] (\x, \y) circle (2.5pt);
+        }
+        
+        % Заголовки
+        \node[darktext, font=\bfseries] at (4, 0.65) {Геометрическое распр.};
+        \node[darktext] at (4, 0.58) {$p_i = p(1-p)^{i-1}$ \quad $(p=0.4)$};
+    \end{scope}
+
+    % ==========================================
+    % 3. Биномиальное распределение (ПО ЦЕНТРУ СНИЗУ)
+    % ==========================================
+    \begin{scope}[shift={(4.25cm, -6cm)}] % Сдвиг в центр и вниз на 6 см
+        % Оси
+        \draw[->, thick, darktext] (-0.5, 0) -- (9, 0) node[right] {$i$};
+        \draw[->, thick, darktext] (0, -0.05) -- (0, 0.55) node[above] {$p_i$};
+        
+        % Разметка оси X
+        \foreach \x in {0,1,2,3,4,5,6,7,8} {
+            \draw[darktext] (\x, 0) -- (\x, -0.015) node[below=2pt] {\scriptsize $\x$};
+        }
+        % Разметка оси Y
+        \foreach \y in {0.1, 0.2, 0.3, 0.4, 0.5} {
+            \draw[darktext] (0, \y) -- (-0.15, \y) node[left=1pt] {\scriptsize $\y$};
+        }
+        
+        % Линии и точки (точные значения для n = 8, p = 0.5)
+        \foreach \x/\y in {0/0.004, 1/0.031, 2/0.109, 3/0.219, 4/0.273, 5/0.219, 6/0.109, 7/0.031, 8/0.004} {
+            \draw[thick, colorBin] (\x, 0) -- (\x, \y);
+            \fill[colorBin] (\x, \y) circle (2.5pt);
+        }
+        
+        % Заголовки
+        \node[darktext, font=\bfseries] at (4, 0.65) {Биномиальное распр.};
+        \node[darktext] at (4, 0.58) {$p_i = C_n^i p^i (1-p)^{n-i}$ \quad $(p=0.5)$};
+    \end{scope}
+
+\end{tikzpicture}
+\end{center}
+
+\begin{Definition}{Конечный и $\sigma$-компактный объём}{}
+\begin{itemize}
+    \item Объём $\varphi$ называется \textbf{конечным}, если базовое множество $X \in \mathcal{P}$ и $\varphi(X) < +\infty$.
+    \item Объём $\varphi$ называется \textbf{$\sigma$-компактным} (или $\sigma$-конечным), если множество $X$ можно представить как $X = \bigcup\limits_{i=1}^{\infty} X_i$, где для каждого $i$ выполняется $\varphi(X_i) < +\infty$.
+\end{itemize}
+\end{Definition}
+
+\begin{Example}
+На полукольце $\mathcal{P} = \{[a, b)\} : a \le b, \; a, b \in \mathbb{R}$ задан объём $\varphi([a, b)) = b - a$. Пространство $X = \mathbb{R}$ можно представить как $\mathbb{R} = \bigcup\limits_{n=-\infty}^{\infty} [n, n+1)$, где объём каждого полуинтервала равен 1. Значит, это $\sigma$-конечный объём.
+\end{Example}
+
+\begin{Theorem}{Свойства объёма}{}
+Пусть $\varphi: \mathcal{P} \to [0, +\infty]$ — объём, и $P_1, P_2, \dots, P_n \in \mathcal{P}$. Тогда:
+\begin{enumerate}
+    \item \textbf{Монотонность:} Если $P \subset P_1$, то $\varphi(P) \le \varphi(P_1)$.
+    \item \textbf{Усиленная монотонность:} Если $\bigsqcup\limits_{i=1}^n P_i \subset P$, то $\varphi(P) \ge \sum\limits_{i=1}^n \varphi(P_i)$.
+    \item \textbf{Конечная полуаддитивность:} Если $P \subset \bigcup\limits_{i=1}^n P_i$, то $\varphi(P) \le \sum\limits_{i=1}^n \varphi(P_i)$.
+\end{enumerate}
+\end{Theorem}
+
+\begin{Proof}[Доказательство]
+\textbf{Пункт 2:} По свойству полукольца, разность можно представить как конечное дизъюнктное объединение элементов полукольца:
+$$ P \setminus \bigsqcup\limits_{i=1}^n P_i = \bigsqcup\limits_{j=1}^m Q_j, \quad Q_j \in \mathcal{P} $$
+Тогда множество $P$ представимо в виде:
+$$ P = \left( \bigsqcup\limits_{i=1}^n P_i \right) \sqcup \left( \bigsqcup\limits_{j=1}^m Q_j \right) $$
+В силу аддитивности объёма:
+$$ \varphi(P) = \sum\limits_{i=1}^n \varphi(P_i) + \sum\limits_{j=1}^m \varphi(Q_j) \ge \sum\limits_{i=1}^n \varphi(P_i) $$
+(что автоматически доказывает и пункт 1, если взять $n=1$).
+
+\textbf{Пункт 3:} Обозначим $P_i' = P \cap P_i \in \mathcal{P}$. Тогда $P = \bigcup\limits_{i=1}^n P_i'$. По лемме об упрощении структуры объединения (свойство полукольца), это объединение можно нарезать на дизъюнктные куски:
+$$ P = \bigsqcup\limits_{i=1}^n \bigsqcup\limits_{j=1}^{m_i} Q_{ij} $$
+Причем $Q_{ij} \subset P_i'$ (а значит, и $Q_{ij} \subset P_i$).
+Используя аддитивность и монотонность (из п.2):
+$$ \varphi(P) = \sum\limits_{i=1}^n \sum\limits_{j=1}^{m_i} \varphi(Q_{ij}) \le \sum\limits_{i=1}^n \varphi(P_i') \le \sum\limits_{i=1}^n \varphi(P_i) $$
+\end{Proof}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2, >=latex]
+
+    % --- Определение цветов ---
+    \definecolor{darktext}{HTML}{154360}
+    \definecolor{colorP1}{HTML}{7DCEA0} % Зеленый для P_1
+    \definecolor{colorP2}{HTML}{5DADE2} % Синий для P_2
+
+    % ==========================================
+    % 1. Покрывающие множества P1 и P2 (с полупрозрачностью)
+    % ==========================================
+    
+    % Рисуем P1 (слева)
+    \filldraw[fill=colorP1, fill opacity=0.4, draw=colorP1, thick] (0.5, 0.5) rectangle (4.5, 4.5);
+    \node[colorP1!80!black, font=\Large\bfseries] at (1, 4.1) {$P_1$};
+
+    % Рисуем P2 (справа). Там, где они наложатся, цвет станет темнее.
+    \filldraw[fill=colorP2, fill opacity=0.4, draw=colorP2, thick] (2.5, 1) rectangle (6.5, 4);
+    \node[colorP2!80!black, font=\Large\bfseries] at (6, 3.6) {$P_2$};
+
+
+    % ==========================================
+    % 2. Наше исходное множество P
+    % ==========================================
+    
+    % Рисуем P толстой темно-синей линией (оно полностью внутри P1 U P2)
+    \draw[draw=darktext, ultra thick] (1.5, 1.5) rectangle (5.5, 3.5);
+    \node[darktext, font=\Large\bfseries] at (1.8, 3.2) {$P$};
+
+
+    % ==========================================
+    % 3. Дизъюнктная нарезка внутри P на куски Q_j
+    % ==========================================
+    
+    % Граница, где начинается P2 (x = 2.5)
+    \draw[dashed, darktext, thick] (2.5, 1.5) -- (2.5, 3.5);
+    % Граница, где заканчивается P1 (x = 4.5)
+    \draw[dashed, darktext, thick] (4.5, 1.5) -- (4.5, 3.5);
+
+    % Подписываем куски Q_j
+    \node[darktext, font=\Large\bfseries] at (2, 2.5) {$Q_1$};
+    \node[darktext, font=\Large\bfseries] at (3.5, 2.5) {$Q_2$};
+    \node[darktext, font=\Large\bfseries] at (5, 2.5) {$Q_3$};
+
+
+    % ==========================================
+    % 4. Легенда снизу с математической логикой
+    % ==========================================
+    \node[darktext, align=left, anchor=north] at (3.5, 0) {
+        Множество $P$ нарезано на дизъюнктные части: $P = Q_1 \sqcup Q_2 \sqcup Q_3$ \\
+        Тогда его объём: $\varphi(P) = \varphi(Q_1) + \varphi(Q_2) + \varphi(Q_3)$ \\
+        \\
+        Заметим, что $Q_1, Q_2 \subset P_1$, а значит $\varphi(P_1) \ge \varphi(Q_1) + \varphi(Q_2)$ \\
+        Также $Q_2, Q_3 \subset P_2$, а значит $\varphi(P_2) \ge \varphi(Q_2) + \varphi(Q_3)$ \\
+        \\
+        Суммируя, получаем: $\varphi(P_1) + \varphi(P_2) \ge \varphi(Q_1) + 2\varphi(Q_2) + \varphi(Q_3) \ge \varphi(P)$ \\
+        \small(Центральный кусок $Q_2$ считается дважды, поэтому возникает неравенство $\ge$)
+    };
+
+\end{tikzpicture}
+\end{center}
+
+\section{§ Произведение полуколец и объёмов}
+
+\begin{Definition}{Произведение полуколец}{}
+Пусть $\mathcal{P}$ и $\mathcal{Q}$ — полукольца. \textbf{Произведением} полуколец $\mathcal{P}$ и $\mathcal{Q}$ назовём систему множеств:
+$$ \mathcal{P} \odot \mathcal{Q} = \{ P \times Q \mid P \in \mathcal{P}, \; Q \in \mathcal{Q} \} $$
+где $\times$ обозначает декартово произведение множеств.
+\end{Definition}
+
+\begin{Lemma}{О структуре произведения полуколец}{}
+Система $\mathcal{P} \odot \mathcal{Q}$ является полукольцом.
+\end{Lemma}
+
+\begin{Proof}
+Проверим аксиомы полукольца:
+1) $\emptyset = \emptyset \times \emptyset \in \mathcal{P} \odot \mathcal{Q}$.
+
+2) Пусть $A, B \in \mathcal{P} \odot \mathcal{Q}$, где $A = P_1 \times Q_1$ и $B = P_2 \times Q_2$. Тогда:
+$$ A \cap B = (P_1 \cap P_2) \times (Q_1 \cap Q_2) \in \mathcal{P} \odot \mathcal{Q} $$
+
+3) Пусть $A, B \in \mathcal{P} \odot \mathcal{Q}$. Можно считать, что $B \subset A$ (иначе $A \setminus B = A \setminus (A \cap B)$).
+Тогда $P_2 \subset P_1$ и $Q_2 \subset Q_1$. Разложим разности $P_1 \setminus P_2$ и $Q_1 \setminus Q_2$ в дизъюнктные объединения:
+$$ P_1 \setminus P_2 = \bigsqcup\limits_{i=1}^n P_i', \quad Q_1 \setminus Q_2 = \bigsqcup\limits_{j=1}^m Q_j' $$
+Тогда $P_1 = P_2 \sqcup \bigsqcup\limits_{i=1}^n P_i'$ и $Q_1 = Q_2 \sqcup \bigsqcup\limits_{j=1}^m Q_j'$. 
+Подставляя это в декартово произведение $P_1 \times Q_1$, получим:
+$$ P_1 \times Q_1 = (P_2 \times Q_2) \sqcup \left( \bigsqcup\limits_{j=1}^m P_2 \times Q_j' \right) \sqcup \left( \bigsqcup\limits_{i=1}^n P_i' \times Q_2 \right) \sqcup \left( \bigsqcup\limits_{i=1}^n \bigsqcup\limits_{j=1}^m P_i' \times Q_j' \right) $$
+Это доказывает, что разность $A \setminus B$ представима как конечное дизъюнктное объединение элементов из $\mathcal{P} \odot \mathcal{Q}$.
+\end{Proof}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.4, >=latex]
+
+    % --- Настройка цветов ---
+    \definecolor{colorB}{HTML}{FADBD8}      % Бледно-красный (вычитаемое множество B)
+    \definecolor{colorQ1}{HTML}{D4E6F1}     % Светло-синий (верхний левый кусок)
+    \definecolor{colorQ2}{HTML}{A9CCE3}     % Синий (нижний правый кусок)
+    \definecolor{colorQ3}{HTML}{7FB3D5}     % Темно-синий (верхний правый кусок)
+    \definecolor{darktext}{HTML}{154360}    % Темно-синий для текста и линий
+
+    % ==========================================
+    % 1. Отрисовка цветных блоков
+    % ==========================================
+
+    % Множество B = P_2 x Q_2 (вычитаем его)
+    \filldraw[fill=colorB, draw=darktext, thick] (0,0) rectangle (3,2);
+    
+    % Часть 1 разности: P_2 x (Q_1 \setminus Q_2)
+    \filldraw[fill=colorQ1, draw=darktext, thick] (0,2) rectangle (3,4);
+    
+    % Часть 2 разности: (P_1 \setminus P_2) x Q_2
+    \filldraw[fill=colorQ2, draw=darktext, thick] (3,0) rectangle (5,2);
+    
+    % Часть 3 разности: (P_1 \setminus P_2) x (Q_1 \setminus Q_2)
+    \filldraw[fill=colorQ3, draw=darktext, thick] (3,2) rectangle (5,4);
+
+    % ==========================================
+    % 2. Подписи внутри прямоугольников
+    % ==========================================
+    
+    \node[darktext, font=\Large\bfseries] at (1.5, 1) {$B$};
+    \node[darktext, font=\small] at (1.5, 0.5) {$P_2 \times Q_2$};
+
+    \node[darktext, font=\bfseries, align=center] at (1.5, 3) {Часть 1 \\ $P_2 \times Q'_1$};
+    \node[darktext, font=\bfseries, align=center] at (4, 1) {Часть 2 \\ $P'_1 \times Q_2$};
+    \node[darktext, font=\bfseries, align=center] at (4, 3) {Часть 3 \\ $P'_1 \times Q'_1$};
+
+    % ==========================================
+    % 3. Разметка осей X и Y (проекции множеств)
+    % ==========================================
+
+    % Ось X (множества P)
+    \draw[|<->|, darktext, thick] (0, -0.4) -- (3, -0.4) node[midway, below] {$P_2$};
+    \draw[|<->|, darktext, thick] (3, -0.4) -- (5, -0.4) node[midway, below] {$P'_1 = P_1 \setminus P_2$};
+    \draw[|<->|, darktext, thick] (0, -1) -- (5, -1) node[midway, below] {$P_1$};
+
+    % Ось Y (множества Q)
+    \draw[|<->|, darktext, thick] (-0.4, 0) -- (-0.4, 2) node[midway, left] {$Q_2$};
+    \draw[|<->|, darktext, thick] (-0.4, 2) -- (-0.4, 4) node[midway, left] {$Q'_1 = Q_1 \setminus Q_2$};
+    \draw[|<->|, darktext, thick] (-1, 0) -- (-1, 4) node[midway, left] {$Q_1$};
+
+    % ==========================================
+    % 4. Общая граница большого прямоугольника A
+    % ==========================================
+    \draw[darktext, ultra thick] (0,0) rectangle (5,4);
+    \node[darktext, font=\Large\bfseries, above right] at (0,4) {$A = P_1 \times Q_1$};
+
+    % ==========================================
+    % 5. Легенда снизу
+    % ==========================================
+    \node[darktext, align=left, anchor=north] at (2.5, -1.5) {
+        Разность $A \setminus B$ представляет собой «уголок» (синяя зона). \\
+        Мы разбиваем проекции на попарно непересекающиеся части: \\
+        $P_1 = P_2 \sqcup P'_1$ \quad и \quad $Q_1 = Q_2 \sqcup Q'_1$ \\
+        В результате разность $A \setminus B$ разбивается на 3 прямоугольника, \\
+        каждый из которых принадлежит полукольцу $\mathcal{P} \odot \mathcal{Q}$.
+    };
+
+\end{tikzpicture}
+\end{center}
+
+\begin{Example}
+Множество $\mathcal{P}^n = \{[a, b)\} $ является полукольцом, где $a = (a_1, \dots, a_n)$, $b = (b_1, \dots, b_n)$ и $a_i \le b_i$.
+Многомерный полуинтервал определяется как:
+$$ [a, b) = \{ x \in \mathbb{R}^n \mid a_i \le x_i < b_i \} $$
+Это есть декартово произведение $n$ одномерных полуколец.
+\end{Example}
+
+\begin{Definition}{Произведение объёмов}{}
+Пусть $\mathcal{P}$ и $\mathcal{Q}$ — полукольца, $\varphi$ — объём на $\mathcal{P}$, $\psi$ — объём на $\mathcal{Q}$.
+Тогда функция $\nu(P \times Q) = \varphi(P) \cdot \psi(Q)$ называется \textbf{произведением объёмов} (считается, что $0 \cdot (+\infty) = 0$ и $(+\infty) \cdot 0 = 0$).
+\end{Definition}
+
+\begin{Theorem}{Об объёме на произведении}{}
+Определенная выше функция $\nu$ является объёмом на $\mathcal{P} \odot \mathcal{Q}$.
+\end{Theorem}
+
+\begin{Proof}
+Покажем, что функция $\nu(P \times Q) = \varphi(P) \cdot \psi(Q)$ является объёмом на $\mathcal{P} \odot \mathcal{Q}$.
+
+\textbf{1) Свойство нуля:} \\
+Так как $\emptyset \in \mathcal{P}$ и $\emptyset \in \mathcal{Q}$, пустое множество в произведении полуколец можно представить как $\emptyset \times \emptyset$.
+Тогда по определению:
+$$ \nu(\emptyset) = \nu(\emptyset \times \emptyset) = \varphi(\emptyset) \cdot \psi(\emptyset) = 0 \cdot 0 = 0 $$
+(Аналогично, если хотя бы один из множителей $P$ или $Q$ является пустым, произведение даст $0$).
+
+\textbf{2) Конечная аддитивность:} \\
+Пусть прямоугольник $P \times Q \in \mathcal{P} \odot \mathcal{Q}$ разбит на конечное дизъюнктное объединение прямоугольников из того же полукольца:
+$$ P \times Q = \bigsqcup\limits_{k=1}^n (P_k \times Q_k) $$
+где $P, P_k \in \mathcal{P}$ и $Q, Q_k \in \mathcal{Q}$.
+Воспользуемся свойством полукольца об упрощении структуры объединения. Спроецируем все стороны прямоугольников на оси. Существует такое разбиение $P$ на дизъюнктные множества $\tilde{P}_i \in \mathcal{P}$ и $Q$ на множества $\tilde{Q}_j \in \mathcal{Q}$, что:
+$$ P = \bigsqcup\limits_{i=1}^{I} \tilde{P}_i \quad \text{и} \quad Q = \bigsqcup\limits_{j=1}^{J} \tilde{Q}_j $$
+При этом каждое $P_k$ является точным объединением какой-то части множеств $\tilde{P}_i$, а каждое $Q_k$ — части множеств $\tilde{Q}_j$.
+В силу конечной аддитивности самих объёмов $\varphi$ и $\psi$:
+$$ \nu(P \times Q) = \varphi(P)\psi(Q) = \left( \sum\limits_{i=1}^{I} \varphi(\tilde{P}_i) \right) \left( \sum\limits_{j=1}^{J} \psi(\tilde{Q}_j) \right) = \sum\limits_{i=1}^{I} \sum\limits_{j=1}^{J} \varphi(\tilde{P}_i)\psi(\tilde{Q}_j) $$
+С другой стороны, каждый из меньших прямоугольников $P_k \times Q_k$ состоит в точности из тех «клеток» $\tilde{P}_i \times \tilde{Q}_j$, которые в него попадают. Запишем сумму их объёмов:
+$$ \sum\limits_{k=1}^n \nu(P_k \times Q_k) = \sum\limits_{k=1}^n \varphi(P_k)\psi(Q_k) = \sum\limits_{k=1}^n \sum\limits_{\text{клетки } (i, j) \in P_k \times Q_k} \varphi(\tilde{P}_i)\psi(\tilde{Q}_j) $$
+Поскольку исходное объединение прямоугольников было дизъюнктным и в точности покрывало всё множество $P \times Q$, каждая пара $(i, j)$ учитывается в правой сумме ровно один раз. Значит, суммы абсолютно идентичны. Аддитивность доказана.
+\end{Proof}
+
+\section{§ Мера и её свойства}
+
+\begin{Definition}{Мера}{}
+Объём $\varphi: \mathcal{P} \to [0, +\infty]$ называется \textbf{мерой}, если для любой последовательности непересекающихся множеств $P, P_1, P_2, \dots \in \mathcal{P}$ выполняется свойство \textbf{счётной аддитивности}:
+$$ P = \bigsqcup\limits_{i=1}^{\infty} P_i \implies \varphi(P) = \sum\limits_{i=1}^{\infty} \varphi(P_i) $$
+\end{Definition}
+
+\begin{Example}
+\begin{enumerate}
+    \item Мера Лебега на полукольце полуинтервалов в $\mathbb{R}$: 
+    $$ \lambda([a, b)) = b - a $$
+    Она же в многомерном случае $\mathbb{R}^n$: 
+    $$ \lambda([a, b)) = \prod\limits_{i=1}^n (b_i - a_i) $$
+    
+    \item Пусть $f$ — возрастающая функция. Зададим объём (меру Лебега-Стилтьеса):
+    $$ \nu([a, b)) = f(b) - f(a) $$
+    Представим полуинтервал в виде счётного объединения:
+    $$ [a, b) = \bigcup\limits_{i=1}^{\infty} [a_{i-1}, a_i) $$
+    где $a_0 = a$, $a_i < a_{i+1}$ и $\lim\limits_{n \to \infty} a_n = b$. 
+    Если счётная аддитивность выполняется, то:
+    $$ \nu([a, b)) = \sum\limits_{i=1}^{\infty} \nu([a_{i-1}, a_i)) = \sum\limits_{i=1}^{\infty} \left( f(a_i) - f(a_{i-1}) \right) = \lim\limits_{n \to \infty} (f(a_n) - f(a_0)) $$
+    Отсюда следует, что $\lim\limits_{n \to \infty} f(a_n) = f(b)$, то есть функция $f$ должна быть \textbf{непрерывна слева}.
+    
+    \item Пусть $\Omega$ — не более чем счётное пространство элементарных исходов, $\mathcal{U} = 2^\Omega$. Каждому $\omega_i \leftrightarrow p_i \ge 0$.
+    Для любого $A \in \mathcal{U}$ задан объём:
+    $$ \varphi(A) = \sum\limits_{i: \omega_i \in A} p_i $$
+    Покажем, что это мера. Пусть $A = \bigsqcup\limits_{i=1}^{\infty} A_i$. Нам нужно доказать, что $\varphi(A) = \sum\limits_{i=1}^{\infty} \varphi(A_i)$.
+    Для любого конечного $N \in \mathbb{N}$ верно, что $\bigsqcup\limits_{i=1}^N A_i \subset A$. В силу усиленной монотонности объёма:
+    $$ \sum\limits_{i=1}^N \varphi(A_i) \le \varphi(A) $$
+    Переходя к пределу при $N \to \infty$, получаем $\sum\limits_{i=1}^{\infty} \varphi(A_i) \le \varphi(A)$. \\
+    С другой стороны, из свойства полуаддитивности: 
+    $$ \varphi(A) \le \sum\limits_{i=1}^N \varphi(A_i) \le \sum\limits_{i=1}^{\infty} \varphi(A_i) $$
+    Следовательно, $\varphi(A) = \sum\limits_{i=1}^{\infty} \varphi(A_i)$, и объём $\varphi$ является мерой.
+\end{enumerate}
+\end{Example}
+
+\begin{Theorem}{Критерий меры}{}
+Пусть задан объём $\varphi: \mathcal{P} \to [0, +\infty]$. Для того чтобы $\varphi$ был мерой, необходимо и достаточно, чтобы выполнялось свойство \textbf{счётной полуаддитивности}:
+$$ P, P_1, P_2, \dots \in \mathcal{P} \quad \text{и} \quad P \subset \bigcup\limits_{i=1}^{\infty} P_i \implies \varphi(P) \le \sum\limits_{i=1}^{\infty} \varphi(P_i) $$
+\end{Theorem}
+
+\begin{Proof}
+$\Rightarrow$ Пусть $\varphi$ — мера. Обозначим $P_i' = P \cap P_i \in \mathcal{P}$. Тогда $P = \bigcup\limits_{i=1}^{\infty} P_i'$. 
+По свойству полукольца (лемма про нарезку), это объединение можно представить как дизъюнктное:
+$$ \bigcup\limits_{i=1}^{\infty} P_i' = \bigsqcup\limits_{i=1}^{\infty} \bigsqcup\limits_{j=1}^{m_i} Q_{ij} $$
+где $Q_{ij} \in \mathcal{P}$ и $Q_{ij} \subset P_i' \subset P_i$. Из усиленной монотонности для каждого $i$ следует:
+$$ \sum\limits_{j=1}^{m_i} \varphi(Q_{ij}) \le \varphi(P_i') \le \varphi(P_i) $$
+Так как $\varphi$ мера (счётно аддитивна на дизъюнктных объединениях), то:
+$$ \varphi(P) = \sum\limits_{i=1}^{\infty} \sum\limits_{j=1}^{m_i} \varphi(Q_{ij}) \le \sum\limits_{i=1}^{\infty} \varphi(P_i) $$
+
+$\Leftarrow$ Пусть выполняется счётная полуаддитивность. Рассмотрим $P = \bigsqcup\limits_{i=1}^{\infty} P_i$, где $P, P_i \in \mathcal{P}$. 
+Тогда из счётной полуаддитивности имеем: $\varphi(P) \le \sum\limits_{i=1}^{\infty} \varphi(P_i)$. \\
+С другой стороны, для любого $N$ верно $\bigsqcup\limits_{i=1}^N P_i \subset P$. Из усиленной монотонности объёма:
+$$ \sum\limits_{i=1}^N \varphi(P_i) \le \varphi(P) \implies \lim\limits_{N \to \infty} \sum\limits_{i=1}^N \varphi(P_i) = \sum\limits_{i=1}^{\infty} \varphi(P_i) \le \varphi(P) $$
+Объединяя неравенства $\le$ и $\ge$, получаем равенство $\varphi(P) = \sum\limits_{i=1}^{\infty} \varphi(P_i)$.
+\end{Proof}
+
+\begin{Theorem}{Непрерывность меры снизу}{}
+Пусть $\varphi$ — объём, заданный на алгебре $\mathcal{U}$. Объём $\varphi$ является мерой тогда и только тогда, когда $\varphi$ \textbf{непрерывен снизу}, то есть:
+$$ A_i \subset A_{i+1}, \quad A = \bigcup\limits_{i=1}^{\infty} A_i \quad (A_i, A \in \mathcal{U}) \implies \lim\limits_{i \to \infty} \varphi(A_i) = \varphi(A) $$
+\end{Theorem}
+
+\begin{Proof}
+\textbf{Лемма (вспомогательная):} Если $A_{i-1} \subset A_i$, то $A_i = A_{i-1} \sqcup (A_i \setminus A_{i-1})$. По аддитивности объёма $\varphi(A_i \setminus A_{i-1}) = \varphi(A_i) - \varphi(A_{i-1})$.
+
+$\Rightarrow$ Пусть $\varphi$ — мера. Представим $A$ в виде дизъюнктного объединения:
+$$ A = \bigsqcup\limits_{i=1}^{\infty} (A_i \setminus A_{i-1}), \quad \text{где } A_0 = \emptyset $$
+Тогда:
+$$ \varphi(A) = \sum\limits_{i=1}^{\infty} \varphi(A_i \setminus A_{i-1}) = \sum\limits_{i=1}^{\infty} (\varphi(A_i) - \varphi(A_{i-1})) = \lim\limits_{N \to \infty} (\varphi(A_N) - \varphi(A_0)) = \lim\limits_{N \to \infty} \varphi(A_N) $$
+
+$\Leftarrow$ Пусть $A = \bigsqcup\limits_{i=1}^{\infty} A_i$, где $A, A_i \in \mathcal{U}$. Обозначим $B_N = \bigsqcup\limits_{i=1}^N A_i$.
+Очевидно, что $B_{N+1} \supset B_N$ и $A = \bigcup\limits_{N=1}^{\infty} B_N$. В силу непрерывности снизу:
+$$ \lim\limits_{N \to \infty} \varphi(B_N) = \varphi(A) $$
+Так как $\varphi(B_N) = \sum\limits_{i=1}^N \varphi(A_i)$, то $\lim\limits_{N \to \infty} \sum\limits_{i=1}^N \varphi(A_i) = \sum\limits_{i=1}^{\infty} \varphi(A_i) = \varphi(A)$. Счётная аддитивность доказана.
+\end{Proof}
+
+\begin{center}
+\begin{tikzpicture}[scale=1]
+    % Самый большой овал (A3)
+    \draw[thick, defframe, fill=defbg!30] (0,0) ellipse (4cm and 2.5cm);
+    
+    % Средний овал (A2)
+    \draw[thick, defframe, fill=defbg!60] (-0.5,-0.2) ellipse (3cm and 1.8cm);
+    
+    % Маленький овал (A1)
+    \draw[thick, defframe, fill=defbg!100] (-1,-0.4) ellipse (1.5cm and 1cm);
+    
+    % Подписи
+    \node at (-1,-0.4) {$A_1$};
+    \node at (1.2, 0.5) {$A_2 \setminus A_1$};
+    \node at (2.5, 1.2) {$A_3 \setminus A_2$};
+    \node[above] at (0, 2.6) {Обобщение: $A = \bigsqcup\limits_{i=1}^{\infty} (A_i \setminus A_{i-1})$};
+\end{tikzpicture}
+\end{center}
+
+\begin{Theorem}{Непрерывность меры сверху}{}
+Пусть $\varphi$ — \textbf{конечный} объём, заданный на алгебре $\mathcal{U}$. Тогда следующие утверждения эквивалентны:
+\begin{enumerate}
+    \item $\varphi$ — мера.
+    \item $\varphi$ \textbf{непрерывна сверху}, то есть: $A_{i+1} \subset A_i$, $A = \bigcap\limits_{i=1}^{\infty} A_i \quad (A, A_i \in \mathcal{U}) \implies \varphi(A) = \lim\limits_{N \to \infty} \varphi(A_N)$.
+    \item $\varphi$ непрерывна сверху на пустом множестве (то есть при $A = \emptyset$).
+\end{enumerate}
+\end{Theorem}
+
+\begin{Proof}
+\textbf{1 $\Rightarrow$ 2:} Пусть $\varphi$ — мера. Представим $A_1$ в виде дизъюнктного объединения:
+$$ A_1 = A \sqcup \bigsqcup\limits_{i=1}^{\infty} (A_i \setminus A_{i+1}) $$
+По свойству меры:
+$$ \varphi(A_1) = \varphi(A) + \sum\limits_{i=1}^{\infty} (\varphi(A_i) - \varphi(A_{i+1})) = \varphi(A) + \lim\limits_{N \to \infty} \sum\limits_{i=1}^N (\varphi(A_i) - \varphi(A_{i+1})) $$
+Эта сумма телескопическая, поэтому:
+$$ \varphi(A_1) = \varphi(A) + \lim\limits_{N \to \infty} (\varphi(A_1) - \varphi(A_{N+1})) = \varphi(A) + \varphi(A_1) - \lim\limits_{N \to \infty} \varphi(A_{N+1}) $$
+Так как мера \textbf{конечна} (т.е. $\varphi(A_1) < \infty$), мы можем вычесть $\varphi(A_1)$ из обеих частей, получая $\varphi(A) = \lim\limits_{N \to \infty} \varphi(A_{N+1})$.
+
+\textbf{2 $\Rightarrow$ 3:} Очевидно (достаточно подставить $A = \emptyset$, тогда $\varphi(\emptyset) = 0$).
+
+\textbf{3 $\Rightarrow$ 1:} Пусть $A = \bigsqcup\limits_{i=1}^{\infty} A_i$, где $A, A_i \in \mathcal{U}$. Рассмотрим остаток множества $B_n$:
+$$ B_n = A \setminus \bigsqcup\limits_{i=1}^n A_i $$
+Множества $B_n$ убывают ($B_{n+1} \subset B_n$) и $\bigcap\limits_{n=1}^{\infty} B_n = \emptyset$. По условию 3, $\lim\limits_{n \to \infty} \varphi(B_n) = \varphi(\emptyset) = 0$.
+С другой стороны:
+$$ 0 = \lim\limits_{n \to \infty} \varphi(B_n) = \varphi(A) - \lim\limits_{n \to \infty} \varphi \left( \bigsqcup\limits_{i=1}^n A_i \right) = \varphi(A) - \lim\limits_{n \to \infty} \sum\limits_{i=1}^n \varphi(A_i) = \varphi(A) - \sum\limits_{i=1}^{\infty} \varphi(A_i) $$
+Отсюда $\varphi(A) = \sum\limits_{i=1}^{\infty} \varphi(A_i)$, что означает, что $\varphi$ — мера.
+\end{Proof}
+
+
+\setcounter{section}{4}
+
+\section{§ Внешняя мера и её свойства}
+
+Глобальная идея: погрузим множество в не более чем счётное семейство множеств, которое можно измерить. 
+$$ \text{Мера на скудной системе} \xrightarrow{\text{строим}} \text{Внешнюю меру} \xrightarrow{\text{сужаем}} \text{Мера на большей системе множеств} $$
+
+\begin{Definition}{Внешняя мера}{}
+Пусть $X$ — множество. Функция $\tau: 2^X \to [0, +\infty]$ называется \textbf{внешней мерой}, если:
+\begin{enumerate}
+    \item $\tau(\emptyset) = 0$.
+    \item $\tau$ счётно-полуаддитивна: 
+    $$ A \subset \bigcup\limits_{i=1}^{\infty} A_i \implies \tau(A) \le \sum\limits_{i=1}^{\infty} \tau(A_i) $$
+\end{enumerate}
+\end{Definition}
+
+\noindent \textbf{Свойства внешней меры:}
+\begin{enumerate}
+    \item Внешняя мера \textbf{конечно-полуаддитивна}: $ A \subset \bigcup\limits_{i=1}^n A_i \implies \tau(A) \le \sum\limits_{i=1}^n \tau(A_i) $
+    \item Внешняя мера \textbf{монотонна}: $ A \subset B \implies \tau(A) \le \tau(B) $
+\end{enumerate}
+
+\begin{Proof}[Доказательство свойств]
+(Из 1 следует 2). Пусть $A \subset B$. Множество $A$ можно покрыть следующим образом: $A \subset B \cup \bigcup\limits_{k=1}^{\infty} \emptyset$. Тогда из счётной полуаддитивности:
+$$ \tau(A) \le \tau(B) + \sum\limits_{k=1}^{\infty} \tau(\emptyset) = \tau(B) + 0 = \tau(B) $$
+\end{Proof}
+
+\begin{Definition}{$\tau$-измеримое множество}{}
+Множество $A$ называется \textbf{$\tau$-измеримым}, если для любого множества $E \subset X$ выполняется равенство:
+$$ \tau(E) = \tau(E \cap A) + \tau(E \setminus A) $$
+(Интуитивно: множество $A$ разбивает произвольное множество $E$ аддитивно).
+\end{Definition}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9, every node/.style={scale=0.9}]
+    % Множество A (правая полуплоскость)
+    \fill[defbg!80!white] (1.5, -2) rectangle (5, 3);
+    \draw[thick, defframe] (1.5, -2) -- (1.5, 3) node[above right, text=black] {$A$ (измеримое множество)};
+    
+    % Множество E (овал)
+    \draw[thick, fill=lembg, opacity=0.9] (0,0) ellipse (2.5cm and 1.5cm);
+    \node[left] at (-2.6, 0) {$E$};
+    
+    % Пересечение E \cap A
+    \begin{scope}
+        \clip (1.5, -2) rectangle (5, 3);
+        \fill[lemframe!40!white] (0,0) ellipse (2.5cm and 1.5cm);
+    \end{scope}
+    
+    % Обводка E поверх всего, чтобы граница была четкой
+    \draw[thick, lemframe] (0,0) ellipse (2.5cm and 1.5cm);
+    \draw[thick, dashed] (1.5, -1.2) -- (1.5, 1.2); % Линия разреза внутри E
+    
+    % Подписи
+    \node at (0.2, 0) {$E \setminus A$};
+    \node at (2.6, 0) {$E \cap A$};
+\end{tikzpicture}
+\end{center}
+
+\noindent \textbf{NB!} Автоматически всегда имеем неравенство $\tau(E) \le \tau(E \cap A) + \tau(E \setminus A)$. \\
+\textit{Доказательство:} Множество $E$ можно представить как $E = (E \cap A) \sqcup (E \setminus A)$. Значит, $E \subset (E \cap A) \cup (E \setminus A)$. Так как внешняя мера конечно-полуаддитивна, то $\tau(E) \le \tau(E \cap A) + \tau(E \setminus A)$.
+
+Следовательно, для проверки $\tau$-измеримости достаточно доказать обратное неравенство: 
+$$ \tau(E) \ge \tau(E \cap A) + \tau(E \setminus A) $$
+
+\noindent \textbf{Замечание:} Пустое множество $\emptyset$ является $\tau$-измеримым. \\
+Действительно, $E \cap \emptyset = \emptyset \subset A \implies \tau(E \cap \emptyset) = 0$. Проверяем неравенство:
+$$ \tau(E) \ge \tau(E \setminus \emptyset) = \tau(E) = \tau(E \cap \emptyset) + \tau(E \setminus \emptyset) \implies \emptyset \text{ — } \tau\text{-измеримо.} $$
+
+\begin{Theorem}{О $\sigma$-алгебре измеримых множеств}{}
+Пусть $\tau$ — внешняя мера. Система $\mathcal{U}_\tau$ всех $\tau$-измеримых множеств является $\sigma$-алгеброй, а сужение функции $\tau$ на $\mathcal{U}_\tau$ является мерой.
+\end{Theorem}
+
+\begin{Proof}
+\textbf{Пункт 1: Покажем, что $\mathcal{U}_\tau$ — алгебра.} \\
+Мы уже показали, что $\emptyset \in \mathcal{U}_\tau$. \\
+Пусть $\exists A \in \mathcal{U}_\tau \implies \forall E \in 2^X: \tau(E) = \tau(E \setminus A) + \tau(E \cap A)$. \\
+Заметим, что $E \cap A = E \setminus A^c$ и $E \setminus A = E \cap A^c$. Подставляя, получаем:
+$$ \tau(E) = \tau(E \setminus A^c) + \tau(E \cap A^c) \implies A^c \in \mathcal{U}_\tau $$
+Пусть $A, B \in \mathcal{U}_\tau$. Проверим $A \cup B$:
+\begin{align*}
+    \tau(E) &= \tau(E \cap A) + \tau(E \setminus A) \\
+    &= \tau(E \cap A) + \tau((E \setminus A) \cap B) + \tau((E \setminus A) \setminus B) \\
+    &\ge \tau((E \cap A) \cup ((E \setminus A) \cap B)) + \tau(E \setminus (A \cup B)) \\
+    &= \tau(E \cap (A \cup B)) + \tau(E \setminus (A \cup B))
+\end{align*}
+Получили неравенство $\tau(E) \ge \tau(E \cap (A \cup B)) + \tau(E \setminus (A \cup B))$, что влечёт $A \cup B \in \mathcal{U}_\tau$.
+
+\textbf{Пункт 2: Покажем, что $\tau$ — объём на $\mathcal{U}_\tau$.} \\
+Пусть $\exists A, B \in \mathcal{U}_\tau$ и $A \cap B = \emptyset$. Возьмём в качестве $E = A \sqcup B$:
+$$ \tau(A \sqcup B) = \tau((A \sqcup B) \cap A) + \tau((A \sqcup B) \setminus A) = \tau(A) + \tau(B) $$
+Следовательно, есть конечная аддитивность.
+
+\textbf{Пункт 3: Покажем, что $\mathcal{U}_\tau$ — $\sigma$-алгебра.} \\
+Пусть $A = \bigsqcup\limits_{i=1}^{\infty} A_i$, где $A_i \in \mathcal{U}_\tau$. \\
+Для любого $N \in \mathbb{N}$ по индукции (используя измеримость):
+$$ \tau(E) = \tau \left( E \cap \bigsqcup\limits_{i=1}^N A_i \right) + \tau \left( E \setminus \bigsqcup\limits_{i=1}^N A_i \right) = \sum\limits_{i=1}^N \tau(E \cap A_i) + \tau \left( E \setminus \bigsqcup\limits_{i=1}^N A_i \right) $$
+Так как $\bigsqcup\limits_{i=1}^N A_i \subset A$, то $E \setminus A \subset E \setminus \bigsqcup\limits_{i=1}^N A_i$. В силу монотонности:
+$$ \tau(E) \ge \sum\limits_{i=1}^N \tau(E \cap A_i) + \tau(E \setminus A) $$
+Перейдём к пределу при $N \to \infty$:
+$$ \tau(E) \ge \lim\limits_{N \to \infty} \sum\limits_{i=1}^N \tau(E \cap A_i) + \tau(E \setminus A) = \sum\limits_{i=1}^{\infty} \tau(E \cap A_i) + \tau(E \setminus A) $$
+Используя счётную полуаддитивность внешней меры:
+$$ \sum\limits_{i=1}^{\infty} \tau(E \cap A_i) \ge \tau \left( \bigcup\limits_{i=1}^{\infty} (E \cap A_i) \right) = \tau(E \cap A) $$
+Следовательно, $\tau(E) \ge \tau(E \cap A) + \tau(E \setminus A) \implies A \in \mathcal{U}_\tau$. \\
+Любое объединение $A = \bigsqcup\limits_{i=1}^{\infty} A_i$ можно записать как дизъюнктное: $\bigsqcup\limits_{i=1}^{\infty} \left( A_i \setminus \bigcup\limits_{j=0}^{i-1} A_j \right)$. Значит, $\mathcal{U}_\tau$ — $\sigma$-алгебра.
+
+\textbf{Пункт 4.} По критерию меры $\tau$ является мерой, так как это объём + есть счётная полуаддитивность (по определению внешней меры).
+\end{Proof}
+
+\begin{Definition}{Полная мера}{}
+Мера $\mu$ на полукольце $\mathcal{P}$ называется \textbf{полной}, если из того, что $A \in \mathcal{P}$ и $\mu(A) = 0$, следует, что для любого $B \subset A$:
+\begin{enumerate}
+    \item $B \in \mathcal{P}$
+    \item $\mu(B) = 0$
+\end{enumerate}
+\end{Definition}
+
+\noindent \textbf{Мотивирующий пример (Мера Лебега):} Пусть $\mathcal{U}$ — система подмножеств $\mathbb{R}$, содержащая одноточечные множества, и $\mu(\{\alpha\}) = 0$. Пусть $A \notin \mathcal{U}$. Рассмотрим прямое произведение $B = B_1 \times B_2$ и меру $\mu_2(B_1 \times B_2) = \mu_1(B_1)\mu_1(B_2)$.
+Тогда $\mu_2(\{\alpha\} \times \mathbb{R}) = \mu_1(\{\alpha\}) \cdot \mu_1(\mathbb{R}) = 0 \cdot (+\infty) = 0$.
+Однако множество $\{\alpha\} \times A \subset \{\alpha\} \times \mathbb{R}$, но при этом не факт, что оно измеримо, если мера не полная. В полной мере такое подмножество автоматически измеримо и имеет меру 0.
+
+\begin{Lemma}{О полноте меры на $\mathcal{U}_\tau$}{}
+Сужение $\tau$ на $\mathcal{U}_\tau$ является полной мерой.
+\end{Lemma}
+
+\begin{Proof}
+Пусть $A \in \mathcal{U}_\tau$ и $\mu(A) = \tau(A) = 0$. Пусть $\forall B \subset A$. \\
+В силу монотонности внешней меры: $\tau(B) \le \tau(A) = 0 \implies \mu(B) = 0$. \\
+Покажем, что $B \in \mathcal{U}_\tau$ (т.е. $\tau$-измеримое). Проверим неравенство:
+$$ \tau(E \cap B) + \tau(E \setminus B) \le \tau(E) $$
+Заметим, что $\tau(E \cap B) \le \tau(B) = 0 \implies \tau(E \cap B) = 0$. \\
+Также $E \setminus B \subset E$, поэтому $\tau(E \setminus B) \le \tau(E)$. \\
+Итого: $0 + \tau(E \setminus B) \le \tau(E)$. Неравенство доказано, $B \in \mathcal{U}_\tau$.
+\end{Proof}
+
+\begin{Example}
+Пусть $X = \mathbb{R}$. Зададим $\tau$: $\tau(A) = 1$ если $A \neq \emptyset$, и $\tau(\emptyset) = 0$. Это внешняя мера. \\
+\textbf{Факт:} $\tau$-измеримы только $\emptyset$ и $\mathbb{R}$. То есть $\mathcal{U}_\tau = \{\emptyset, \mathbb{R}\}$. \\
+\textit{Доказательство:} Пусть $\exists A \neq \emptyset$ и $A \neq \mathbb{R}$. Для любого $E$ должно быть $\tau(E) = \tau(E \cap A) + \tau(E \setminus A)$. Возьмём $E = \mathbb{R}$.
+Тогда $1 = \tau(\mathbb{R} \cap A) + \tau(\mathbb{R} \setminus A) \implies 1 = 1 + 1 \implies 1 = 2$. Противоречие. Значит, $A \notin \mathcal{U}_\tau$.
+\end{Example}
+
+\section{§ Процесс Каратеодори (Продолжение меры)}
+
+\begin{Definition}{Внешняя мера, порождённая мерой}{}
+Пусть $\mu_0$ — мера на полукольце $\mathcal{P}$. \textbf{Внешней мерой, порождённой $\mu_0$}, назовём функцию:
+$$ \mu^*(A) = \inf \left\{ \sum\limits_{i=1}^{\infty} \mu_0(P_i) : A \subset \bigcup\limits_{i=1}^{\infty} P_i, \quad P_i \in \mathcal{P} \right\} $$
+(Полная аналогия с суммами Дарбу для интеграла Римана). Если множество $A$ не может быть покрыто элементами полукольца, то полагаем $\mu^*(A) = +\infty$.
+\end{Definition}
+
+\begin{Theorem}{О свойствах порождённой внешней меры}{}
+Функция $\mu^*$ является внешней мерой, совпадающей с $\mu_0$ на полукольце $\mathcal{P}$.
+\end{Theorem}
+
+\begin{Proof}
+\textbf{1) Покажем, что $\forall P \in \mathcal{P}, \;\; \mu^*(P) = \mu_0(P)$.} \\
+Так как $P \subset P \cup \emptyset \cup \emptyset \dots$, очевидно, что $\mu^*(P) \le \mu_0(P)$. \\
+С другой стороны, пусть $P \subset \bigcup\limits_{i=1}^{\infty} P_i$. Так как $\mu_0$ — мера (а значит, обладает свойством счётной полуаддитивности на полукольце):
+$$ \mu_0(P) \le \sum\limits_{i=1}^{\infty} \mu_0(P_i) $$
+Так как это верно для любого покрытия, переходя к точной нижней грани ($\inf$) по всем покрытиям, получим $\mu_0(P) \le \mu^*(P)$. Следовательно, $\mu^*(P) = \mu_0(P)$.
+
+\textbf{2) Покажем, что $\mu^*$ — внешняя мера.} \\
+$\mu^* \ge 0$ в силу определения. \\
+$\mu^*(\emptyset) = \mu_0(\emptyset) = 0$ (так как $\mu_0$ — мера). \\
+Осталось доказать счётную полуаддитивность: $A \subset \bigcup\limits_{i=1}^{\infty} A_i \implies \mu^*(A) \le \sum\limits_{i=1}^{\infty} \mu^*(A_i)$.
+Будем считать, что $\forall i \in \mathbb{N}: \mu^*(A_i) < +\infty$, иначе неравенство выполняется тривиально.
+
+Зафиксируем произвольное $\varepsilon > 0$. По определению точной нижней грани, для каждого $A_i$ существует покрытие элементами полукольца $P_i^n \in \mathcal{P}$ такое, что $A_i \subset \bigcup\limits_{n=1}^{\infty} P_i^n$ и выполняется неравенство:
+$$ \sum\limits_{n=1}^{\infty} \mu_0(P_i^n) \le \mu^*(A_i) + \frac{\varepsilon}{2^i} $$
+
+Множество $A$ содержится в объединении всех $A_i$, следовательно:
+$$ A \subset \bigcup\limits_{i=1}^{\infty} A_i \subset \bigcup\limits_{i=1}^{\infty} \bigcup\limits_{n=1}^{\infty} P_i^n $$
+Это счётное объединение элементов из полукольца $\mathcal{P}$. По определению внешней меры:
+$$ \mu^*(A) \le \sum\limits_{i=1}^{\infty} \sum\limits_{n=1}^{\infty} \mu_0(P_i^n) \le \sum\limits_{i=1}^{\infty} \left( \mu^*(A_i) + \frac{\varepsilon}{2^i} \right) = \sum\limits_{i=1}^{\infty} \mu^*(A_i) + \varepsilon \sum\limits_{i=1}^{\infty} \frac{1}{2^i} = \sum\limits_{i=1}^{\infty} \mu^*(A_i) + \varepsilon $$
+Так как $\varepsilon > 0$ было выбрано произвольно, то $\mu^*(A) \le \sum\limits_{i=1}^{\infty} \mu^*(A_i)$. Счётная полуаддитивность доказана.
+\end{Proof}
+
+\begin{Theorem}{О продолжении меры (Теорема Каратеодори)}{}
+Сужение внешней меры $\mu^*$ на систему $\mathcal{U}_{\mu^*}$ всех $\mu^*$-измеримых множеств является мерой. Это сужение является \textbf{продолжением} меры $\mu_0$ с полукольца $\mathcal{P}$. В частности, $\mathcal{P} \subset \mathcal{U}_{\mu^*}$.
+\end{Theorem}
+
+\begin{Proof}
+Из предыдущих теорем мы уже знаем, что $\mu^*$ — внешняя мера, а её сужение на систему измеримых множеств $\mathcal{U}_{\mu^*}$ является мерой. Осталось показать, что элементы полукольца $\mathcal{P}$ измеримы, то есть $\mathcal{P} \subset \mathcal{U}_{\mu^*}$.
+
+Пусть $P \in \mathcal{P}$. Нам нужно доказать, что для любого множества $E \subset X$ выполняется:
+$$ \mu^*(E) \ge \mu^*(E \cap P) + \mu^*(E \setminus P) $$
+
+\textbf{Случай а):} $E \in \mathcal{P}$ (множество $E$ из полукольца). \\
+Тогда разность $E \setminus P$ можно представить как конечное дизъюнктное объединение: $E \setminus P = \bigsqcup\limits_{i=1}^n Q_i$, где $Q_i \in \mathcal{P}$. 
+Следовательно, $E = (E \cap P) \sqcup \bigsqcup\limits_{i=1}^n Q_i$.
+Так как на элементах полукольца $\mu^*$ совпадает с $\mu_0$, а $\mu_0$ конечно аддитивна:
+$$ \mu^*(E) = \mu_0(E) = \mu_0(E \cap P) + \sum\limits_{i=1}^n \mu_0(Q_i) = \mu^*(E \cap P) + \sum\limits_{i=1}^n \mu^*(Q_i) $$
+Применяя конечную полуаддитивность внешней меры:
+$$ \mu^*(E) \ge \mu^*(E \cap P) + \mu^* \left( \bigcup\limits_{i=1}^n Q_i \right) = \mu^*(E \cap P) + \mu^*(E \setminus P) $$
+
+\textbf{Случай б):} $E \notin \mathcal{P}$ (множество $E$ не из полукольца). \\
+Если $\mu^*(E) = +\infty$, то неравенство выполняется тривиально. 
+Если $\mu^*(E) < +\infty$, то для любого $\varepsilon > 0$ существует покрытие $E \subset \bigcup\limits_{i=1}^{\infty} P_i$ ($P_i \in \mathcal{P}$), такое что:
+$$ \mu^*(E) + \varepsilon > \sum\limits_{i=1}^{\infty} \mu_0(P_i) $$
+Так как $P_i \in \mathcal{P}$, для каждого из них выполняется доказанный \textbf{Случай а} (подставляя $P_i$ вместо $E$):
+$$ \sum\limits_{i=1}^{\infty} \mu_0(P_i) = \sum\limits_{i=1}^{\infty} \mu^*(P_i) \ge \sum\limits_{i=1}^{\infty} \left( \mu^*(P_i \cap P) + \mu^*(P_i \setminus P) \right) $$
+Используя счётную полуаддитивность внешней меры:
+$$ \sum\limits_{i=1}^{\infty} \mu^*(P_i \cap P) + \sum\limits_{i=1}^{\infty} \mu^*(P_i \setminus P) \ge \mu^* \left( \bigcup\limits_{i=1}^{\infty} (P_i \cap P) \right) + \mu^* \left( \bigcup\limits_{i=1}^{\infty} (P_i \setminus P) \right) $$
+Заметим, что $E \cap P \subset \bigcup\limits_{i=1}^{\infty} (P_i \cap P)$ и $E \setminus P \subset \bigcup\limits_{i=1}^{\infty} (P_i \setminus P)$. В силу монотонности:
+$$ \mu^*(E) + \varepsilon > \mu^*(E \cap P) + \mu^*(E \setminus P) $$
+Устремляя $\varepsilon \to 0$, получаем требуемое неравенство. Следовательно, $P \in \mathcal{U}_{\mu^*}$.
+\end{Proof}
+
+\begin{Definition}{Пространство с мерой}{}
+Тройка $(X, \mathcal{U}, \mu)$, где $X$ — базовое множество, $\mathcal{U}$ — $\sigma$-алгебра измеримых множеств, а $\mu$ — мера, заданная на $\mathcal{U}$, называется \textbf{пространством с мерой} (или измеримым пространством).
+\end{Definition}
+
+\begin{Example}
+Пусть $X = \{1, 2, 3\}$. Дано полукольцо $\mathcal{P} = \{\emptyset, \{2, 3\}\}$. Задана мера $\mu_0(\emptyset) = 0, \mu_0(\{2, 3\}) = 0$.
+Выполним процесс Каратеодори для построения $\mu^*$:
+\begin{itemize}
+    \item $\mu^*(\{2\}) = 0$ и $\mu^*(\{3\}) = 0$, так как они покрываются множеством $\{2, 3\}$ (монотонность).
+    \item Множества, содержащие элемент $1$, невозможно покрыть элементами из $\mathcal{P}$, поэтому их внешняя мера равна $+\infty$:
+    $$ \mu^*(\{1\}) = \mu^*(\{1, 2\}) = \mu^*(\{1, 3\}) = \mu^*(\{1, 2, 3\}) = +\infty $$
+\end{itemize}
+В данном случае множество $X$ нельзя покрыть элементами конечной меры, поэтому эта мера \textbf{не является $\sigma$-конечной}. Система измеримых множеств $\mathcal{U}_{\mu^*} = 2^X$.
+\end{Example}
+
+\section{§ Свойства стандартного продолжения}
+
+\begin{Theorem}{Свойства продолжения меры}{}
+Пусть $\mu_0$ — мера на полукольце $\mathcal{P}$. Пусть $\mu$ — её стандартное продолжение (по Каратеодори) на $\sigma$-алгебру $\mathcal{U}$, а $\nu$ — какое-либо другое продолжение $\mu_0$ на некоторую $\sigma$-алгебру $\mathcal{U}_0$. Тогда:
+\begin{enumerate}
+    \item Для любого $A \in \mathcal{U} \cap \mathcal{U}_0$ выполняется $\nu(A) \le \mu(A)$. Более того, если $\mu(A) < +\infty$, то $\mu(A) = \nu(A)$.
+    \item Если мера $\mu_0$ является $\textbf{$\sigma$-конечной}$ (то есть $X = \bigcup\limits_{i=1}^{\infty} P_i$, где $\mu_0(P_i) < +\infty$), то $\nu = \mu$ на пересечении $\mathcal{U} \cap \mathcal{U}_0$. (Теорема о единственности продолжения).
+\end{enumerate}
+\end{Theorem}
+
+\begin{Proof}
+\textbf{Доказательство пункта 1:} \\
+Если $\mu(A) = +\infty$, то неравенство $\nu(A) \le +\infty$ выполняется очевидным образом.
+
+Пусть $\mu(A) < +\infty$. По определению внешней меры, для любого $\varepsilon > 0$ существует покрытие $A \subset \bigcup\limits_{i=1}^{\infty} P_i$ ($P_i \in \mathcal{P}$), такое что:
+$$ \sum\limits_{i=1}^{\infty} \mu_0(P_i) \le \mu(A) + \varepsilon $$
+Так как $\nu$ — продолжение меры $\mu_0$, то $\nu(P_i) = \mu_0(P_i)$. В силу счётной полуаддитивности меры $\nu$:
+$$ \nu(A) \le \sum\limits_{i=1}^{\infty} \nu(P_i) = \sum\limits_{i=1}^{\infty} \mu_0(P_i) \le \mu(A) + \varepsilon $$
+Переходя к точной нижней грани по всем покрытиям ($\varepsilon \to 0$), получаем $\nu(A) \le \mu(A)$.
+
+\textbf{Покажем равенство при $\mu(A) < +\infty$:} \\
+Сначала докажем вспомогательный факт: $\forall P \in \mathcal{P}$, $\nu(A \cap P) = \mu(A \cap P)$. \\
+Предположим противное: пусть $\nu(A \cap P) < \mu(A \cap P)$. Так как $P = (P \cap A) \sqcup (P \setminus A)$, то:
+$$ \nu(P) = \nu(P \cap A) + \nu(P \setminus A) < \mu(P \cap A) + \mu(P \setminus A) = \mu(P) $$
+Но $P \in \mathcal{P}$, а на полукольце обе меры совпадают, то есть $\nu(P) = \mu_0(P) = \mu(P)$. Получили противоречие: $\mu(P) < \mu(P)$. Следовательно, $\nu(A \cap P) = \mu(A \cap P)$.
+
+Теперь рассмотрим покрытие $A \subset \bigcup\limits_{i=1}^{\infty} P_i$. По свойствам полукольца, объединение $\bigcup P_i$ можно представить как дизъюнктное объединение элементов полукольца: $\bigsqcup\limits_{i=1}^{\infty} \bigsqcup\limits_{j=1}^{m_i} Q_{ij}$, где $Q_{ij} \in \mathcal{P}$.
+Тогда само множество $A$ можно записать как дизъюнктное объединение: $A = \bigsqcup\limits_{i, j} (A \cap Q_{ij})$.
+Используя счётную аддитивность и доказанный факт $\nu(A \cap Q_{ij}) = \mu(A \cap Q_{ij})$:
+$$ \nu(A) = \sum\limits_{i, j} \nu(A \cap Q_{ij}) = \sum\limits_{i, j} \mu(A \cap Q_{ij}) = \mu(A) $$
+
+\textbf{Доказательство пункта 2 (Единственность продолжения):} \\
+По условию мера $\mu_0$ является $\sigma$-конечной, значит, пространство можно представить как $X = \bigcup\limits_{n=1}^{\infty} P_n$, где $P_n \in \mathcal{P}$ и $\mu_0(P_n) < +\infty$.
+Обозначим $S_n = \bigcup\limits_{k=1}^n P_k$. По лемме о нарезке, это конечное объединение можно представить как дизъюнктное объединение элементов полукольца $Q_j \in \mathcal{P}$:
+$$ S_n = \bigsqcup\limits_{j=1}^{m_n} Q_j $$
+Так как $\mu_0(Q_j) < +\infty$, то $\mu(Q_j) < +\infty$.
+Рассмотрим произвольное измеримое множество $A \in \mathcal{U} \cap \mathcal{U}_0$. Пересечем его с $Q_j$:
+Множество $A \cap Q_j \subset Q_j$, значит, $\mu(A \cap Q_j) \le \mu(Q_j) < +\infty$. 
+В силу доказанного пункта 1, для множеств конечной меры продолжения совпадают, поэтому $\nu(A \cap Q_j) = \mu(A \cap Q_j)$.
+Суммируя по дизъюнктным частям, получаем совпадение мер на пересечении с $S_n$:
+$$ \nu(A \cap S_n) = \sum\limits_{j=1}^{m_n} \nu(A \cap Q_j) = \sum\limits_{j=1}^{m_n} \mu(A \cap Q_j) = \mu(A \cap S_n) $$
+Заметим, что $S_1 \subset S_2 \subset \dots$, причем $\bigcup\limits_{n=1}^{\infty} S_n = X$. Следовательно, последовательность множеств $(A \cap S_n)$ монотонно возрастает и $A \cap S_n \nearrow A$. 
+Поскольку $\mu$ и $\nu$ являются мерами на $\sigma$-алгебре, они обладают свойством непрерывности снизу. Переходя к пределу при $n \to \infty$, получаем:
+$$ \nu(A) = \lim\limits_{n \to \infty} \nu(A \cap S_n) = \lim\limits_{n \to \infty} \mu(A \cap S_n) = \mu(A) $$
+Теорема о единственности продолжения полностью доказана.
+\end{Proof}
+
+
+\section{§ Классы множеств и аппроксимация меры}
+
+\begin{Definition}{Множества типа $\mathcal{U}_\sigma$ и $\mathcal{U}_\delta$}{}
+Пусть $\mathcal{U}$ — некоторая система множеств.
+\begin{itemize}
+    \item Множество $A$ называется множеством типа $\mathbf{\mathcal{U}_\sigma}$, если оно представимо в виде не более чем счётного объединения элементов из $\mathcal{U}$:
+    $$ A = \bigcup\limits_{i=1}^{\infty} A_i, \quad A_i \in \mathcal{U} $$
+    \item Множество $A$ называется множеством типа $\mathbf{\mathcal{U}_\delta}$, если оно представимо в виде не более чем счётного пересечения элементов из $\mathcal{U}$:
+    $$ A = \bigcap\limits_{i=1}^{\infty} A_i, \quad A_i \in \mathcal{U} $$
+\end{itemize}
+\end{Definition}
+
+\noindent \textbf{NB:} Справедливы следующие обозначения для итераций: $\mathcal{U}_{\sigma\delta} = (\mathcal{U}_\sigma)_\delta$, $\quad \mathcal{U}_{\delta\sigma} = (\mathcal{U}_\delta)_\sigma$.
+
+\begin{Lemma}{О структуре открытых множеств в $\mathbb{R}^n$}{}
+Любое непустое открытое в $\mathbb{R}^n$ множество является множеством типа $(\mathcal{P}^n)_\sigma$. Более того, оно есть объединение не более чем счётного числа попарно дизъюнктных $n$-мерных ячеек из полукольца $\mathcal{P}^n$.
+\end{Lemma}
+
+\begin{Proof}
+Пусть $G \subset \mathbb{R}^n$ — непустое открытое множество.
+Так как $G$ открыто, для любой точки $x \in G$ существует окрестность, целиком лежащая в $G$. Значит, существует $n$-мерный полуинтервал $[a_x, b_x) \in \mathcal{P}^n$ с рациональными координатами вершин, такой что:
+$$ x \in [a_x, b_x) \quad \text{и} \quad [a_x, b_x) \subset G $$
+Очевидно, что $G = \bigcup\limits_{x \in G} [a_x, b_x)$. 
+Так как множество всех полуинтервалов с рациональными концами счётно, то это объединение содержит не более чем счётное число различных элементов полукольца $\mathcal{P}^n$. Значит, $G = \bigcup\limits_{i=1}^{\infty} P_i$, где $P_i \in \mathcal{P}^n$. \\
+По свойству полукольца (лемма «про нарезку»), любое счётное объединение элементов полукольца можно представить в виде дизъюнктного объединения элементов того же полукольца.
+\end{Proof}
+
+\begin{Definition}{Борелевская оболочка}{}
+Минимальная $\sigma$-алгебра, содержащая заданную систему множеств $\mathcal{A}$, называется \textbf{борелевской оболочкой} системы $\mathcal{A}$ и обозначается $\mathcal{B}(\mathcal{A})$.
+\end{Definition}
+
+\begin{Theorem}{Об аппроксимации внешней меры}{}
+Пусть $\mu$ — стандартное продолжение меры $\mu_0$ с полукольца $\mathcal{P}$. Если $\mu^*(E) < +\infty$, то существует множество $C \in \mathcal{P}_{\sigma\delta} \subset \mathcal{B}(\mathcal{P})$ такое, что:
+$$ E \subset C \quad \text{и} \quad \mu^*(E) = \mu(C) $$
+\end{Theorem}
+
+\begin{Proof}
+По определению внешней меры, порождённой мерой $\mu_0$:
+$$ \mu^*(E) = \inf \left\{ \sum\limits_{i=1}^{\infty} \mu_0(P_i) : E \subset \bigcup\limits_{i=1}^{\infty} P_i, \quad P_i \in \mathcal{P} \right\} $$
+По свойству инфимума, для любого $n \in \mathbb{N}$ существует покрывающий набор элементов $P_i^n \in \mathcal{P}$, такой что $E \subset \bigcup\limits_{i=1}^{\infty} P_i^n$ и:
+$$ \mu^*(E) + \frac{1}{n} > \sum\limits_{i=1}^{\infty} \mu_0(P_i^n) $$
+Обозначим объединение этого набора за $C_n = \bigcup\limits_{i=1}^{\infty} P_i^n$. Очевидно, что $C_n \in \mathcal{P}_\sigma$ и $E \subset C_n$. 
+Из счётной полуаддитивности внешней меры $\mu^*$ и совпадения $\mu^*$ с $\mu_0$ на полукольце следует:
+$$ \mu^*(E) \le \mu^*(C_n) \le \sum\limits_{i=1}^{\infty} \mu^*(P_i^n) = \sum\limits_{i=1}^{\infty} \mu_0(P_i^n) < \mu^*(E) + \frac{1}{n} $$
+Определим множество $C = \bigcap\limits_{n=1}^{\infty} C_n$. Так как это счётное пересечение множеств типа $\mathcal{P}_\sigma$, то $C \in \mathcal{P}_{\sigma\delta} \subset \mathcal{B}(\mathcal{P})$.
+Поскольку $E \subset C_n$ для всех $n$, то $E \subset C$. 
+Тогда из монотонности меры: $\mu^*(E) \le \mu(C) \le \mu(C_n) < \mu^*(E) + \frac{1}{n}$ для любого $n$. Устремляя $n \to \infty$, получаем $\mu(C) = \mu^*(E)$.
+\end{Proof}
+
+\begin{Theorem}{Следствие (Аппроксимация измеримого множества)}{}
+Пусть $\mu$ — стандартное продолжение меры $\mu_0$ с полукольца $\mathcal{P}$, и множество $A$ измеримо ($\mu(A) < +\infty$). Тогда существуют борелевские множества $B, C \in \mathcal{B}(\mathcal{P})$, такие что:
+$$ B \subset A \subset C \quad \text{и} \quad \mu(C \setminus B) = 0 $$
+\end{Theorem}
+
+\begin{Proof}
+\textit{}
+
+\textbf{1) Построение $C$ (оценка снаружи):} \\
+Так как $\mu(A) < +\infty$, по теореме об аппроксимации существует множество $C \in \mathcal{P}_{\sigma\delta} \subset \mathcal{B}(\mathcal{P})$ такое, что $A \subset C$ и $\mu(C) = \mu(A)$. \\
+Так как $A$ измеримо и $\mu(A)$ конечна, разность $C \setminus A$ также измерима, и её мера равна:
+$$ \mu(C \setminus A) = \mu(C) - \mu(A) = 0 $$
+
+\textbf{2) Построение $B$ (оценка изнутри):} \\
+Множество $C \setminus A$ имеет меру ноль. Применим теорему об аппроксимации к этому множеству: существует множество $N \in \mathcal{B}(\mathcal{P})$ такое, что $(C \setminus A) \subset N$ и $\mu(N) = \mu(C \setminus A) = 0$.
+
+Определим множество $B = C \setminus N$. Так как $C$ и $N$ — борелевские множества, то и $B \in \mathcal{B}(\mathcal{P})$. \\
+Покажем, что $B \subset A$. Заметим, что $(C \setminus A) \subset N$, следовательно $C \setminus N \subset C \setminus (C \setminus A) = A$. Таким образом, $B \subset A \subset C$.
+
+\textbf{3) Проверка разности:} \\
+Мера разности $\mu(C \setminus B) = \mu(C \setminus (C \setminus N)) = \mu(C \cap N)$. 
+Поскольку $C \cap N \subset N$, в силу монотонности меры:
+$$ \mu(C \setminus B) \le \mu(N) = 0 \implies \mu(C \setminus B) = 0 $$
+Что и требовалось доказать.
+\end{Proof}
+
+\section{§ Мера Лебега и её свойства}
+
+\begin{Definition}{Мера Лебега в $\mathbb{R}^n$}{}
+\textbf{Мерой Лебега} в $\mathbb{R}^n$ называется стандартное продолжение (по Каратеодори) $\lambda_n$ объёма с полукольца многомерных ячеек $\mathcal{P}^n$.
+\end{Definition}
+
+Напомним конструкцию:
+1) На $\mathcal{P}^1 = \{[a, b)\}$ мера $\lambda_1([a, b)) = b - a$.
+2) $\mathcal{P}^n = \mathcal{P}^1 \odot \dots \odot \mathcal{P}^1$ (декартово произведение $n$ раз) является полукольцом. Объём на нём задаётся как $\lambda_n = \lambda_1 \cdot \dots \cdot \lambda_1$, то есть $\lambda_n([a, b)) = \prod\limits_{k=1}^n (b_k - a_k)$.
+
+\begin{Theorem}{Счётная аддитивность объёма на $\mathcal{P}^n$}{}
+Функция объёма $\lambda_n$ является мерой (то есть счётно аддитивна) на полукольце $\mathcal{P}^n$.
+\end{Theorem}
+
+\begin{Proof}
+Достаточно доказать свойство счётной полуаддитивности: если $[a, b) \subset \bigcup\limits_{i=1}^{\infty} [a_i, b_i)$, то $\lambda_n([a, b)) \le \sum\limits_{i=1}^{\infty} \lambda_n([a_i, b_i))$.
+
+Зафиксируем произвольное $\varepsilon > 0$. Из-за того, что объём непрерывен как функция от координат, мы можем слегка "раздуть" каждый элемент покрытия. Существуют векторы $a_i^\varepsilon < a_i$ (покоординатно), такие что:
+$$ \lambda_n([a_i^\varepsilon, b_i)) < \lambda_n([a_i, b_i)) + \frac{\varepsilon}{2^i} $$
+Рассмотрим любую точку $t \in [a, b)$ (то есть $a \le t < b$). Замкнутый параллелепипед $[a, t]$ является компактом в $\mathbb{R}^n$. 
+Справедлива цепочка включений:
+$$ [a, t] \subset [a, b) \subset \bigcup\limits_{i=1}^{\infty} [a_i^\varepsilon, b_i) \subset \bigcup\limits_{i=1}^{\infty} (a_i^\varepsilon, b_i) $$
+Мы покрыли компакт $[a, t]$ открытыми множествами $(a_i^\varepsilon, b_i)$. По лемме Гейне-Бореля из этого покрытия можно выделить конечное подпокрытие. Значит, существует такой номер $N$, что:
+$$ [a, t] \subset \bigcup\limits_{i=1}^N (a_i^\varepsilon, b_i) $$
+Отсюда следует, что:
+$$ [a, t) \subset [a, t] \subset \bigcup\limits_{i=1}^N (a_i^\varepsilon, b_i) \subset \bigcup\limits_{i=1}^N [a_i^\varepsilon, b_i) $$
+Так как для конечного объединения в полукольце действует конечная полуаддитивность объёма, то:
+$$ \lambda_n([a, t)) \le \sum\limits_{i=1}^N \lambda_n([a_i^\varepsilon, b_i)) \le \sum\limits_{i=1}^{\infty} \lambda_n([a_i^\varepsilon, b_i)) < \sum\limits_{i=1}^{\infty} \lambda_n([a_i, b_i)) + \sum\limits_{i=1}^{\infty} \frac{\varepsilon}{2^i} $$
+То есть $\lambda_n([a, t)) < \sum\limits_{i=1}^{\infty} \lambda_n([a_i, b_i)) + \varepsilon$.
+Это неравенство справедливо для всех $t < b$. Устремим $t \to b$. В силу непрерывности объёма получим:
+$$ \lambda_n([a, b)) \le \sum\limits_{i=1}^{\infty} \lambda_n([a_i, b_i)) + \varepsilon $$
+Так как $\varepsilon > 0$ было выбрано произвольно ($\varepsilon \downarrow 0$), получаем $\lambda_n([a, b)) \le \sum\limits_{i=1}^{\infty} \lambda_n([a_i, b_i))$. Счётная полуаддитивность доказана, значит объём является мерой.
+\end{Proof}
+
+\section{§ Свойства меры Лебега и измеримых множеств}
+
+\begin{Theorem}{Базовые свойства измеримых множеств}{}
+\begin{enumerate}
+    \item Открытые множества измеримы. Мера непустого открытого множества строго положительна.
+    \item Замкнутые множества измеримы.
+    \item Мера одноточечного множества равна 0.
+    \item Мера любого не более чем счётного множества равна 0.
+    \item Мера измеримого ограниченного множества конечна. Всякое измеримое множество — это объединение не более чем счётного числа множеств конечной меры.
+    \item Гиперплоскости имеют меру нуль. Если $H_{n-1} = \{ x \in \mathbb{R}^n : w_1 x_1 + \dots + w_n x_n + w_0 = 0 \}$, то $\lambda_m(H_{n-1}) = 0$ при $m \ge n$.
+    \item Пусть $D \subset \mathbb{R}^m$ и $\Phi: D \to \mathbb{R}^n$, причем $\Phi \in C^1(D)$. Если $A \subset D$ измеримо относительно $\lambda_m$, то $\Phi(A)$ измеримо относительно $\lambda_n$.
+    \item Измеримость и мера Лебега сохраняются при движениях пространства (сдвиг + ортогональное преобразование).
+\end{enumerate}
+\end{Theorem}
+
+\begin{Proof}[Развёрнутые доказательства (упражнения с лекции)]
+\textbf{1) Открытые множества:} Любое открытое в $\mathbb{R}^n$ множество $G$ можно представить как объединение не более чем счётного числа $n$-мерных ячеек (прямоугольников) из полукольца $\mathcal{P}^n$. Так как полукольцо лежит в $\sigma$-алгебре измеримых множеств $\mathcal{U}_\lambda$, а $\sigma$-алгебра замкнута относительно счётных объединений, то $G \in \mathcal{U}_\lambda$. Если $G \neq \emptyset$, оно содержит хотя бы одну ячейку со строго положительными длинами сторон, значит $\lambda(G) > 0$.
+
+\textbf{2) Замкнутые множества:} Любое замкнутое множество $F$ является дополнением к некоторому открытому множеству $G$ (то есть $F = \mathbb{R}^n \setminus G$). Так как открытое $G$ измеримо, а $\sigma$-алгебра замкнута относительно перехода к дополнению, то $F$ измеримо.
+
+\textbf{3) Одноточечное множество:} Точку $x = (x_1, \dots, x_n)$ можно представить как счётное пересечение вложенных полуинтервалов: 
+$$ \{x\} = \bigcap\limits_{k=1}^{\infty} \left[ x_1, x_1 + \frac{1}{k} \right) \times \dots \times \left[ x_n, x_n + \frac{1}{k} \right) $$
+Мера каждого такого полуинтервала равна $\frac{1}{k^n}$. В силу непрерывности меры Лебега сверху: $\lambda(\{x\}) = \lim\limits_{k \to \infty} \frac{1}{k^n} = 0$.
+
+\textbf{4) Счётное множество:} Пусть $A = \{x_1, x_2, \dots\}$. Представим его как счётное объединение одноточечных множеств: $A = \bigcup\limits_{i=1}^{\infty} \{x_i\}$. В силу счётной полуаддитивности (или аддитивности, так как точки не пересекаются) меры: 
+$$ \lambda(A) \le \sum\limits_{i=1}^{\infty} \lambda(\{x_i\}) = \sum\limits_{i=1}^{\infty} 0 = 0 $$
+
+\textbf{5) Ограниченные множества:} Если множество $A$ ограничено, оно целиком помещается внутри некоторого большого куба $K = [-R, R]^n$. В силу монотонности меры: $\lambda(A) \le \lambda(K) = (2R)^n < +\infty$.
+Любое пространство $\mathbb{R}^n$ можно разбить на счётное объединение кубов $K_m = [-m, m]^n$. Тогда любое измеримое множество $A = \bigcup\limits_{m=1}^{\infty} (A \cap K_m)$, где мера каждого куска конечна.
+
+\textbf{6) Гиперплоскость:} Ортогональным преобразованием (которое сохраняет меру Лебега, см. п. 8) любую гиперплоскость можно перевести в координатную плоскость $x_n = 0$. Тогда она представляет собой прямое произведение $\mathbb{R}^{n-1} \times \{0\}$. Мера этого множества равна произведению $(+\infty) \cdot 0 = 0$.
+
+\textbf{7) Гладкие отображения:} Гладкая функция $\Phi \in C^1$ на компакте удовлетворяет условию Липшица. Известно, что липшицевы отображения переводят множества лебеговой меры нуль в множества меры нуль, а так как любое измеримое множество есть объединение борелевского (которое переходит в борелевское) и множества меры нуль, образ остаётся измеримым.
+
+\textbf{8) Инвариантность при движениях:} Сдвиг не меняет длин рёбер ячеек из полукольца, поэтому мера Лебега трансляционно инвариантна по определению. При ортогональном преобразовании (повороте/отражении) матрица Якоби имеет определитель $\pm 1$. При замене переменных в кратном интеграле объём множества умножается на модуль определителя Якоби, то есть на $| \pm 1 | = 1$. Следовательно, объём (и мера) сохраняется.
+\end{Proof}
+
+\begin{Example}[ Множество нулевой меры мощности континуум]
+Рассмотрим \textbf{множество Кантора}. Построим его итеративно на отрезке $[0, 1]$:
+\begin{itemize}
+    \item $C_0 = [0, 1]$
+    \item $C_1 = \left[0, \frac{1}{3}\right] \cup \left[\frac{2}{3}, 1\right]$ (сегменты первого ранга, удаляем среднюю треть)
+    \item $C_2 = \left[0, \frac{1}{9}\right] \cup \left[\frac{2}{9}, \frac{3}{9}\right] \cup \left[\frac{6}{9}, \frac{7}{9}\right] \cup \left[\frac{8}{9}, 1\right]$
+\end{itemize}
+Само множество Кантора определяется как бесконечное пересечение: $C = \bigcap\limits_{i=1}^{\infty} C_i$.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2, >=latex]
+    \definecolor{darktext}{HTML}{154360}
+    \definecolor{colorPoi}{HTML}{7DCEA0}
+    
+    % C_0
+    \draw[darktext, ultra thick] (0, 0) -- (9, 0);
+    \node[left, darktext] at (-0.5, 0) {$C_0$};
+    
+    % C_1
+    \draw[darktext, ultra thick] (0, -0.6) -- (3, -0.6);
+    \draw[darktext, ultra thick] (6, -0.6) -- (9, -0.6);
+    \node[left, darktext] at (-0.5, -0.6) {$C_1$};
+    
+    % C_2
+    \draw[darktext, ultra thick] (0, -1.2) -- (1, -1.2);
+    \draw[darktext, ultra thick] (2, -1.2) -- (3, -1.2);
+    \draw[darktext, ultra thick] (6, -1.2) -- (7, -1.2);
+    \draw[darktext, ultra thick] (8, -1.2) -- (9, -1.2);
+    \node[left, darktext] at (-0.5, -1.2) {$C_2$};
+    
+    % C_3 (набросок точек)
+    \foreach \x in {0, 0.33, 0.66, 1, 2, 2.33, 2.66, 3, 6, 6.33, 6.66, 7, 8, 8.33, 8.66, 9} {
+        \fill[colorPoi] (\x, -1.8) circle (1.5pt);
+    }
+    \node[left, darktext] at (-0.5, -1.8) {$C_\infty$};
+\end{tikzpicture}
+\end{center}
+\end{Example}
+
+\begin{Lemma}{Свойства множества Кантора}{}
+1) Множество $C$ измеримо относительно $\lambda_1$. \\
+2) $\lambda_1(C) = 0$. \\
+3) Мощность множества $C$ — континуум.
+\end{Lemma}
+
+\begin{Proof}
+1) Измеримо, так как состоит из пересечения счётного числа измеримых множеств (каждое $C_i$ — конечное объединение отрезков). \\
+2) На каждом шаге $i$ длина оставшихся отрезков составляет $2^i \cdot \frac{1}{3^i} = \left(\frac{2}{3}\right)^i$. Так как $C \subset C_i$, то:
+$$ \lambda_1(C) \le \lambda_1(C_i) = \left(\frac{2}{3}\right)^i \xrightarrow{i \to \infty} 0 \implies \lambda_1(C) = 0 $$
+3) Существует биекция между элементами множества Кантора и множеством всех двоичных последовательностей бесконечной длины, мощность которого равна континууму.
+\end{Proof}
+
+\section{§ Неизмеримые множества}
+
+\begin{Theorem}{Множество Витали}{}
+Любое множество положительной меры Лебега содержит неизмеримое подмножество.
+\end{Theorem}
+
+\begin{Proof}
+Пусть существует измеримое множество $A$, такое что $0 < \lambda_n(A) < +\infty$. \\
+Будем считать элементы эквивалентными $x \sim y$ для $x, y \in A$, если их разность $x - y \in \mathbb{Q}^n$ (вектор с рациональными координатами). Это задаёт отношение эквивалентности. \\
+Следовательно, множество $A$ разбивается на дизъюнктные классы эквивалентности. \\
+В силу аксиомы выбора, мы можем создать множество $E$, содержащее \textbf{ровно по одному представителю} из каждого класса эквивалентности.
+
+Так как $A$ имеет конечную меру, оно ограничено. Пусть $\forall x \in A : \|x\| \le R$. \\
+Следовательно, для любых $x, y \in A$ расстояние $\|x - y\| \le 2R$. \\
+Рассмотрим счётное объединение сдвигов множества $E$ на рациональные векторы $r$:
+$$ W = \bigcup\limits_{r \in \mathbb{Q}^n, \|r\| \le 2R} (r + E) $$
+По построению множества представителей, $A \subset W$. 
+Предположим от противного, что $E$ \textbf{измеримо}. Тогда каждый сдвиг $(r + E)$ также измерим (мера инвариантна относительно сдвига), а значит и объединение $W$ измеримо.
+Так как сдвиги $(r + E)$ попарно не пересекаются, мера их счётного объединения равна сумме мер:
+$$ 0 < \lambda_n(A) \le \lambda_n(W) = \sum\limits_{k=1}^{\infty} \lambda_n(r_k + E) = \sum\limits_{k=1}^{\infty} \lambda_n(E) $$
+\begin{itemize}
+    \item Если $\lambda_n(E) = 0$, то $\lambda_n(W) = \sum 0 = 0$, что противоречит $0 < \lambda_n(A) \le \lambda_n(W)$.
+    \item Если $\lambda_n(E) > 0$, то сумма бесконечного числа одинаковых положительных чисел равна $+\infty$, то есть $\lambda_n(W) = +\infty$. Однако множество $W$ ограничено радиусом $3R$, поэтому его мера должна быть конечна. Противоречие.
+\end{itemize}
+Следовательно, допущение об измеримости неверно. Множество $E \subset A$ является неизмеримым.
+\end{Proof}
+
+\noindent \textbf{Замечание (О гладких преобразованиях):} Отказаться совсем от гладкости $\Phi$ как достаточного условия сохранения измеримости (см. свойство 7) нельзя. Классический контрпример строится на базе функции Кантора (лестницы Кантора) $\varphi$. Можно построить непрерывную (но не абсолютно непрерывную) функцию, которая отображает множество меры нуль на множество положительной меры (содержащее неизмеримое подмножество $E$). Тогда $e = \varphi^{-1}(E)$ является подмножеством множества меры нуль, следовательно $\lambda(e) = 0$ (измеримо), но его образ $E$ — неизмерим. Вывод: простой непрерывности недостаточно.
+
+\section{§ Измеримые функции и их свойства}
+
+Идея интеграла Лебега отличается от интеграла Римана тем, что мы разбиваем не ось $X$, а ось $Y$. 
+
+\begin{center}
+\begin{center}
+\begin{center}
+\begin{tikzpicture}[scale=1.2, >=latex]
+
+    % --- Определение цветов ---
+    \definecolor{darktext}{HTML}{154360}     % Темно-синий
+    \definecolor{colorY}{HTML}{D4E6F1}       % Светло-голубой для полосы Y
+    \definecolor{colorHighlight}{HTML}{2874A6} % Насыщенный синий для выделения множеств
+    \definecolor{colorCurve}{HTML}{85929E}   % Серый для невыделенной части графика
+
+    % ==========================================
+    % 1. Горизонтальная разбивка по оси Y (Интеграл Лебега)
+    % ==========================================
+    
+    % Закрашиваем исследуемый коридор по Y
+    \fill[colorY, opacity=0.6] (-0.2, 1.8) rectangle (8.2, 2.5);
+    
+    % Линии уровней y_{i-1} и y_i
+    \draw[dashed, colorHighlight, thick] (-0.2, 1.8) -- (8.2, 1.8) node[right] {$y_{i-1}$};
+    \draw[dashed, colorHighlight, thick] (-0.2, 2.5) -- (8.2, 2.5) node[right] {$y_i$};
+
+    % Оси координат
+    \draw[->, thick, darktext] (-0.5, 0) -- (8.8, 0) node[right] {$x$};
+    \draw[->, thick, darktext] (0, -0.5) -- (0, 4) node[above] {$f(x)$};
+
+    % ==========================================
+    % 2. Отрисовка функции f(x) кусками для точного попадания
+    % ==========================================
+    
+    \draw[thick, colorCurve] (0,1) to[out=60, in=225] (0.5, 1.8);
+    \draw[ultra thick, colorHighlight] (0.5, 1.8) to[out=45, in=225] (1.0, 2.5); 
+    \draw[thick, colorCurve] (1.0, 2.5) to[out=45, in=180] (1.5, 3.5) to[out=0, in=135] (2.0, 2.5);
+    \draw[ultra thick, colorHighlight] (2.0, 2.5) to[out=-45, in=135] (2.6, 1.8);
+    \draw[thick, colorCurve] (2.6, 1.8) to[out=-45, in=180] (3.5, 1.2) to[out=0, in=225] (4.4, 1.8);
+    \draw[ultra thick, colorHighlight] (4.4, 1.8) to[out=45, in=225] (4.9, 2.5);
+    \draw[thick, colorCurve] (4.9, 2.5) to[out=45, in=180] (5.5, 3.2) to[out=0, in=135] (6.1, 2.5);
+    \draw[ultra thick, colorHighlight] (6.1, 2.5) to[out=-45, in=135] (6.8, 1.8);
+    \draw[thick, colorCurve] (6.8, 1.8) to[out=-45, in=135] (7.8, 0.5);
+
+    % ==========================================
+    % 3. Проекция на ось X (формирование множества e_i)
+    % ==========================================
+    
+    \foreach \x in {0.5, 1.0, 2.0, 2.6, 4.4, 4.9, 6.1, 6.8} {
+        \draw[dashed, colorHighlight!60!white] (\x, 1.8) -- (\x, 0);
+    }
+    
+    \draw[dashed, colorHighlight!60!white] (1.0, 2.5) -- (1.0, 1.8);
+    \draw[dashed, colorHighlight!60!white] (2.0, 2.5) -- (2.0, 1.8);
+    \draw[dashed, colorHighlight!60!white] (4.9, 2.5) -- (4.9, 1.8);
+    \draw[dashed, colorHighlight!60!white] (6.1, 2.5) -- (6.1, 1.8);
+
+    \draw[line width=4pt, colorHighlight] (0.5, 0) -- (1.0, 0);
+    \draw[line width=4pt, colorHighlight] (2.0, 0) -- (2.6, 0);
+    \draw[line width=4pt, colorHighlight] (4.4, 0) -- (4.9, 0);
+    \draw[line width=4pt, colorHighlight] (6.1, 0) -- (6.8, 0);
+
+    % ==========================================
+    % 4. Подписи и Легенда (перенесено ВНИЗ, чтобы ничего не перекрывать)
+    % ==========================================
+    
+    % Квадратная "скобка", объединяющая отрезки
+    \draw[darktext, thick] (0.5, -0.1) -- (0.5, -0.3) -- (6.8, -0.3) -- (6.8, -0.1);
+    \node[darktext, below=2pt] at (3.65, -0.3) {
+        $\mathbf{e_i = f^{-1}([y_{i-1}, y_i))}$ --- измеримое лебегово множество
+    };
+
+    % Пояснительный текст (строго под графиком)
+    \node[darktext, align=center] at (3.65, -3) {
+        \textbf{Идея интеграла Лебега:} \\
+        Мы разбиваем не ось аргументов $X$, а ось значений $Y$. \\
+        Одному шагу по $Y$ может соответствовать множество $e_i$, \\
+        состоящее из множества разрозненных кусков на оси $X$. \\
+        \vspace{0.5em} \\
+        Сумма Лебега: $\sum\limits_{i=1}^n y_i \cdot \mu(e_i)$
+    };
+
+\end{tikzpicture}
+\end{center}
+\end{center}
+
+\begin{Definition}{Лебеговы множества}{}
+Пусть дана функция $f: X \to \overline{\mathbb{R}}$. \textbf{Лебеговыми множествами} функции $f$, соответствующими значению $a \in \mathbb{R}$, называются следующие подмножества $X$:
+\begin{enumerate}
+    \item[a)] $X(f > a) = \{ x \in X : f(x) > a \}$
+    \item[б)] $X(f \ge a) = \{ x \in X : f(x) \ge a \}$
+    \item[в)] $X(f < a) = \{ x \in X : f(x) < a \}$
+    \item[г)] $X(f \le a) = \{ x \in X : f(x) \le a \}$
+\end{enumerate}
+\end{Definition}
+
+\begin{Lemma}{Эквивалентность измеримости}{}
+Пусть $X$ — множество, $\mathcal{U}$ — $\sigma$-алгебра. Измеримость (принадлежность $\mathcal{U}$) для любого $a \in \mathbb{R}$ любого из четырех типов лебеговых множеств равносильна.
+\end{Lemma}
+
+\begin{Proof}
+Докажем по цепочке переходов, используя свойства $\sigma$-алгебры:
+\begin{itemize}
+    \item $a \Rightarrow \text{б}$: Заметим, что нестрогое неравенство можно представить как счётное пересечение строгих:
+    $$ X(f \ge a) = \bigcap\limits_{n=1}^{\infty} X\left(f > a - \frac{1}{n}\right) $$
+    Счётное пересечение измеримых множеств измеримо.
+    \item $\text{б} \Rightarrow \text{в}$: Переход к дополнению: $X(f < a) = X \setminus X(f \ge a)$. Дополнение измеримо.
+    \item $\text{в} \Rightarrow \text{г}$: $X(f \le a) = \bigcap\limits_{n=1}^{\infty} X\left(f < a + \frac{1}{n}\right)$. Измеримо.
+    \item $\text{г} \Rightarrow \text{a}$: $X(f > a) = X \setminus X(f \le a)$. Измеримо.
+\end{itemize}
+Все определения эквивалентны.
+\end{Proof}
+
+\begin{Definition}{Измеримая функция}{}
+Функция $f$ называется \textbf{измеримой}, если все её лебеговы множества $X(f > a)$ (а следовательно, и все остальные типы) являются измеримыми для любого $a \in \mathbb{R}$.
+\end{Definition}
+
+\begin{Lemma}{Свойства измеримых функций}{}
+Пусть $f$ — измеримая функция. Тогда:
+\begin{enumerate}
+    \item Прообразы одноточечных множеств $f^{-1}(\{a\})$ измеримы.
+    \item Прообраз любого промежутка измерим.
+    \item Функция модуля $|f|$ измерима.
+    \item Прообраз любого открытого множества измерим.
+    \item Сужение функции $f$ на измеримое подмножество $E \subset X$ измеримо.
+    \item Если $f$ измерима на каждом $E_i$, то $f$ измерима на их объединении $\bigcup\limits_{i=1}^{\infty} E_i$.
+\end{enumerate}
+\end{Lemma}
+\end{center}
+\begin{Proof}
+\textbf{1)} Прообраз точки — это пересечение двух лебеговых множеств: 
+$$ f^{-1}(\{a\}) = X(f \le a) \setminus X(f < a) $$
+
+\textbf{2)} Для полуинтервала $[a, b)$:
+$$ f^{-1}([a, b)) = X(f < b) \setminus X(f < a) $$
+
+\textbf{3)} По определению лебегова множества для модуля:
+$$ X(|f| < a) = X(-a < f < a) = X(f < a) \cap X(f > -a) $$
+Пересечение измеримых множеств измеримо.
+
+\textbf{4)} Пусть $G$ — открытое множество. По теореме о структуре открытых множеств, $G$ представимо в виде счётного объединения интервалов: $G = \bigcup\limits_{i=1}^{\infty} (a_i, b_i)$.
+Прообраз объединения равен объединению прообразов:
+$$ f^{-1}(G) = f^{-1}\left(\bigcup\limits_{i=1}^{\infty} (a_i, b_i)\right) = \bigcup\limits_{i=1}^{\infty} f^{-1}((a_i, b_i)) $$
+Так как прообраз интервала измерим (свойство 2), а счётное объединение измеримых множеств измеримо, то $f^{-1}(G)$ измеримо.
+
+\textbf{5) (Доказательство упражнения):} Пусть $f$ измерима на $X$, и задано измеримое подмножество $M \subset X$. Рассмотрим сужение $f|_M$. 
+Лебегово множество для сужения имеет вид:
+$$ M(f|_M > a) = \{ x \in M : f(x) > a \} $$
+Очевидно, что это множество является пересечением:
+$$ M(f|_M > a) = M \cap X(f > a) $$
+Множество $M$ измеримо по условию. Множество $X(f > a)$ измеримо, так как $f$ измерима на $X$. Пересечение двух измеримых множеств измеримо. Значит, функция $f|_M$ измерима.
+
+\textbf{6) (Доказательство упражнения):} Пусть $E = \bigcup\limits_{i=1}^{\infty} E_i$, и на каждом $E_i$ функция $f$ измерима. 
+Рассмотрим лебегово множество на объединении $E$:
+$$ E(f > a) = \{ x \in E : f(x) > a \} = \bigcup\limits_{i=1}^{\infty} \{ x \in E_i : f(x) > a \} = \bigcup\limits_{i=1}^{\infty} E_i(f > a) $$
+По условию функция $f$ измерима на каждом $E_i$, следовательно, каждое множество $E_i(f > a)$ измеримо. Так как $\sigma$-алгебра замкнута относительно счётных объединений, итоговое множество $E(f > a)$ измеримо.
+\end{Proof}
+
+\section{§ Замкнутость измеримых функций}
+
+\begin{Theorem}{Замкнутость относительно предельного перехода}{}
+Пусть $\varphi_n$ — последовательность измеримых функций. Тогда:
+\begin{enumerate}
+    \item Функции $g(x) = \inf\limits_n \varphi_n(x)$ и $h(x) = \sup\limits_n \varphi_n(x)$ измеримы.
+    \item Верхний предел $\varlimsup \varphi_n$ и нижний предел $\varliminf \varphi_n$ измеримы.
+\end{enumerate}
+В частности, если существует поточечный предел $\lim\limits_{n \to \infty} \varphi_n(x)$, то он является измеримой функцией.
+\end{Theorem}
+
+\begin{Proof}
+Докажем пункт 1, проверив лебеговы множества для точных граней.
+Для инфимума: значение инфимума строго меньше $a$ тогда и только тогда, когда хотя бы один элемент последовательности строго меньше $a$. 
+$$ X(g < a) = \bigcup\limits_{n=1}^{\infty} X(\varphi_n < a) $$
+Счётное объединение измеримых множеств измеримо.
+
+Для супремума: значение супремума не превосходит $a$ тогда и только тогда, когда \textbf{все} элементы последовательности не превосходят $a$.
+$$ X(h \le a) = \bigcap\limits_{n=1}^{\infty} X(\varphi_n \le a) $$
+Счётное пересечение измеримых множеств измеримо.
+\end{Proof}
+
+\begin{Example}[ к предельному переходу]
+Рассмотрим последовательность $\varphi_n(x) = x^n$ на отрезке $X = [0, 1]$. Очевидно, что каждая функция непрерывна, а значит измерима.
+Найдём точные грани:
+$$ g(x) = \inf\limits_n (x^n) = \begin{cases} 0, & x < 1 \\ 1, & x = 1 \end{cases} \quad \text{и} \quad h(x) = \sup\limits_n (x^n) = x $$
+Проверим лебеговы множества для $a = 1/2$:
+$$ X\left(g < \frac{1}{2}\right) = [0, 1) \quad \text{и} \quad X\left(h < \frac{1}{2}\right) = \left[0, \frac{1}{2}\right) $$
+Оба полученных множества измеримы (принадлежат борелевской оболочке), что подтверждает теорему.
+\end{Example}
+
+\section{§ Арифметические свойства измеримых функций}
+
+\begin{Theorem}{Суперпозиция измеримых и непрерывной функции}{}
+Пусть $f_1, \dots, f_n : X \to \mathbb{R}$ — измеримые функции, а функция $\varphi : Y \to \mathbb{R}$ (где $Y \subset \mathbb{R}^n$) является непрерывной ($\varphi \in C(Y)$). 
+Тогда сложная функция $\varphi(f_1(x), \dots, f_n(x))$ также является измеримой на $X$.
+\end{Theorem}
+
+\begin{Proof}
+Рассмотрим вектор-функцию $F(x) = (f_1(x), \dots, f_n(x))$. 
+Сначала докажем, что прообраз любого $n$-мерного полуинтервала $[a, b) = [a_1, b_1) \times \dots \times [a_n, b_n)$ при отображении $F$ является измеримым множеством. Действительно:
+$$ F^{-1}([a, b)) = \bigcap\limits_{i=1}^n f_i^{-1}([a_i, b_i)) $$
+Так как каждая $f_i$ измерима, прообразы $[a_i, b_i)$ измеримы. Конечное пересечение измеримых множеств также измеримо.
+
+Теперь пусть $G$ — произвольное открытое множество в $\mathbb{R}^n$. Согласно теореме о структуре открытого множества, $G$ можно представить как не более чем счётное объединение ячеек: $G = \bigcup\limits_{k=1}^{\infty} [a^{(k)}, b^{(k)})$.
+Тогда прообраз открытого множества:
+$$ F^{-1}(G) = \bigcup\limits_{k=1}^{\infty} F^{-1}([a^{(k)}, b^{(k)})) $$
+является измеримым как счётное объединение измеримых множеств.
+
+Перейдем к функции $\varphi$. Рассмотрим её лебегово множество для значения $a$. Множество тех $y \in Y$, где $\varphi(y) < a$, есть:
+$$ \{ y \in Y : \varphi(y) < a \} = \varphi^{-1}((-\infty, a)) = G_a \cap Y $$
+где $G_a$ — некоторое открытое множество в $\mathbb{R}^n$ (в силу непрерывности $\varphi$).
+Проверим измеримость лебегова множества сложной функции:
+$$ X(\varphi(F(x)) < a) = \{ x \in X : F(x) \in G_a \cap Y \} = X(F^{-1}(G_a)) $$
+Как мы доказали выше, прообраз открытого множества $G_a$ измерим. Следовательно, сложная функция измерима.
+\end{Proof}
+
+\noindent \textbf{NB (Важное замечание):} В расширенной числовой прямой $\overline{\mathbb{R}}$ мы доопределяем операции следующим образом:
+$$ 0 \cdot (\pm \infty) = (\pm \infty) \cdot 0 = 0, \quad \frac{x}{\pm \infty} = 0 \text{ при } x \in \mathbb{R} $$
+Операции вида $(+\infty) - (+ \infty)$ не определены (полагаем равными 0 по договоренности или избегаем их).
+
+\begin{Theorem}{Арифметические свойства измеримых функций}{}
+Пусть $f, g$ — измеримые функции. Тогда:
+\begin{enumerate}
+    \item $f + g$ — измерима.
+    \item $f \cdot g$ — измерима.
+    \item $c \cdot f$ — измерима (при $c \in \mathbb{R}$).
+    \item $\frac{f}{g}$ — измерима (на множестве, где $g \neq 0$).
+\end{enumerate}
+\end{Theorem}
+
+\begin{Proof}
+Будем считать, что значения $f$ и $g$ конечны. Тогда достаточно применить предыдущую теорему о суперпозиции:
+1) Функция $\varphi(x, y) = x + y \in C(\mathbb{R}^2)$ непрерывна, значит $f(x) + g(x)$ измерима.
+2) Функция $\varphi(x, y) = x \cdot y \in C(\mathbb{R}^2)$ непрерывна, значит $f(x) \cdot g(x)$ измерима.
+Остальные пункты доказываются аналогично.
+\end{Proof}
+
+\section{§ Простые функции и аппроксимация}
+
+\begin{Definition}{Простая функция}{}
+Измеримая функция называется \textbf{простой}, если множество её значений конечно.
+\end{Definition}
+
+\begin{Definition}{Допустимое разбиение}{}
+Разбиение области определения $X$ простой функции $f$ называется \textbf{допустимым}, если:
+\begin{enumerate}
+    \item Элементы разбиения измеримы.
+    \item На каждом элементе разбиения функция $f$ постоянна (не меняет значение).
+\end{enumerate}
+\end{Definition}
+
+\begin{Lemma}{Общее допустимое разбиение}{}
+Пусть $f, g$ — простые функции. Тогда для них существует общее допустимое разбиение.
+\end{Lemma}
+
+\begin{Proof}
+Пусть $f$ принимает значения $a_1, \dots, a_n$. Тогда множества $E_i = f^{-1}(\{a_i\})$ ($i \in \{1 \dots n\}$) образуют допустимое разбиение для $f$. \\
+Пусть $g$ принимает значения $b_1, \dots, b_k$. Тогда множества $G_j = g^{-1}(\{b_j\})$ ($j \in \{1 \dots k\}$) образуют допустимое разбиение для $g$. \\
+Рассмотрим систему попарных пересечений $\{ E_i \cap G_j \}_{i, j}$. Это множество измеримо, и на нём обе функции постоянны. Следовательно, это и есть общее допустимое разбиение для $f$ и $g$ (некоторые пересечения могут быть пустыми, это нормально).
+\end{Proof}
+
+\noindent \textbf{Следствие:} Сумма и произведение простых функций — тоже простые функции (доказывается применением леммы об общем разбиении).
+
+\begin{Theorem}{Об аппроксимации измеримой функции}{}
+Любая неотрицательная измеримая функция является поточечным пределом последовательности простых функций. Причем последовательность можно считать монотонно возрастающей ($f_1 \le f_2 \le \dots \le f$). \\
+Если функция $f$ ограничена, то сходимость можно считать равномерной.
+\end{Theorem}
+
+\begin{Proof}
+Зафиксируем $n \in \mathbb{N}$. Разобьём ось $Y$ от $0$ до $n$ на отрезки длины $1/n$, а всё, что больше $n$, сгруппируем в один кусок.
+Определим полуинтервалы:
+$$ \Delta_i^n = \left[ \frac{i}{n}, \frac{i+1}{n} \right), \quad i \in \{0, 1, \dots, n^2-1\} $$
+И последний элемент для неограниченного хвоста: $\Delta_{n^2}^n = [n, +\infty)$.
+Построим прообразы этих интервалов: $e_i^n = f^{-1}(\Delta_i^n)$. Так как $f$ измерима, все $e_i^n$ измеримы.
+
+Построим простую функцию $g_n(x)$, задав её значения на каждом $e_i^n$ равными нижней границе интервала:
+$$ g_n(x) = \frac{i}{n} \quad \text{при } x \in e_i^n $$
+\begin{center}
+\begin{tikzpicture}[scale=1.5, >=latex]
+    \definecolor{darktext}{HTML}{154360}
+    \definecolor{colorPoi}{HTML}{7DCEA0}
+    \definecolor{colorArea}{HTML}{D4E6F1}
+
+    % Оси
+    \draw[->, thick, darktext] (-0.5, 0) -- (6, 0) node[right] {$x$};
+    \draw[->, thick, darktext] (0, -0.5) -- (0, 3) node[above] {$f(x)$};
+
+    % Кривая f(x)
+    \draw[thick, darktext] plot [smooth, tension=0.7] coordinates { (0, 2.5) (1, 0.5) (2.5, 2.2) (4, 1.2) (5.5, 0.5) };
+    \node[darktext] at (2.8, 2.5) {$f(x)$};
+
+    % Разметка по Y
+    \draw[dashed, gray] (0, 0.5) node[left, darktext] {$\frac{i}{n}$} -- (5.5, 0.5);
+    \draw[dashed, gray] (0, 1.0) node[left, darktext] {$\frac{i+1}{n}$} -- (4.5, 1.0);
+    \draw[dashed, gray] (0, 2.0) node[left, darktext] {$n$} -- (2.8, 2.0);
+
+    % Ступеньки g_n(x)
+    \draw[ultra thick, colorPoi] (0, 2.0) -- (0.3, 2.0);
+    \draw[ultra thick, colorPoi] (0.3, 1.0) -- (0.7, 1.0);
+    \draw[ultra thick, colorPoi] (0.7, 0.5) -- (1.6, 0.5);
+    \draw[ultra thick, colorPoi] (1.6, 1.0) -- (1.9, 1.0);
+    \draw[ultra thick, colorPoi] (1.9, 2.0) -- (3.0, 2.0);
+    \draw[ultra thick, colorPoi] (3.0, 1.0) -- (4.2, 1.0);
+    \draw[ultra thick, colorPoi] (4.2, 0.5) -- (5.5, 0.5);
+
+    % Пунктиры вниз
+    \draw[dashed, colorPoi] (0.7, 0.5) -- (0.7, 0);
+    \draw[dashed, colorPoi] (1.6, 0.5) -- (1.6, 0);
+    \draw[decorate, decoration={brace, amplitude=4pt, mirror}, darktext] (0.7, -0.1) -- (1.6, -0.1) node[midway, below=4pt] {$e_i^n$};
+    
+    \node[colorPoi, font=\bfseries] at (4.5, 2.5) {Простая $g_n(x)$};
+\end{tikzpicture}
+\end{center}
+
+Для любого $x \in e_i^n$ (где $i < n^2$) выполняется оценка:
+$$ g_n(x) \le f(x) < g_n(x) + \frac{1}{n} $$
+Отсюда очевидно, что $\lim\limits_{n \to \infty} g_n(x) = f(x)$ поточечно. 
+Для $x \in e_{n^2}^n$ (хвост): $f(x) \ge n = g_n(x)$ (здесь $f$ может быть неограничена).
+
+Чтобы гарантировать монотонное возрастание приближений, переопределим функцию: 
+$$ h_n(x) = \max(g_1(x), \dots, g_n(x)) $$
+Она также простая, возрастает и сходится к $f$.
+
+\textbf{Равномерная сходимость:} Если $f \le C$ (ограничена), то при $n > C$ последний "бесконечный" интервал $\Delta_{n^2}^n$ будет пустым. Тогда для всех $x \in X$ выполнено $0 \le f(x) - g_n(x) < \frac{1}{n}$. Это означает равномерную сходимость.
+\end{Proof}
+
+\begin{Theorem}{Следствие}{}
+Для любой измеримой (в том числе знакопеременной) функции $f$ существует поточечный предел последовательности простых функций $f_n$, такой что $|f_n| \le |f|$.
+\end{Theorem}
+
+\begin{Proof}
+Разложим функцию на положительную и отрицательную части: $f = f_+ - f_-$, где $f_+ = \max(f, 0)$ и $f_- = \max(-f, 0)$. Применим теорему об аппроксимации к каждой из них по отдельности, а затем вычтем приближения.
+\end{Proof}
+
+\section{§ Сходимость почти всюду и по мере}
+
+Пусть $(X, \mathcal{U}, \mu)$ — пространство с мерой.
+Обозначим $L^0(X, \mu)$ — пространство измеримых \textbf{почти всюду конечных} функций.
+Свойство выполняется \textbf{почти всюду (п.в.)}, если оно выполняется для всех точек $X$, кроме множества меры нуль.
+
+\begin{Example}
+Пусть $A$ — множество меры нуль ($\lambda(A) = 0$). Индикаторная функция $\chi_A(x) = \begin{cases} 1, & x \in A \\ 0, & x \notin A \end{cases}$. \\
+Можно сказать, что $\chi_A = 0$ почти всюду.
+\end{Example}
+
+\begin{Definition}{Сходимость почти всюду}{}
+Говорят, что последовательность $f_n \in L^0(X, \mu)$ \textbf{сходится почти всюду} к $f$ (обозначается $f_n \xrightarrow{\text{п.в.}} f$), если существует множество $E \subset X$ меры нуль ($\mu(E) = 0$), такое что для всех $x \in X \setminus E$ выполняется поточечная сходимость: $\lim\limits_{n \to \infty} f_n(x) = f(x)$.
+\end{Definition}
+
+\begin{Example}
+Пусть $f_n(x) = x^n$ на $[0, 1]$. \\
+Поточечный предел: $f(x) = \begin{cases} 1, & x = 1 \\ 0, & x \in [0, 1) \end{cases}$. \\
+Так как множество $\{1\}$ имеет меру Лебега 0, то $f_n \xrightarrow{\text{п.в.}} 0$.
+\end{Example}
+
+\begin{Definition}{Сходимость по мере}{}
+Говорят, что $f_n$ \textbf{сходится к $f$ по мере $\mu$} (обозначается $f_n \xrightarrow{\mu} f$), если для любого $\varepsilon > 0$:
+$$ \lim\limits_{n \to \infty} \mu(X(|f_n - f| \ge \varepsilon)) = 0 $$
+\end{Definition}
+
+\begin{Example}[ Контрпример ]
+Из сходимости почти всюду \textbf{не всегда} следует сходимость по мере.
+Рассмотрим $(\mathbb{R}, \mathcal{U}, \lambda)$. Пусть $f_n(x) = \chi_{[n, n+1]}(x)$ (индикатор отрезка $[n, n+1]$).
+Для любой фиксированной точки $x \in \mathbb{R}$, при достаточно большом $n$ блок уедет правее, и $f_n(x)$ станет равным 0. Следовательно, $f_n \xrightarrow{\text{п.в.}} 0$.
+Однако сходимости по мере нет! Для $\varepsilon = 1/2$:
+$$ \lambda(\mathbb{R}(|f_n - 0| \ge 1/2)) = \lambda([n, n+1]) = 1 \not\to 0 $$
+\end{Example}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.8, >=latex]
+    \definecolor{darktext}{HTML}{154360}
+    \definecolor{colorHighlight}{HTML}{2874A6}
+    
+    \draw[->, thick, darktext] (0, 0) -- (10, 0) node[right] {$x$};
+    \draw[->, thick, darktext] (0, -0.5) -- (0, 2) node[above] {$f_n(x)$};
+    
+    \draw[thick, colorHighlight, fill=colorHighlight!20] (2, 0) rectangle (3, 1);
+    \node[above, darktext] at (2.5, 1) {$n=1$};
+    
+    \draw[thick, colorHighlight, fill=colorHighlight!20] (5, 0) rectangle (6, 1);
+    \node[above, darktext] at (5.5, 1) {$n=2$};
+    
+    \draw[thick, colorHighlight, fill=colorHighlight!20] (8, 0) rectangle (9, 1);
+    \node[above, darktext] at (8.5, 1) {$n=3 \to \infty$};
+    
+    \draw[->, ultra thick, darktext, dashed] (3.5, 0.5) -- (4.5, 0.5);
+    \draw[->, ultra thick, darktext, dashed] (6.5, 0.5) -- (7.5, 0.5);
+\end{tikzpicture}
+\end{center}
+
+\begin{Theorem}{Связь сходимостей (Теорема Лебега)}{}
+Если пространство имеет конечную меру ($\mu(X) < +\infty$), то из сходимости почти всюду следует сходимость по мере.
+\end{Theorem}
+
+\begin{Proof}
+Рассмотрим случай, когда $f_n \xrightarrow{X} f$ сходится всюду и монотонно убывая ($f_1 \ge f_2 \ge \dots$).
+Зафиксируем $\varepsilon > 0$. Обозначим $X_n = X(|f_n - f| \ge \varepsilon)$.
+В силу монотонного убывания $f_n$, множества $X_n$ вложены: $X_1 \supset X_2 \supset \dots$
+Так как $f_n \to f$ всюду, ни одна точка не может остаться в $X_n$ навсегда. Значит, $\bigcap\limits_{n=1}^{\infty} X_n = \emptyset$.
+Так как мера всего пространства конечна ($\mu(X) < +\infty$), мы можем применить свойство \textbf{непрерывности меры сверху}:
+$$ \lim\limits_{n \to \infty} \mu(X_n) = \mu\left( \bigcap\limits_{n=1}^{\infty} X_n \right) = \mu(\emptyset) = 0 $$
+Следовательно, $f_n \xrightarrow{\mu} f$. 
+\end{Proof}
+
+\begin{Example}[ Контрпример ]
+Из сходимости по мере \textbf{не следует} сходимость почти всюду. Рассмотрим классический контрпример на отрезке $X = [0, 1]$ с мерой Лебега. 
+
+Построим последовательность функций-индикаторов, которые «скользят» по отрезку, при этом их ширина постоянно уменьшается. 
+Пусть $f_1 = \chi_{[0, 1]}$. 
+Затем разделим отрезок пополам: $f_2 = \chi_{[0, 1/2]}$, $f_3 = \chi_{[1/2, 1]}$. 
+Затем на три части: $f_4 = \chi_{[0, 1/3]}$, $f_5 = \chi_{[1/3, 2/3]}$, $f_6 = \chi_{[2/3, 1]}$, и так далее.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.1, >=latex]
+    \definecolor{darktext}{HTML}{154360}
+    \definecolor{colorHighlight}{HTML}{2874A6}
+    
+    % n=1
+    \begin{scope}[shift={(0,0)}]
+        \draw[->, thick, darktext] (-0.2, 0) -- (2.5, 0) node[right] {$x$};
+        \draw[->, thick, darktext] (0, -0.2) -- (0, 1.5) node[above] {$f_n(x)$};
+        \draw[darktext] (2, 0) -- (2, -0.1) node[below] {$1$};
+        \draw[darktext] (0, 1) -- (-0.1, 1) node[left] {$1$};
+        
+        \filldraw[fill=colorHighlight!20, draw=colorHighlight, ultra thick] (0, 0) rectangle (2, 1);
+        \node[darktext, font=\bfseries] at (1, 1.3) {$n=1$};
+    \end{scope}
+
+    % n=2, 3
+    \begin{scope}[shift={(3.5,0)}]
+        \draw[->, thick, darktext] (-0.2, 0) -- (2.5, 0) node[right] {$x$};
+        \draw[->, thick, darktext] (0, -0.2) -- (0, 1.5);
+        \draw[darktext] (2, 0) -- (2, -0.1) node[below] {$1$};
+        
+        \draw[colorHighlight, ultra thick, dashed] (0, 0) rectangle (1, 1);
+        \filldraw[fill=colorHighlight!20, draw=colorHighlight, ultra thick] (1, 0) rectangle (2, 1);
+        
+        \node[darktext, font=\bfseries] at (0.5, 1.3) {$f_2$};
+        \node[darktext, font=\bfseries] at (1.5, 1.3) {$f_3$};
+        \node[darktext, font=\bfseries, color=colorHighlight] at (1, -0.6) {Ширина $1/2$};
+    \end{scope}
+
+    % n=4, 5, 6
+    \begin{scope}[shift={(7,0)}]
+        \draw[->, thick, darktext] (-0.2, 0) -- (2.5, 0) node[right] {$x$};
+        \draw[->, thick, darktext] (0, -0.2) -- (0, 1.5);
+        \draw[darktext] (2, 0) -- (2, -0.1) node[below] {$1$};
+        
+        \draw[colorHighlight, ultra thick, dashed] (0, 0) rectangle (0.66, 1);
+        \filldraw[fill=colorHighlight!20, draw=colorHighlight, ultra thick] (0.66, 0) rectangle (1.33, 1);
+        \draw[colorHighlight, ultra thick, dashed] (1.33, 0) rectangle (2, 1);
+        
+        \node[darktext, font=\bfseries] at (0.33, 1.3) {$f_4$};
+        \node[darktext, font=\bfseries] at (1.0, 1.3) {$f_5$};
+        \node[darktext, font=\bfseries] at (1.66, 1.3) {$f_6$};
+        \node[darktext, font=\bfseries, color=colorHighlight] at (1, -0.6) {Ширина $1/3$};
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+
+Заметим, что мера носителя функции $\lambda(X(|f_n| > 0))$ стремится к 0, следовательно, $f_n \xrightarrow{\lambda} 0$ (сходится по мере к нулю).
+Однако для \textbf{любой} точки $x \in [0, 1]$ этот «блок» будет проходить через неё бесконечное число раз. Значит, $f_n(x)$ бесконечно часто принимает значение 1 и бесконечно часто значение 0. Поточечного предела не существует нигде!
+\end{Example}
+
+\begin{Theorem}{Рисса (О выборе сходящейся подпоследовательности)}{}
+Из любой последовательности $f_n$, сходящейся по мере к $f$, можно выбрать подпоследовательность $f_{n_k}$, которая сходится к $f$ почти всюду.
+\end{Theorem}
+
+\begin{Proof}
+Пусть $f_n \xrightarrow{\mu} f$. По определению сходимости по мере, для любого $k \in \mathbb{N}$ (где $\varepsilon = \frac{1}{k}$):
+$$ \lim\limits_{n \to \infty} \mu\left( X\left(|f_n - f| \ge \frac{1}{k}\right) \right) = 0 $$
+Следовательно, по определению предела, существует такой номер $n_0(k)$, что для всех $n \ge n_0(k)$ мера этого множества становится меньше $\frac{1}{2^k}$:
+$$ \mu\left( X\left(|f_n - f| \ge \frac{1}{k}\right) \right) < \frac{1}{2^k} $$
+Будем выбирать возрастающую последовательность индексов $n_k \ge n_0(k)$. 
+По лемме Бореля-Кантелли (так как сумма мер $\sum\limits_{k=1}^{\infty} \frac{1}{2^k} < +\infty$), множество точек, которые попадают в эти исключительные множества бесконечно часто, имеет меру нуль. Вне этого множества меры нуль $|f_{n_k} - f| < \frac{1}{k}$ для всех достаточно больших $k$, что означает поточечную сходимость почти всюду.
+\end{Proof}
+
+\begin{Theorem}{Следствия из теоремы Рисса}{}
+\begin{enumerate}
+    \item Если $f_n \xrightarrow{\mu} f$ и $f_n \xrightarrow{\mu} g$, то $f$ и $g$ совпадают почти всюду ($f \stackrel{\text{п.в.}}{=} g$).
+    \item Если $f_n \xrightarrow{\mu} f$ и $f_n \le g$ почти всюду, то $f \le g$ почти всюду.
+\end{enumerate}
+\end{Theorem}
+
+\begin{Proof}
+\textbf{1)} По теореме Рисса из последовательности $f_n$ можно выделить подпоследовательность $f_{n_k}$, такую что $f_{n_k} \xrightarrow{\text{п.в.}} f$. 
+С другой стороны, любая подпоследовательность сходящейся по мере последовательности сама сходится по мере к тому же пределу. Значит, $f_{n_k} \xrightarrow{\mu} g$. Применим теорему Рисса к $f_{n_k}$: из неё можно выделить подподпоследовательность $f_{n_{k_m}} \xrightarrow{\text{п.в.}} g$. 
+Так как $f_{n_{k_m}}$ является подпоследовательностью сходящейся почти всюду к $f$, то она также сходится к $f$. В силу единственности предела числовой последовательности, $f \stackrel{\text{п.в.}}{=} g$.
+
+\textbf{2)} Аналогично, переходя к подпоследовательности, сходящейся почти всюду. Предельный переход сохраняет нестрогие неравенства для числовых последовательностей.
+\end{Proof}
+
+
+\section{§ Интеграл по мере Лебега и его свойства}
+
+\begin{Definition}{Интеграл от простой функции}{}
+Пусть задана измеримая \textbf{неотрицательная простая функция} $g$, и пусть $\{A_i\}_{i=1}^n$ — некоторое допустимое разбиение для $g$, где $a_i$ — значения функции $g$ на множестве $A_i$. Тогда интеграл от функции $g$ по мере $\mu$ определяется как:
+$$ \int\limits_X g \, d\mu = \sum\limits_{i=1}^n a_i \cdot \mu(A_i) $$
+\end{Definition}
+
+\begin{Example}[ Интеграл от функции Дирихле]
+Рассмотрим пространство $X = \mathbb{R}$ с классической мерой Лебега $\lambda$.
+Функция Дирихле $d(x) = \begin{cases} 1, & x \in \mathbb{Q} \\ 0, & x \notin \mathbb{Q} \end{cases}$.
+Она является простой. Допустимое разбиение: $A_1 = \mathbb{Q}$ (значение $a_1 = 1$) и $A_2 = \mathbb{R} \setminus \mathbb{Q}$ (значение $a_2 = 0$).
+$$ \int\limits_{\mathbb{R}} d(x) \, d\lambda = 1 \cdot \lambda(\mathbb{Q}) + 0 \cdot \lambda(\mathbb{R} \setminus \mathbb{Q}) = 1 \cdot 0 + 0 \cdot (+\infty) = 0 $$
+\end{Example}
+
+\begin{Lemma}{Корректность определения}{}
+Определение интеграла от простой функции не зависит от выбора допустимого разбиения.
+\end{Lemma}
+
+\begin{Proof}
+Пусть $\{A_i\}_{i=1}^n$ и $\{B_j\}_{j=1}^m$ — два различных допустимых разбиения для функции $g$ со значениями $a_i$ и $b_j$ соответственно.
+Заметим, что система попарных пересечений $\{A_i \cap B_j\}$ является их общим измельчением. Каждое $A_i$ представимо как дизъюнктное объединение $A_i = \bigsqcup\limits_{j=1}^m (A_i \cap B_j)$.
+Запишем сумму для первого разбиения, используя конечную аддитивность меры:
+$$ \sum\limits_{i=1}^n a_i \mu(A_i) = \sum\limits_{i=1}^n a_i \left( \sum\limits_{j=1}^m \mu(A_i \cap B_j) \right) = \sum\limits_{i=1}^n \sum\limits_{j=1}^m a_i \mu(A_i \cap B_j) $$
+Так как пересечение $A_i \cap B_j$ не пусто только если функция принимает на нём одно и то же значение, то на этом пересечении $a_i = b_j$. Заменим $a_i$ на $b_j$:
+$$ \dots = \sum\limits_{i=1}^n \sum\limits_{j=1}^m b_j \mu(A_i \cap B_j) = \sum\limits_{j=1}^m b_j \left( \sum\limits_{i=1}^n \mu(A_i \cap B_j) \right) = \sum\limits_{j=1}^m b_j \mu(B_j) $$
+Суммы совпали, следовательно, значение интеграла корректно.
+\end{Proof}
+
+\begin{Lemma}{Свойства интеграла для простых функций}{}
+\begin{enumerate}
+    \item Если $g(x) = C$ на измеримом множестве $E$, то $\int\limits_E g \, d\mu = C \cdot \mu(E)$.
+    \item Если $g_1, g_2$ — простые функции и $g_1 \le g_2$, то $\int\limits_X g_1 \, d\mu \le \int\limits_X g_2 \, d\mu$.
+\end{enumerate}
+\end{Lemma}
+
+\begin{Proof}
+\textbf{1)} Допустимым разбиением для $X$ является множество $E$ (где $g=C$) и $X \setminus E$ (доопределим там функцию нулём). 
+Тогда $\int\limits_X \hat{g} \, d\mu = 0 \cdot \mu(X \setminus E) + C \cdot \mu(E) = C \cdot \mu(E)$.
+
+\textbf{2)} По лемме об общем допустимом разбиении, существует разбиение $\{A_i\}$, на котором обе функции постоянны. Пусть их значения равны $a_i$ и $b_i$. Из условия $g_1 \le g_2$ следует, что $\forall i: a_i \le b_i$.
+$$ \int\limits_X g_1 \, d\mu = \sum\limits_{i} a_i \mu(A_i) \le \sum\limits_{i} b_i \mu(A_i) = \int\limits_X g_2 \, d\mu $$
+\end{Proof}
+
+\begin{Definition}{Интеграл от измеримой функции}{}
+Пусть $f$ — неотрицательная измеримая функция. Её \textbf{интеграл Лебега} определяется как супремум интегралов от всех простых функций, не превосходящих $f$:
+$$ \int\limits_X f \, d\mu = \sup \left\{ \int\limits_X g \, d\mu \;\middle|\; g \text{ — простая, } g \le f \right\} $$
+
+Если $f$ — произвольная знакопеременная измеримая функция, её представляют в виде разности $f = f_+ - f_-$, где $f_+ = \max(0, f)$ и $f_- = \max(0, -f)$. Интеграл равен:
+$$ \int\limits_X f \, d\mu = \int\limits_X f_+ \, d\mu - \int\limits_X f_- \, d\mu $$
+(при условии, что эта разность определена в $\overline{\mathbb{R}}$, то есть не возникает неопределенности $\infty - \infty$).
+\end{Definition}
+
+\begin{Definition}{Суммируемость}{}
+Если оба интеграла $\int\limits_X f_+ \, d\mu$ и $\int\limits_X f_- \, d\mu$ \textbf{конечны}, то функция $f$ называется \textbf{суммируемой} по мере $\mu$. Пространство суммируемых функций обозначается $L^1(X, \mu)$.
+(Если конечен только один из них, говорят, что функция интегрируема, но её интеграл равен $+\infty$ или $-\infty$).
+\end{Definition}
+
+\begin{Example}
+Рассмотрим функцию $\frac{\sin x}{x}$ на $[0, +\infty)$. 
+В смысле несобственного интеграла Римана: $\int\limits_0^{+\infty} \frac{\sin x}{x} dx = \frac{\pi}{2}$ (сходится условно).
+Однако интеграла Лебега $\int\limits_{[0, +\infty)} \frac{\sin x}{x} \, d\lambda$ \textbf{не существует}, так как площади и положительной ($f_+$), и отрицательной ($f_-$) частей бесконечны, что даёт неопределённость $\infty - \infty$. (По Лебегу функция интегрируема тогда и только тогда, когда интегрируем её модуль).
+\end{Example}
+
+\begin{Theorem}{Свойства интеграла Лебега}{}
+Пусть $f, g$ — неотрицательные измеримые функции.
+\begin{enumerate}
+    \item \textbf{Монотонность:} Если $f \le g$ на множестве $E$, то $\int\limits_E f \, d\mu \le \int\limits_E g \, d\mu$.
+    \item \textbf{Интегрирование по множеству меры нуль:} Если $\mu(E) = 0$, то $\int\limits_E f \, d\mu = 0$.
+\end{enumerate}
+\end{Theorem}
+
+\begin{Proof}
+\textbf{1)} По определению, интеграл — это супремум по простым функциям. Если простая функция $h \le f$, то в силу $f \le g$, она также $h \le g$. Следовательно, множество простых функций, аппроксимирующих $f$, является подмножеством простых функций, аппроксимирующих $g$. Супремум по меньшему множеству не превосходит супремума по большему.
+
+\textbf{2)} Если функция $f$ ограничена ($f \le C$), то по доказанному ранее для простых функций (свойство 1):
+$$ \int\limits_E |f| \, d\mu \le \int\limits_E C \, d\mu = C \cdot \mu(E) = C \cdot 0 = 0 $$
+Если функция неограничена, то любая простая функция $h \le f$ всё равно принимает лишь конечное число значений, а значит она ограничена. Тогда $\int\limits_E h \, d\mu = 0$. Так как супремум множества нулей равен нулю, интеграл равен нулю.
+\end{Proof}
+
+\section{§ Предельный переход под знаком интеграла}
+
+\begin{Theorem}{Леви (О монотонной сходимости)}{}
+Пусть $f_n$ — последовательность \textbf{неотрицательных} измеримых функций на $X$, которая монотонно возрастает ($f_{n+1} \ge f_n$) и поточечно сходится к функции $f$. 
+Тогда:
+$$ \lim\limits_{n \to \infty} \int\limits_X f_n \, d\mu = \int\limits_X f \, d\mu $$
+\end{Theorem}
+
+\begin{Proof}
+В силу монотонности функций ($f_n \le f_{n+1} \le f$), их интегралы образуют неубывающую числовую последовательность, ограниченную сверху числом $\int\limits_X f \, d\mu$. Значит, существует предел:
+$$ L = \lim\limits_{n \to \infty} \int\limits_X f_n \, d\mu \le \int\limits_X f \, d\mu $$
+(где $L \in \overline{\mathbb{R}}$). Осталось доказать обратное неравенство: $L \ge \int\limits_X f \, d\mu$.
+
+Возьмём произвольную простую функцию $g$, такую что $0 \le g \le f$. 
+Зафиксируем число $\theta \in (0, 1)$. Рассмотрим множества:
+$$ X_n = X(f_n \ge \theta g) = \{ x \in X : f_n(x) \ge \theta g(x) \} $$
+Так как $f_n$ возрастает, множества вложены: $X_1 \subset X_2 \subset \dots \subset X_n \subset X_{n+1}$. \\
+Покажем, что $\bigcup\limits_{n=1}^{\infty} X_n = X$. Действительно, для любого $x \in X$, если $f(x) = 0$, то $x \in X_1$. Если $f(x) > 0$, то $\theta g(x) < g(x) \le f(x) = \lim\limits_{n \to \infty} f_n(x)$. Значит, начиная с некоторого номера $N$, значение $f_N(x)$ превысит $\theta g(x)$, и точка попадёт в $X_N$.
+
+Используя монотонность интеграла:
+$$ \int\limits_X f_n \, d\mu \ge \int\limits_{X_n} f_n \, d\mu \ge \int\limits_{X_n} \theta g \, d\mu = \theta \sum\limits_{i=1}^k a_i \mu(A_i \cap X_n) $$
+где $A_i$ — разбиение для простой функции $g$ со значениями $a_i$. \\
+Устремим $n \to \infty$. В левой части получим предел $L$. В правой части, в силу \textbf{непрерывности меры снизу} (так как множества $A_i \cap X_n$ расширяются до $A_i$), мера $\mu(A_i \cap X_n) \to \mu(A_i)$.
+$$ L \ge \theta \sum\limits_{i=1}^k a_i \mu(A_i) = \theta \int\limits_X g \, d\mu $$
+Это неравенство верно для любого $\theta \in (0, 1)$. Переходя к пределу при $\theta \to 1-0$, получаем $L \ge \int\limits_X g \, d\mu$. \\
+Наконец, так как неравенство верно для любой простой функции $g \le f$, возьмём супремум по всем таким $g$. По определению интеграла Лебега получим $L \ge \int\limits_X f \, d\mu$. Теорема доказана.
+\end{Proof}
+
+\begin{Theorem}{Линейность интеграла Лебега}{}
+Пусть $f, g$ — суммируемые функции ($f, g \in L^1(X, \mu)$), а $\alpha, \beta \in \mathbb{R}$. Тогда:
+$$ \int\limits_X (\alpha f + \beta g) \, d\mu = \alpha \int\limits_X f \, d\mu + \beta \int\limits_X g \, d\mu $$
+\end{Theorem}
+
+\begin{Proof}
+\textit{(Развёрнутое доказательство)} \\
+Сначала докажем для случая $\alpha, \beta \ge 0$ и неотрицательных функций $f, g \ge 0$.
+Если $f$ и $g$ — \textbf{простые функции}, то у них есть общее допустимое разбиение $\{A_i\}$ со значениями $a_i$ и $b_i$. Комбинация $\alpha f + \beta g$ также является простой функцией со значениями $\alpha a_i + \beta b_i$. По определению:
+$$ \int\limits_X (\alpha f + \beta g) \, d\mu = \sum\limits_{i} (\alpha a_i + \beta b_i) \mu(A_i) = \alpha \sum\limits_{i} a_i \mu(A_i) + \beta \sum\limits_{i} b_i \mu(A_i) = \alpha \int\limits_X f \, d\mu + \beta \int\limits_X g \, d\mu $$
+
+Перейдем к \textbf{произвольным неотрицательным измеримым} функциям $f$ и $g$. По теореме об аппроксимации, существуют возрастающие последовательности простых функций $f_n \nearrow f$ и $g_n \nearrow g$. 
+Тогда линейная комбинация $h_n = \alpha f_n + \beta g_n$ является возрастающей последовательностью простых функций, которая поточечно сходится к $\alpha f + \beta g$. \\
+Применим теорему Леви (о монотонной сходимости) к последовательности $h_n$:
+\begin{align*}
+    \int\limits_X (\alpha f + \beta g) \, d\mu &= \lim\limits_{n \to \infty} \int\limits_X (\alpha f_n + \beta g_n) \, d\mu \\
+    &= \lim\limits_{n \to \infty} \left( \alpha \int\limits_X f_n \, d\mu + \beta \int\limits_X g_n \, d\mu \right) \\
+    &= \alpha \lim\limits_{n \to \infty} \int\limits_X f_n \, d\mu + \beta \lim\limits_{n \to \infty} \int\limits_X g_n \, d\mu \\
+    &= \alpha \int\limits_X f \, d\mu + \beta \int\limits_X g \, d\mu
+\end{align*}
+Для знакопеременных функций утверждение доказывается разложением $f = f_+ - f_-$ и $g = g_+ - g_-$ и группировкой положительных слагаемых.
+\end{Proof}
+
+\end{document}

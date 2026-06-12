@@ -8,6 +8,7 @@
 \usepackage{tikz}
 \usetikzlibrary{hobby, arrows.meta}
 \usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{calc,intersections,decorations.pathreplacing,patterns.meta}
 % Современный шрифт, поддерживающий кириллицу (Charter)
 \usepackage{XCharter}
 
@@ -2012,6 +2013,878 @@ $$ \int\limits_X (\alpha f + \beta g) \, d\mu = \sum\limits_{i} (\alpha a_i + \b
     &= \alpha \int\limits_X f \, d\mu + \beta \int\limits_X g \, d\mu
 \end{align*}
 Для знакопеременных функций утверждение доказывается разложением $f = f_+ - f_-$ и $g = g_+ - g_-$ и группировкой положительных слагаемых.
+\end{Proof}
+\begin{Lemma}{Счётная аддитивность интеграла Лебега}{}
+Пусть $f \ge 0$ — измеримая функция, и $A = \bigsqcup\limits_{i=1}^{\infty} A_i$ (дизъюнктное объединение измеримых множеств). Тогда:
+$$ \int\limits_A f \, d\mu = \sum\limits_{i=1}^{\infty} \int\limits_{A_i} f \, d\mu $$
+\end{Lemma}
+
+\begin{Proof}
+Введём последовательность функций $f_n(x) = \sum\limits_{i=1}^n f(x) \cdot I_{A_i}(x)$, где $I_{A_i}$ — индикатор множества $A_i$.
+Заметим, что:
+1) $f_n(x)$ монотонно возрастает (так как $f \ge 0$ и добавляются новые неотрицательные слагаемые).
+2) $f_n(x)$ поточечно сходится к $f(x) \cdot I_A(x)$.
+По теореме Леви о монотонной сходимости предел интегралов равен интегралу от предела:
+$$ \int\limits_A f \, d\mu = \lim\limits_{n \to \infty} \int\limits_X f_n \, d\mu = \lim\limits_{n \to \infty} \sum\limits_{i=1}^n \int\limits_{A_i} f \, d\mu = \sum\limits_{i=1}^{\infty} \int\limits_{A_i} f \, d\mu $$
+\end{Proof}
+
+\noindent \textbf{NB:} Пусть $f \ge 0$, задано пространство $(\mathbb{R}, \mathcal{U}, \lambda)$. Функция множества $\mu(A) = \int\limits_A f \, d\lambda$ является мерой для любого $A \in \mathcal{U}$. При этом функция $f$ называется \textbf{плотностью} меры $\mu$.
+
+\begin{Lemma}{О хвостах интегрируемой функции}{}
+Пусть $f \in L^1(X, \mu)$ и мера пространства бесконечна ($\mu(X) = +\infty$). Тогда для любого $\varepsilon > 0$ существует измеримое множество $A$, такое что:
+$$ \mu(A) < +\infty \quad \text{и} \quad \int\limits_{X \setminus A} |f| \, d\mu < \varepsilon $$
+\end{Lemma}
+
+\begin{Proof}
+Рассмотрим последовательность множеств $A_n = \left\{ x \in X : |f(x)| < \frac{1}{n} \right\}$. 
+Очевидно, что эти множества вложены ($A_1 \supset A_2 \supset A_3 \dots$), то есть последовательность убывает. Пересечение всех этих множеств: $\bigcap\limits_{n=1}^{\infty} A_n = \{ x \in X : f(x) = 0 \}$.
+По теореме о предельном переходе (в силу интегрируемости $|f|$):
+$$ \lim\limits_{n \to \infty} \int\limits_{A_n} |f| \, d\mu = \int\limits_{\{f=0\}} |f| \, d\mu = 0 $$
+По определению предела, для заданного $\varepsilon > 0$ существует номер $n_0$, такой что $\int\limits_{A_{n_0}} |f| \, d\mu < \varepsilon$.
+Положим искомое множество $A = X \setminus A_{n_0} = \left\{ x \in X : |f(x)| \ge \frac{1}{n_0} \right\}$.
+Тогда $\int\limits_{X \setminus A} |f| \, d\mu = \int\limits_{A_{n_0}} |f| \, d\mu < \varepsilon$.
+Проверим конечность меры $A$:
+$$ \int\limits_X |f| \, d\mu \ge \int\limits_A |f| \, d\mu \ge \int\limits_A \frac{1}{n_0} \, d\mu = \frac{1}{n_0} \mu(A) $$
+Так как интеграл от $|f|$ конечен ($f \in L^1$), то $\mu(A) \le n_0 \int\limits_X |f| \, d\mu < +\infty$. Лемма доказана.
+\end{Proof}
+
+\begin{Example}[ О «дельта-функции»]
+В классическом анализе часто пишут, что $\delta(x) = \begin{cases} +\infty, & x=0 \\ 0, & x \ne 0 \end{cases}$. 
+В рамках теории меры Лебега это \textbf{совершенно неверно}, так как функция, равная нулю почти везде, имеет интеграл Лебега равный $0$, а не $1$.
+
+В реальности дельта-функция Дирака — это обобщённая функция, которая порождается дельта-образной последовательностью функций $\varphi_\delta(x)$, сходящейся к ней в смысле интегралов:
+\begin{center}
+\begin{tikzpicture}[scale=1, >=latex]
+    \definecolor{darktext}{HTML}{154360}
+    \definecolor{colorHighlight}{HTML}{2874A6}
+    
+    \draw[->, thick, darktext] (-3, 0) -- (3, 0) node[right] {$x$};
+    \draw[->, thick, darktext] (0, -0.5) -- (0, 3) node[above] {$y$};
+    \draw[colorHighlight, ultra thick, fill=colorHighlight!20] (-1, 0) rectangle (1, 2);
+    
+    \draw[darktext] (-1, 0) -- (-1, -0.1) node[below] {$-\delta$};
+    \draw[darktext] (1, 0) -- (1, -0.1) node[below] {$\delta$};
+    \draw[darktext] (0, 2) -- (-0.1, 2) node[left] {$\frac{1}{2\delta}$};
+    
+    \node[darktext, font=\bfseries] at (2, 2) {$\varphi_\delta(x)$};
+\end{tikzpicture}
+\end{center}
+$$ \varphi_\delta(x) = \begin{cases} \frac{1}{2\delta}, & x \in [-\delta, \delta] \\ 0, & \text{иначе} \end{cases} \implies \int\limits_{\mathbb{R}} \varphi_\delta \, d\lambda = 1 $$
+Тогда $\int\limits_{\mathbb{R}} \varphi_\delta(x) \psi(x-x_0) \, d\lambda \xrightarrow{\delta \to 0} \psi(x_0)$. 
+
+Связь с дискретной вероятностью: 
+$$ P(x \in A) = \sum\limits_{i: a_i \in A} p_i = \int\limits_A \sum\limits_{i} p_i \delta(x - a_i) \, d\lambda $$
+\end{Example}
+
+\begin{Lemma}{Абсолютная непрерывность интеграла Лебега}{}
+Пусть $f \in L^1(X, \mu)$. Тогда для любого $\varepsilon > 0$ существует такое $\delta > 0$, что для любого измеримого множества $e \subset X$, мера которого $\mu(e) < \delta$, выполняется неравенство:
+$$ \int\limits_e |f| \, d\mu < \varepsilon $$
+\end{Lemma}
+
+\begin{Proof}
+Зафиксируем $\varepsilon > 0$. По теореме об аппроксимации существует простая неотрицательная функция $g_\varepsilon$, такая что $0 \le g_\varepsilon \le |f|$ и:
+$$ \int\limits_X |f| \, d\mu < \int\limits_X g_\varepsilon \, d\mu + \varepsilon $$
+Интеграл по множеству $e$ можно переписать и оценить:
+$$ \int\limits_e |f| \, d\mu = \int\limits_e (|f| - g_\varepsilon) \, d\mu + \int\limits_e g_\varepsilon \, d\mu \le \int\limits_X (|f| - g_\varepsilon) \, d\mu + \int\limits_e g_\varepsilon \, d\mu $$
+Первый интеграл строго меньше $\varepsilon$. 
+Так как $g_\varepsilon$ — простая функция, она ограничена некоторой константой $C_\varepsilon$. Тогда второй интеграл: $\int\limits_e g_\varepsilon \, d\mu \le \int\limits_e C_\varepsilon \, d\mu = C_\varepsilon \cdot \mu(e)$.
+Потребуем, чтобы $C_\varepsilon \cdot \mu(e) < \varepsilon$. Отсюда находим $\delta = \frac{\varepsilon}{C_\varepsilon}$.
+Тогда для любого $e$ с мерой $\mu(e) < \delta$ будет выполнено требуемое неравенство.
+\end{Proof}
+
+\begin{Theorem}{О равномерной сходимости}{}
+Пусть $f_n \in L^1(X, \mu)$, последовательность равномерно сходится к функции $f$ ($f_n \xrightarrow{\rightrightarrows} f$ на $X$), и мера пространства конечна ($\mu(X) < +\infty$). Тогда $f \in L^1(X, \mu)$ и:
+$$ \lim\limits_{n \to \infty} \int\limits_X f_n \, d\mu = \int\limits_X f \, d\mu $$
+\end{Theorem}
+
+\begin{Proof}
+Из равномерной сходимости следует, что существует такой номер $n_0$, что для всех $n > n_0$ и для всех $x \in X$ выполнено $|f_n(x) - f(x)| < 1$. \\
+Проинтегрируем это неравенство: $\int\limits_X |f_n - f| \, d\mu \le \int\limits_X 1 \, d\mu = \mu(X) < +\infty$.
+Значит, разность $|f_n - f| \in L^1(X, \mu)$. 
+Представим $|f| = |f - f_n + f_n| \le |f - f_n| + |f_n|$. Так как оба слагаемых суммируемы, то $f \in L^1(X, \mu)$.
+Теперь оценим разность интегралов:
+$$ \left| \int\limits_X f \, d\mu - \int\limits_X f_n \, d\mu \right| \le \int\limits_X |f - f_n| \, d\mu \le \int\limits_X \left( \sup\limits_{x \in X} |f(x) - f_n(x)| \right) \, d\mu = \sup\limits_{x \in X} |f - f_n| \cdot \mu(X) $$
+Так как сходимость равномерная, супремум стремится к $0$ при $n \to \infty$. Значит, предел разности интегралов равен нулю.
+\end{Proof}
+
+\begin{Theorem}{Леви (Вторая формулировка)}{}
+Пусть $f_n$ — последовательность неотрицательных измеримых функций, и для почти всех $x \in X$ выполнено: $f_n(x) \xrightarrow{\text{п.в.}} f(x)$ и $f_n(x) \le f_{n+1}(x)$. Тогда:
+$$ \lim\limits_{n \to \infty} \int\limits_X f_n \, d\mu = \int\limits_X f \, d\mu $$
+\end{Theorem}
+
+\begin{Theorem}{Лебега о мажорируемой сходимости}{}
+Пусть $f_n$ — последовательность измеримых функций, $f_n \xrightarrow{\mu} f$ (сходится по мере). Если:
+\begin{enumerate}
+    \item Для всех $n$ почти всюду выполнено $|f_n| \le g$.
+    \item Существует мажоранта $g \in L^1(X, \mu)$.
+\end{enumerate}
+Тогда $f_n$ и предельная функция $f \in L^1(X, \mu)$, и справедлив предельный переход:
+$$ \lim\limits_{n \to \infty} \int\limits_X f_n \, d\mu = \int\limits_X f \, d\mu $$
+\end{Theorem}
+
+\begin{Proof}
+\textbf{1) Суммируемость предела:} Переходя к пределу, получаем $|f| \le g$ п.в. Поскольку мажоранта $g$ суммируема, функция $f$ также суммируема.
+
+\textbf{2) Случай конечной меры $\mu(X) < +\infty$:} 
+Зададим $\varepsilon > 0$. Введём множество $X_n(\varepsilon) = \left\{ x \in X : |f(x) - f_n(x)| \ge \varepsilon \right\}$.
+Оценим модуль разности интегралов:
+\begin{align*}
+    \left| \int\limits_X f \, d\mu - \int\limits_X f_n \, d\mu \right| &\le \int\limits_X |f - f_n| \, d\mu = \int\limits_{X_n(\varepsilon)} |f - f_n| \, d\mu + \int\limits_{X \setminus X_n(\varepsilon)} |f - f_n| \, d\mu \\
+    &\le \int\limits_{X_n(\varepsilon)} 2g \, d\mu + \int\limits_{X \setminus X_n(\varepsilon)} \varepsilon \, d\mu \le \int\limits_{X_n(\varepsilon)} 2g \, d\mu + \varepsilon \cdot \mu(X)
+\end{align*}
+Так как $f_n \xrightarrow{\mu} f$, мера $\mu(X_n(\varepsilon)) \to 0$ при $n \to \infty$. 
+В силу абсолютной непрерывности интеграла Лебега, первый интеграл $\int\limits_{X_n(\varepsilon)} 2g \, d\mu \xrightarrow{n \to \infty} 0$. Второе слагаемое $\varepsilon \cdot \mu(X)$ может быть сделано сколь угодно малым. Следовательно, предел равен нулю.
+
+\textbf{3) Случай бесконечной меры $\mu(X) = +\infty$:} 
+Так как мажоранта $g \in L^1$, по лемме "о хвостах", для любого $\varepsilon > 0$ существует множество $A$ конечной меры ($\mu(A) < +\infty$), такое что $\int\limits_{X \setminus A} 2g \, d\mu < \varepsilon$.
+Тогда:
+$$ \int\limits_X |f - f_n| \, d\mu \le \int\limits_A |f - f_n| \, d\mu + \int\limits_{X \setminus A} 2g \, d\mu < \int\limits_A |f - f_n| \, d\mu + \varepsilon $$
+Первый интеграл берётся по множеству $A$ конечной меры, и по пункту (2) он стремится к нулю. Устремляя $\varepsilon \to 0$, получаем требуемое равенство.
+\end{Proof}
+
+\noindent \textbf{NB:} В теореме Лебега сходимость по мере может быть заменена на сходимость почти везде ($f_n \xrightarrow{\text{п.в.}} f$).
+
+\begin{Definition}{Гамма-функция Эйлера}{}
+Классический пример интеграла:
+$$ \Gamma(\alpha) = \int\limits_0^{+\infty} x^{\alpha - 1} e^{-x} \, dx $$
+Свойства:
+\begin{enumerate}
+    \item Для $\alpha > 0$ интеграл сходится (существует $\Gamma(\alpha)$).
+    \item Формула понижения: $\Gamma(\alpha + 1) = \alpha \Gamma(\alpha)$ при $\alpha > 0$.
+    \item Обобщение факториала: $\Gamma(n + 1) = n! \cdot \Gamma(1) = n!$.
+    \item Значение: $\Gamma\left(\frac{1}{2}\right) = \sqrt{\pi}$.
+\end{enumerate}
+\end{Definition}
+
+\begin{Theorem}{Фату (Лемма Фату)}{}
+Пусть $f_n$ — последовательность неотрицательных измеримых функций, и $f_n \xrightarrow{\text{п.в.}} f$. Если $\exists C > 0$ такое, что $\int\limits_X f_n \, d\mu \le C$ для всех $n$, то:
+$$ \int\limits_X f \, d\mu \le C $$
+\end{Theorem}
+
+\begin{Proof}
+Определим новую последовательность функций: $g_n(x) = \inf\{f_n, f_{n+1}, \dots\}$. 
+Понятно, что:
+1) $g_{n+1} \ge g_n$ (последовательность монотонно возрастает).
+2) $g_n \xrightarrow{\text{п.в.}} f$.
+По теореме Леви к последовательности $g_n$:
+$$ \lim\limits_{n \to \infty} \int\limits_X g_n \, d\mu = \int\limits_X f \, d\mu $$
+Итого, по построению $g_n \le f_n$, значит:
+$$ \int\limits_X g_n \, d\mu \le \int\limits_X f_n \, d\mu \le C $$
+Переходя к пределу, получаем $\int\limits_X f \, d\mu \le C$.
+\end{Proof}
+
+\section{§ Интегралы, зависящие от параметра}
+
+Рассмотрим интеграл вида:
+$$ I(y) = \int\limits_X f(x, y) \, d\mu(x) $$
+где $f : X \times Y \to \mathbb{R}$. \\
+\textbf{Основные вопросы для исследования $I(y)$:}
+\begin{enumerate}
+    \item Вычисление предела $\lim\limits_{y \to y_0} I(y)$? (В частности, непрерывна ли функция $I(y)$?)
+    \item Существует ли производная $I'(y)$ и можно ли дифференцировать под знаком интеграла?
+    \item Существует ли повторный интеграл: $\int\limits_Y I(y) \, d\nu(y) = \int\limits_Y \left( \int\limits_X f(x,y) \, d\mu(x) \right) \, d\nu(y)$? (Решается теоремой Фубини / Тонелли).
+\end{enumerate}
+
+\begin{Definition}{Интегралы Эйлера (Гамма и Бета функции)}{}
+Классические примеры интегралов, зависящих от параметра:
+\begin{itemize}
+    \item \textbf{Интеграл Эйлера 2-го рода (Гамма-функция):} 
+    $$ \Gamma(\alpha) = \int\limits_0^{+\infty} x^{\alpha - 1} e^{-x} \, dx $$
+    \item \textbf{Интеграл Эйлера 1-го рода (Бета-функция):} 
+    $$ B(\alpha, \beta) = \int\limits_0^1 x^{\alpha-1} (1-x)^{\beta-1} \, dx, \quad \text{при } \alpha > 0, \beta > 0 $$
+\end{itemize}
+Функции тесно связаны между собой фундаментальным соотношением:
+$$ B(\alpha, \beta) = \frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha+\beta)} $$
+\end{Definition}
+
+
+\subsection*{1. Равномерная сходимость семейства функций}
+
+\begin{Definition}{Равномерная сходимость по параметру}{}
+Пусть задана функция $f: X \times Y \to \mathbb{R}$, и $x_0$ — предельная (или внутренняя) точка $X$.
+Говорят, что $f(x, y)$ \textbf{равномерно (по $y$)} сходится к $g(y)$ при $x \to x_0$, если:
+$$ \forall \varepsilon > 0 \quad \exists \delta > 0 \quad \forall x \in X: 0 < |x - x_0| < \delta \quad \forall y \in Y \implies |f(x,y) - g(y)| < \varepsilon $$
+Обозначение: $f(x,y) \rightrightarrows_{x \to x_0} g(y)$.
+\end{Definition}
+
+\begin{Example}[ Равномерной и неравномерной сходимости]
+Рассмотрим предел при $x \to +\infty$ для $y \in \mathbb{R}$:
+\begin{enumerate}
+    \item $f(x, y) = \frac{\sin(xy)}{1+x}$. Поточечный предел $\lim\limits_{x \to \infty} f(x, y) = 0$. Сходимость \textbf{равномерная} по $y$, так как мы можем оценить модуль функцией, не зависящей от $y$:
+    $$ \left| \frac{\sin(xy)}{1+x} \right| \le \frac{1}{1+x} \xrightarrow{x \to \infty} 0 $$
+    \item $f(x, y) = \frac{\sin(xy)}{1+xy}$. Поточечно при $x \to +\infty$ предел также равен $0$. Однако сходимость \textbf{не является равномерной}. 
+    Действительно, если двигаться по траектории $y = \frac{1}{x}$ (при $x \to \infty$), то $f\left(x, \frac{1}{x}\right) = \frac{\sin(1)}{2} \ne 0$, что нарушает определение равномерности.
+\end{enumerate}
+\end{Example}
+
+\begin{Theorem}{О равномерном пределе под знаком интеграла}{}
+Пусть $f: X \times Y \to \mathbb{R}$ равномерно сходится к $g(x)$ при $y \to y_0$ ($f \underset{y\to y_0}{\rightrightarrows} g$). Если $f(x, y)$ суммируема по $X$ для всех $y \in Y$, и мера пространства конечна ($\mu(X) < +\infty$), то:
+$$ \lim\limits_{y \to y_0} \int\limits_X f(x,y) \, d\mu(x) = \int\limits_X g(x) \, d\mu(x) $$
+\end{Theorem}
+
+\begin{Proof}
+По определению равномерной сходимости, существует такое $\delta > 0$, что для всех $y$, удовлетворяющих $0 < |y - y_0| < \delta$, и для всех $x \in X$ выполнено: $|f(x,y) - g(x)| < 1$. \\
+Оценим модуль предельной функции $g(x)$:
+$$ |g(x)| = |g(x) - f(x,y) + f(x,y)| \le |g(x) - f(x,y)| + |f(x,y)| \le 1 + |f(x,y)| $$
+Так как мера $\mu(X)$ конечна, константа $1$ интегрируема. Функция $f(x,y)$ суммируема по условию. Значит, мажоранта суммируема, следовательно, $g(x)$ — суммируемая функция.
+
+Оценим разность интегралов:
+\begin{align*}
+    \left| \int\limits_X f(x,y) \, d\mu(x) - \int\limits_X g(x) \, d\mu(x) \right| &\le \int\limits_X |f(x,y) - g(x)| \, d\mu(x) \\
+    &\le \sup\limits_{x \in X} |f(x,y) - g(x)| \cdot \mu(X)
+\end{align*}
+Поскольку сходимость равномерная, супремум разности стремится к $0$ при $y \to y_0$. Так как $\mu(X) < +\infty$, вся правая часть стремится к нулю. Теорема доказана.
+\end{Proof}
+
+\begin{Theorem}{Следствие (Непрерывность интеграла)}{}
+Если в условиях предыдущей теоремы функция $f(x, y)$ непрерывна в точке $y_0$ для любого $x \in X$, то интеграл $I(y)$ непрерывен в точке $y_0$.
+\end{Theorem}
+
+\begin{Proof}
+Из непрерывности $f$ по $y$ следует, что $\lim\limits_{y \to y_0} f(x, y) = f(x, y_0)$. Применяя доказанную теорему:
+$$ \lim\limits_{y \to y_0} I(y) = \lim\limits_{y \to y_0} \int\limits_X f(x,y) \, d\mu(x) = \int\limits_X f(x, y_0) \, d\mu(x) = I(y_0) $$
+Что и означает непрерывность функции $I(y)$.
+\end{Proof}
+
+\subsection*{2. Случай суммируемой мажоранты}
+
+Требование конечности меры $\mu(X)$ и строгой равномерной сходимости часто бывает слишком жёстким. Мощной альтернативой выступает применение теоремы Лебега.
+
+\begin{Theorem}{О предельном переходе (через суммируемую мажоранту)}{}
+Пусть $f: X \times Y \to \mathbb{R}$, и существует поточечный предел $f(x,y) \xrightarrow{y \to y_0} g(x)$ при почти всех $x \in X$. \\
+Если существуют окрестность $\mathring{U}(y_0)$ и функция $h(x)$, такие что:
+\begin{enumerate}
+    \item $|f(x,y)| \le h(x)$ для всех $y \in \mathring{U}(y_0)$ и для почти всех $x \in X$.
+    \item Мажоранта $h(x)$ суммируема ($h \in L^1(X, \mu)$).
+\end{enumerate}
+Тогда предельная функция $g(x)$ суммируема, и возможен предельный переход:
+$$ \lim\limits_{y \to y_0} \int\limits_X f(x,y) \, d\mu(x) = \int\limits_X g(x) \, d\mu(x) $$
+\end{Theorem}
+
+\begin{Proof}
+\textit{(Упражнение с лекции)} \\
+Докажем по определению предела по Гейне. Возьмём произвольную последовательность $y_n \to y_0$ (где $y_n \in \mathring{U}(y_0)$). Определим функциональную последовательность $f_n(x) = f(x, y_n)$.
+По условию, $f_n(x) \xrightarrow{\text{п.в.}} g(x)$.
+Кроме того, для всех $n$ почти всюду выполнено $|f_n(x)| \le h(x) \in L^1$.
+Это в точности условия классической \textbf{теоремы Лебега о мажорируемой сходимости} для последовательностей. Применяя её, получаем:
+$$ \lim\limits_{n \to \infty} \int\limits_X f_n(x) \, d\mu(x) = \int\limits_X g(x) \, d\mu(x) $$
+Так как это верно для любой последовательности $y_n \to y_0$, то предел функции равен интегралу от предела.
+\end{Proof}
+
+\begin{Theorem}{Следствие}{}
+Если функция $f(x,y) \xrightarrow{y \to y_0} f(x, y_0)$ при почти всех $x$ (то есть непрерывна по $y$), ограничена ($|f| \le C$) и мера пространства конечна ($\mu(X) < +\infty$), то $I(y)$ непрерывна в $y_0$.
+\end{Theorem}
+
+\begin{Proof}
+Если $|f| \le C$ и $\mu(X) < +\infty$, то константа $C$ является суммируемой мажорантой. Применяем предыдущую теорему о предельном переходе.
+\end{Proof}
+
+\noindent \textbf{NB (Связь с числовыми рядами):} Рассмотрим пространство $(\mathbb{R}, 2^{\mathbb{R}}, \#)$, где $\#(A) = \text{card}(A \cap \mathbb{N})$ — считающая мера. 
+Тогда обычная сумма ряда — это просто интеграл Лебега по считающей мере: 
+$$ \sum\limits_{n=1}^{\infty} a_n = \int\limits_{\mathbb{R}} f \, d\#, \quad \text{где } f(n) = a_n $$
+В этом контексте знаменитый \textbf{признак Вейерштрасса} равномерной сходимости рядов (наличие сходящегося мажорирующего числового ряда) является прямым следствием \textbf{теоремы Лебега о мажорируемой сходимости}!
+
+\begin{Example}[ Непрерывность интегралов с параметром]
+\begin{enumerate}
+    \item \textbf{Гамма-функция:} $\Gamma(\alpha) = \int\limits_0^{+\infty} x^{\alpha-1} e^{-x} \, dx$. Применяя локальные суммируемые мажоранты, можно строго доказать, что $\Gamma(\alpha) \in C(0, +\infty)$ (является непрерывной на всём положительном луче).
+    \item \textbf{Интеграл с косинусом:} Докажем непрерывность функции $I(\alpha) = \int\limits_0^{+\infty} \frac{\cos(\alpha x)}{1+x^2} \, d\lambda$ на всей оси $\mathbb{R}$. \\
+    Подынтегральная функция непрерывна по параметру $\alpha$. Построим суммируемую мажоранту, не зависящую от $\alpha$:
+    $$ \left| \frac{\cos(\alpha x)}{1+x^2} \right| \le \frac{1}{1+x^2} $$
+    Функция $h(x) = \frac{1}{1+x^2}$ интегрируема на $[0, +\infty)$ (интеграл равен $\pi/2$). Следовательно, по теореме о мажорируемом предельном переходе, интеграл $I(\alpha) \in C(\mathbb{R})$.
+\end{enumerate}
+\end{Example}
+
+
+
+\begin{Theorem}{О дифференцировании интеграла по параметру}{}
+Пусть задан интеграл $I(y) = \int\limits_X f(x, y) \, d\mu(x)$, где $y \in Y$ (некоторый промежуток). Предположим, что:
+\begin{enumerate}
+    \item Для всех $y \in Y$ функция $f(x, y)$ суммируема по $x$ на $X$.
+    \item Для почти всех $x \in X$ и для всех $y \in Y$ существует частная производная $f'_y(x,y)$.
+    \item Существует суммируемая функция $h(x) \in L^1(X, \mu)$, мажорирующая производную: $|f'_y(x, y)| \le h(x)$ для всех $y$.
+\end{enumerate}
+Тогда интеграл $I(y)$ дифференцируем на $Y$, и производную можно вносить под знак интеграла:
+$$ I'(y_0) = \int\limits_X f'_y(x, y_0) \, d\mu(x) $$
+\end{Theorem}
+
+\begin{Proof}
+Рассмотрим разностное отношение для интеграла:
+$$ \frac{I(y_0 + h) - I(y_0)}{h} = \int\limits_X \frac{f(x, y_0 + h) - f(x, y_0)}{h} \, d\mu(x) $$
+По теореме Лагранжа о конечных приращениях для функции $f$ по переменной $y$, существует такое число $\theta \in (0, 1)$, что:
+$$ \frac{f(x, y_0 + h) - f(x, y_0)}{h} = f'_y(x, y_0 + \theta h) $$
+По условию теоремы, производная ограничена суммируемой мажорантой $h(x)$. Следовательно, подынтегральное выражение в разностном отношении ограничено интегрируемой функцией, не зависящей от $h$. 
+Остаётся применить теорему Лебега о мажорируемой сходимости при предельном переходе $h \to 0$. Предел интеграла равен интегралу от предела:
+$$ \lim\limits_{h \to 0} \int\limits_X f'_y(x, y_0 + \theta h) \, d\mu(x) = \int\limits_X f'_y(x, y_0) \, d\mu(x) $$
+\end{Proof}
+
+\begin{Example}[ Вычисление интеграла Лапласа]
+Рассмотрим интеграл Лапласа:
+$$ I(y) = \int\limits_0^{+\infty} e^{-x^2} \cos(yx) \, dx $$
+Здесь $f(x,y) = e^{-x^2} \cos(yx)$. Найдём её частную производную:
+$$ f'_y(x,y) = -e^{-x^2} x \sin(yx) $$
+Производная непрерывна и мажорируется суммируемой функцией $|f'_y(x,y)| \le x e^{-x^2} \in L^1([0, +\infty))$. Значит, можно дифференцировать под знаком интеграла:
+$$ I'(y) = \int\limits_0^{+\infty} -e^{-x^2} x \sin(yx) \, dx $$
+Проинтегрируем по частям. Пусть $u = \sin(yx) \implies du = y \cos(yx) \, dx$. \\
+И $dv = -x e^{-x^2} \, dx \implies v = \frac{1}{2} e^{-x^2}$.
+\begin{align*}
+    I'(y) &= \left. \frac{1}{2} e^{-x^2} \sin(yx) \right|_0^{+\infty} - \frac{y}{2} \int\limits_0^{+\infty} e^{-x^2} \cos(yx) \, dx \\
+    &= 0 - \frac{y}{2} I(y)
+\end{align*}
+Мы получили линейное дифференциальное уравнение первого порядка: $I'(y) = -\frac{y}{2} I(y)$. \\
+Решаем его разделением переменных: $\frac{dI}{I} = -\frac{y}{2} dy \implies \ln|I| = -\frac{y^2}{4} + C \implies I(y) = \tilde{C} e^{-y^2/4}$. \\
+Константу $\tilde{C}$ найдём, подставив $y = 0$:
+$$ I(0) = \int\limits_0^{+\infty} e^{-x^2} \, dx = \frac{\sqrt{\pi}}{2} \quad \text{(интеграл Эйлера-Пуассона)} $$
+Следовательно, точное значение интеграла: $I(y) = \frac{\sqrt{\pi}}{2} e^{-y^2/4}$.
+\end{Example}
+
+
+\section{§ Интеграл по произведению мер}
+
+Пусть заданы два пространства с мерами: $(X, \mathcal{U}, \mu)$ и $(Y, \mathcal{V}, \nu)$. \\
+Рассмотрим прямое произведение пространств $X \times Y$. Множество $\mathcal{U} \otimes \mathcal{V} = \{ A \times B \mid A \in \mathcal{U}, B \in \mathcal{V} \}$ является полукольцом (мы доказывали это ранее).
+
+\begin{Theorem}{Мера на произведении пространств}{}
+Пусть $\mu, \nu$ — \textbf{$\sigma$-конечные} меры. Тогда на полукольце измеримых прямоугольников $\mathcal{U} \otimes \mathcal{V}$ корректно определена $\sigma$-конечная мера:
+$$ (\mu \times \nu)(A \times B) = \mu(A) \cdot \nu(B) $$
+\end{Theorem}
+
+\begin{Proof}
+Мы знаем, что $\mathcal{U} \otimes \mathcal{V}$ — полукольцо, а заданная функция является конечно аддитивным объёмом (это доказывается стандартной разбивкой прямоугольников). Докажем \textbf{счётную аддитивность} объёма. \\
+Пусть прямоугольник разбивается в счётное дизъюнктное объединение: $A \times B = \bigsqcup\limits_{i=1}^{\infty} (A_i \times B_i)$. \\
+Перейдём к индикаторным функциям (характеристическим функциям множеств). Для прямоугольника индикатор распадается в произведение: $\chi_{A \times B}(x,y) = \chi_A(x) \cdot \chi_B(y)$.
+Из дизъюнктности разбиения следует поточечное равенство функций:
+$$ \chi_A(x) \cdot \chi_B(y) = \sum\limits_{i=1}^{\infty} \chi_{A_i}(x) \cdot \chi_{B_i}(y) = \lim\limits_{N \to \infty} \sum\limits_{i=1}^N \chi_{A_i}(x) \cdot \chi_{B_i}(y) $$
+Зафиксируем произвольный $y$. Ряд состоит из неотрицательных измеримых (по $x$) функций. Применим \textbf{теорему Леви} к интегрированию по мере $\mu$:
+$$ \int\limits_X \chi_A(x) \chi_B(y) \, d\mu(x) = \lim\limits_{N \to \infty} \sum\limits_{i=1}^N \int\limits_X \chi_{A_i}(x) \chi_{B_i}(y) \, d\mu(x) $$
+$$ \mu(A) \chi_B(y) = \sum\limits_{i=1}^{\infty} \mu(A_i) \chi_{B_i}(y) $$
+Мы получили новое поточечное равенство неотрицательных функций, зависящих только от $y$. Вновь применим теорему Леви, интегрируя обе части по мере $\nu$:
+$$ \int\limits_Y \mu(A) \chi_B(y) \, d\nu(y) = \sum\limits_{i=1}^{\infty} \int\limits_Y \mu(A_i) \chi_{B_i}(y) \, d\nu(y) $$
+$$ \mu(A) \cdot \nu(B) = \sum\limits_{i=1}^{\infty} \mu(A_i) \cdot \nu(B_i) $$
+Счётная аддитивность доказана. Мера $\sigma$-конечна, так как $X$ и $Y$ можно разбить на счётное объединение кусков конечной меры, значит $X \times Y$ разобьётся на счётное число их попарных произведений конечной меры.
+\end{Proof}
+
+\begin{Theorem}{Тонелли и Фубини (О связи кратного и повторных интегралов)}{}
+Пусть $E \subset X \times Y$. Обозначим его сечения:
+$E_x = \{ y \in Y : (x,y) \in E \}$ (сечение при фиксированном $x$) и 
+$E^y = \{ x \in X : (x,y) \in E \}$. \\
+Площадь множества можно вычислять через интеграл от мер сечений:
+$$ (\mu \times \nu)(E) = \int\limits_X \nu(E_x) \, d\mu(x) = \int\limits_Y \mu(E^y) \, d\nu(y) $$
+
+Обобщение на функции:
+\begin{itemize}
+    \item \textbf{Теорема Тонелли:} Если $f(x,y) \ge 0$ измерима на произведении пространств, то:
+    1) Интеграл $\mathcal{I}(x) = \int_Y f(x,y) \, d\nu(y)$ измерим для почти всех $x$.
+    2) Интеграл $\mathcal{J}(y) = \int_X f(x,y) \, d\mu(x)$ измерим для почти всех $y$.
+    При этом справедлива формула сведения кратного интеграла к повторным:
+    $$ \int\limits_{X \times Y} f(x,y) \, d(\mu \times \nu) = \int\limits_X \left( \int\limits_Y f(x,y) d\nu(y) \right) d\mu(x) = \int\limits_Y \left( \int\limits_X f(x,y) d\mu(x) \right) d\nu(y) $$
+    
+    \item \textbf{Теорема Фубини:} Если функция $f$ \textbf{суммируема} (абсолютно интегрируема) на произведении пространств ($f \in L^1(X \times Y)$), то теорема работает аналогично без требования неотрицательности $f$.
+\end{itemize}
+\end{Theorem}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.8, >=stealth, line join=round, line cap=round]
+
+\definecolor{darktext}{HTML}{1A3A5C}
+\definecolor{surfacefill}{HTML}{E8F4FD}
+\definecolor{surfaceedge}{HTML}{5B9BD5}
+\definecolor{sectionfill}{HTML}{2E75B6}
+\definecolor{sectionline}{HTML}{1F4E79}
+\definecolor{gridcolor}{HTML}{B4C7E7}
+\definecolor{axiscolor}{HTML}{2C3E50}
+
+% --- Оси 3D: y вправо, z вверх, x вглубь (вниз-влево) ---
+\draw[->, thick, axiscolor] (0,0,0) -- (3.2,0,0) node[right, font=\small] {$y$};
+\draw[->, thick, axiscolor] (0,0,0) -- (0,2.8,0) node[above, font=\small] {$z = f(x,y)$};
+\draw[->, thick, axiscolor] (0,0,0) -- (0,0,3.2) node[below left, font=\small] {$x$};
+
+% --- Основание XY (плоскость z=0) ---
+\fill[gridcolor, opacity=0.12] (0,0,0) -- (2.5,0,0) -- (2.5,0,2.5) -- (0,0,2.5) -- cycle;
+\draw[axiscolor, dashed, opacity=0.4] (0,0,2.5) -- (2.5,0,2.5) -- (2.5,0,0);
+\foreach \t in {0,0.5,...,2.5} {
+    \draw[axiscolor, dashed, opacity=0.15] (\t,0,0) -- (\t,0,2.5);
+    \draw[axiscolor, dashed, opacity=0.15] (0,0,\t) -- (2.5,0,\t);
+}
+\node[axiscolor, opacity=0.7] at (1.25, -0.25, 1.25) {$X \times Y$};
+
+% ============================================
+% ПОВЕРХНОСТЬ z = f(x,y)
+% Координаты в TikZ: (y, z, x)
+% ============================================
+
+% Передняя граница x = 0 (ближе к зрителю)
+\coordinate (F0) at (0.00, 1.20, 0.00);
+\coordinate (F1) at (0.31, 1.05, 0.00);
+\coordinate (F2) at (0.62, 0.95, 0.00);
+\coordinate (F3) at (0.94, 0.90, 0.00);
+\coordinate (F4) at (1.25, 1.00, 0.00);
+\coordinate (F5) at (1.56, 1.15, 0.00);
+\coordinate (F6) at (1.88, 1.35, 0.00);
+\coordinate (F7) at (2.19, 1.55, 0.00);
+\coordinate (F8) at (2.50, 1.70, 0.00);
+
+% Задняя граница x = 2.5 (дальше от зрителя)
+\coordinate (B0) at (0.00, 1.60, 2.50);
+\coordinate (B1) at (0.31, 1.40, 2.50);
+\coordinate (B2) at (0.62, 1.35, 2.50);
+\coordinate (B3) at (0.94, 1.30, 2.50);
+\coordinate (B4) at (1.25, 1.40, 2.50);
+\coordinate (B5) at (1.56, 1.55, 2.50);
+\coordinate (B6) at (1.88, 1.75, 2.50);
+\coordinate (B7) at (2.19, 1.95, 2.50);
+\coordinate (B8) at (2.50, 2.10, 2.50);
+
+% Сечение x = 1.25 — точно на поверхности (линейная интерполяция между F и B)
+\coordinate (C0) at (0.00, 1.40, 1.25);
+\coordinate (C1) at (0.31, 1.225, 1.25);
+\coordinate (C2) at (0.62, 1.15, 1.25);
+\coordinate (C3) at (0.94, 1.10, 1.25);
+\coordinate (C4) at (1.25, 1.20, 1.25);
+\coordinate (C5) at (1.56, 1.35, 1.25);
+\coordinate (C6) at (1.88, 1.55, 1.25);
+\coordinate (C7) at (2.19, 1.75, 1.25);
+\coordinate (C8) at (2.50, 1.90, 1.25);
+
+% Заливка поверхности (прозрачная, чтобы видно было сечение)
+\fill[surfacefill, opacity=0.25] 
+    plot[smooth, tension=0.8] coordinates {(F0)(F1)(F2)(F3)(F4)(F5)(F6)(F7)(F8)}
+    -- plot[smooth, tension=0.8] coordinates {(B8)(B7)(B6)(B5)(B4)(B3)(B2)(B1)(B0)}
+    -- cycle;
+
+% Линии поверхности по направлению x (от передней к задней границе)
+\foreach \i in {0,...,8} {
+    \draw[surfaceedge, opacity=0.3, very thin] (F\i) -- (B\i);
+}
+
+% Контур поверхности
+\draw[surfaceedge, thick] plot[smooth, tension=0.8] coordinates {(F0)(F1)(F2)(F3)(F4)(F5)(F6)(F7)(F8)};
+\draw[surfaceedge, thick] plot[smooth, tension=0.8] coordinates {(B0)(B1)(B2)(B3)(B4)(B5)(B6)(B7)(B8)};
+\draw[surfaceedge, thick] (F0) -- (B0);
+\draw[surfaceedge, thick] (F8) -- (B8);
+
+% ============================================
+% СЕЧЕНИЕ при x = x_0 — параллельно плоскости рисунка
+% ============================================
+
+% Заливка от основания z=0 до верхней кривой поверхности
+\fill[sectionfill, opacity=0.35] 
+    (0,0,1.25) -- 
+    plot[smooth, tension=0.8] coordinates {(C0)(C1)(C2)(C3)(C4)(C5)(C6)(C7)(C8)} 
+    -- (2.5,0,1.25) -- cycle;
+
+% Штриховка (вертикальные линии внутри сечения, обрезанные по контуру)
+\begin{scope}
+    \clip (0,0,1.25) -- 
+          plot[smooth, tension=0.8] coordinates {(C0)(C1)(C2)(C3)(C4)(C5)(C6)(C7)(C8)} 
+          -- (2.5,0,1.25) -- cycle;
+    \foreach \y in {0.1,0.2,...,2.4} {
+        \draw[sectionfill, opacity=0.5, very thin] (\y,0,1.25) -- (\y,2.2,1.25);
+    }
+\end{scope}
+
+% Верхняя граница — часть самой поверхности, ультра-жирная и контрастная
+\draw[sectionline, ultra thick] plot[smooth, tension=0.8] coordinates {(C0)(C1)(C2)(C3)(C4)(C5)(C6)(C7)(C8)};
+
+% Боковые и нижняя границы сечения
+\draw[sectionline, thick] (0,0,1.25) -- (C0);
+\draw[sectionline, thick] (2.5,0,1.25) -- (C8);
+\draw[sectionline, thick] (0,0,1.25) -- (2.5,0,1.25);
+
+% ============================================
+% Оформление
+% ============================================
+
+% Точка x_0 на оси x (в точке начала сечения)
+\fill[sectionline] (0,0,1.25) circle (0.05);
+\draw[axiscolor, thick, dashed] (0,0,1.25) -- (-0.15,0,1.25) 
+    node[left, font=\small\bfseries] {$x_0$};
+
+% Подписи
+\node[darktext, align=left, anchor=west, font=\small] at (3.0, 2.2) {
+    \textbf{\large Теорема Фубини} \\[4pt]
+    Объём под поверхностью $z = f(x,y)$ \\ 
+    вычисляется интегрированием площадей \\ 
+    сечений $x = x_0 = \text{const}$ по мере $\nu$: \\[6pt]
+    $\displaystyle \iint_{X \times Y} f(x,y)\, d(\mu \times \nu) = 
+    \int_X \underbrace{\left( \int_Y f(x,y)\, d\nu(y) \right)}_{\mathcal{I}(x)} d\mu(x)$
+};
+
+\draw[sectionfill, thick, ->] (3.8, 0.5) -- (2, 1.0, 1.7) 
+    node[midway, above, font=\tiny, sectionfill] {сечение $\mathcal{I}(x_0)$};
+
+\end{tikzpicture}
+\end{center}
+
+\begin{Proof}[Доказательство теорем Тонелли и Фубини]
+Доказательство проводится стандартным в теории меры поэтапным методом (от простых множеств к произвольным функциям).
+
+\textbf{Этап 1: Индикатор измеримого прямоугольника.} \\
+Пусть $f(x,y) = \chi_{A \times B}(x,y) = \chi_A(x) \chi_B(y)$, где $A \in \mathcal{U}, B \in \mathcal{V}$. 
+Тогда интеграл по $Y$ от сечения равен:
+$$ \mathcal{I}(x) = \int\limits_Y \chi_A(x) \chi_B(y) \, d\nu(y) = \chi_A(x) \int\limits_Y \chi_B(y) \, d\nu(y) = \chi_A(x) \cdot \nu(B) $$
+Эта функция измерима по $x$. Интегрируем её по $X$:
+$$ \int\limits_X \mathcal{I}(x) \, d\mu(x) = \int\limits_X \chi_A(x) \nu(B) \, d\mu(x) = \mu(A) \cdot \nu(B) $$
+С другой стороны, по определению произведения мер, двойной интеграл равен:
+$$ \int\limits_{X \times Y} \chi_{A \times B} \, d(\mu \times \nu) = (\mu \times \nu)(A \times B) = \mu(A) \cdot \nu(B) $$
+Равенство выполняется. (Аналогично для интеграла $\mathcal{J}(y)$).
+
+\textbf{Этап 2: Индикатор произвольного измеримого множества.} \\
+Пусть $f(x,y) = \chi_E(x,y)$, где $E \in \mathcal{U} \otimes \mathcal{V}$. Заметим, что интеграл от индикатора по слою равен мере сечения: $\int\limits_Y \chi_E(x,y) \, d\nu(y) = \nu(E_x)$. \\
+В силу $\sigma$-конечности мер, класс множеств, для которых выполняется равенство $(\mu \times \nu)(E) = \int_X \nu(E_x) d\mu(x)$, содержит полукольцо измеримых прямоугольников и замкнут относительно счетных дизъюнктных объединений и монотонных пределов. По лемме о монотонных классах, равенство распространяется на всю $\sigma$-алгебру измеримых множеств.
+
+\textbf{Этап 3: Простая неотрицательная функция.} \\
+Всякая простая неотрицательная функция представима в виде конечной линейной комбинации индикаторов измеримых множеств: $f(x,y) = \sum_{i=1}^n c_i \chi_{E_i}(x,y)$, где $c_i \ge 0$. Теорема выполняется в силу линейности интеграла Лебега как для кратного интеграла, так и для повторных.
+
+\textbf{Этап 4: Произвольная неотрицательная функция (Теорема Тонелли).} \\
+Пусть $f(x,y) \ge 0$ — измеримая функция на $X \times Y$. По теореме об аппроксимации существует монотонно возрастающая последовательность простых неотрицательных функций $f_n(x,y) \nearrow f(x,y)$.
+Для каждой $f_n$ равенство кратного и повторного интегралов уже доказано:
+$$ \int\limits_{X \times Y} f_n \, d(\mu \times \nu) = \int\limits_X \left( \int\limits_Y f_n \, d\nu \right) d\mu $$
+Так как $f_n \nearrow f$, то интегралы по сечениям также монотонно возрастают $\int\limits_Y f_n \, d\nu \nearrow \int\limits_Y f \, d\nu$. 
+Дважды применяя теорему Леви (о монотонной сходимости) к обеим частям равенства, получаем предельную формулу для функции $f$. Теорема Тонелли доказана.
+
+\textbf{Этап 5: Произвольная суммируемая функция (Теорема Фубини).} \\
+Пусть $f \in L^1(X \times Y, \mu \times \nu)$. Разложим функцию на положительную и отрицательную части: $f = f_+ - f_-$, где $f_+, f_- \ge 0$. \\
+Так как $f$ суммируема, обе функции $f_+$ и $f_-$ суммируемы (их интегралы конечны). Применим доказанную теорему Тонелли к каждой из них по отдельности. 
+Поскольку интегралы конечны, мы можем воспользоваться линейностью интеграла и вычесть уравнения друг из друга без риска получить неопределенность $(\infty - \infty)$:
+\begin{align*}
+    \int\limits_{X \times Y} f \, d(\mu \times \nu) &= \int\limits_{X \times Y} f_+ \, d(\mu \times \nu) - \int\limits_{X \times Y} f_- \, d(\mu \times \nu) \\
+    &= \int\limits_X \left( \int\limits_Y f_+ \, d\nu \right) d\mu - \int\limits_X \left( \int\limits_Y f_- \, d\nu \right) d\mu \\
+    &= \int\limits_X \left( \int\limits_Y (f_+ - f_-) \, d\nu \right) d\mu = \int\limits_X \left( \int\limits_Y f \, d\nu \right) d\mu
+\end{align*}
+Теорема Фубини доказана.
+\end{Proof}
+
+\section{§ Интеграл Лебега и интеграл Римана}
+
+\begin{Theorem}{Связь интегралов Римана и Лебега}{}
+Если функция $f(x)$ интегрируема по Риману на отрезке $[a, b]$ (то есть $f \in R[a,b]$), то она суммируема по мере Лебега на этом отрезке ($f \in L^1([a,b], \lambda)$), и их значения совпадают:
+$$ (R) \int\limits_a^b f(x) \, dx = (L) \int\limits_{[a, b]} f(x) \, d\lambda $$
+\end{Theorem}
+
+\begin{Proof}
+Рассмотрим разбиение отрезка $x_k = a + \frac{k}{n}(b-a)$ для $k \in \{0, \dots, n\}$.
+Построим нижние и верхние суммы Дарбу:
+$$ \underline{S}_n = \sum\limits_{i=1}^n m_i \Delta x_i, \quad \text{где } m_i = \inf\limits_{\Delta_i} f(x) $$
+$$ \overline{S}_n = \sum\limits_{i=1}^n M_i \Delta x_i, \quad \text{где } M_i = \sup\limits_{\Delta_i} f(x) $$
+Определим две ступенчатые (простые) функции: $\underline{f}_n(x) = m_i$ и $\overline{f}_n(x) = M_i$ на интервалах $\Delta_i$. 
+\begin{center}
+\begin{tikzpicture}[scale=1.2, >=latex]
+    \definecolor{darktext}{HTML}{154360}
+    \definecolor{colorUnder}{HTML}{7DCEA0}
+    \definecolor{colorOver}{HTML}{F5B041}
+    
+    % Оси
+    \draw[->, thick, darktext] (-0.5, 0) -- (5, 0) node[right] {$x$};
+    \draw[->, thick, darktext] (0, -0.5) -- (0, 3) node[above] {$y$};
+    
+    % Кривая f(x)
+    \draw[ultra thick, darktext] plot [smooth, tension=0.7] coordinates { (0.5, 1.5) (1.5, 2.5) (2.5, 1.0) (3.5, 2.0) (4.5, 0.5) };
+    \node[darktext] at (1.5, 2.8) {$f(x)$};
+    
+    % Нижняя сумма Дарбу (Зеленая)
+    \filldraw[fill=colorUnder, fill opacity=0.3, draw=colorUnder, thick] (0.5, 0) rectangle (1.5, 1.5);
+    \filldraw[fill=colorUnder, fill opacity=0.3, draw=colorUnder, thick] (1.5, 0) rectangle (2.5, 1.0);
+    \filldraw[fill=colorUnder, fill opacity=0.3, draw=colorUnder, thick] (2.5, 0) rectangle (3.5, 1.0);
+    \filldraw[fill=colorUnder, fill opacity=0.3, draw=colorUnder, thick] (3.5, 0) rectangle (4.5, 0.5);
+    
+    % Верхняя сумма Дарбу (Оранжевая - пустые контуры)
+    \draw[colorOver, thick, dashed] (0.5, 0) rectangle (1.5, 2.5);
+    \draw[colorOver, thick, dashed] (1.5, 0) rectangle (2.5, 2.5);
+    \draw[colorOver, thick, dashed] (2.5, 0) rectangle (3.5, 2.0);
+    \draw[colorOver, thick, dashed] (3.5, 0) rectangle (4.5, 2.0);
+    
+    % Подписи
+    \node[colorUnder, font=\bfseries] at (2.5, 0.5) {$\underline{f}_n \le f$};
+    \node[colorOver, font=\bfseries] at (3.4, 2.3) {$\overline{f}_n \ge f$};
+\end{tikzpicture}
+\end{center}
+
+Тогда интегралы Лебега от этих простых функций в точности равны суммам Дарбу:
+$$ \underline{S}_n = \int\limits_{[a,b]} \underline{f}_n \, d\lambda \quad \text{и} \quad \overline{S}_n = \int\limits_{[a,b]} \overline{f}_n \, d\lambda $$
+При увеличении $n$ (измельчении разбиения) функции $\underline{f}_n$ монотонно не убывают, а $\overline{f}_n$ монотонно не возрастают. Все они ограничены функцией $f$.
+Значит, существуют поточечные пределы: $\underline{f}_n \nearrow \underline{f}$ и $\overline{f}_n \searrow \overline{f}$. Причём $\underline{f} \le f \le \overline{f}$ почти всюду.
+По теореме Леви, пределы интегралов равны интегралам от пределов:
+$$ \lim\limits_{n \to \infty} \underline{S}_n = \int\limits_{[a,b]} \underline{f} \, d\lambda \quad \text{и} \quad \lim\limits_{n \to \infty} \overline{S}_n = \int\limits_{[a,b]} \overline{f} \, d\lambda $$
+Так как функция $f$ интегрируема по Риману, пределы сумм Дарбу совпадают. Значит:
+$$ \int\limits_{[a,b]} \overline{f} \, d\lambda = \int\limits_{[a,b]} \underline{f} \, d\lambda \implies \int\limits_{[a,b]} (\overline{f} - \underline{f}) \, d\lambda = 0 $$
+Так как подынтегральная функция неотрицательна, интеграл равен нулю только если $\overline{f} = \underline{f}$ почти всюду. Из неравенства $\underline{f} \le f \le \overline{f}$ следует, что $f$ совпадает с $\underline{f}$ почти всюду.
+Так как $\underline{f}$ является измеримой (как предел простых), то и $f$ измерима, и её интеграл Лебега совпадает с общим пределом сумм Дарбу (интегралом Римана).
+\end{Proof}
+
+\begin{Theorem}{Следствие (Абсолютная сходимость) }{}
+Если несобственный интеграл Римана сходится абсолютно, то функция интегрируема по Лебегу, и интегралы равны:
+$$ (R) \int\limits_a^b f \, dx = (L) \int\limits_{[a, b)} f \, d\lambda $$
+\end{Theorem}
+
+\subsection*{Несобственные интегралы Лебега}
+
+\begin{Definition}{Несобственный интеграл Лебега}{}
+Говорят, что $f \in L^1_{loc}([a,b))$ (локально суммируема), если $f \in L^1([a, w])$ для любого $w < b$. 
+Несобственный интеграл Лебега определяется как предел:
+$$ \int\limits_{[a, b)} f \, d\lambda \stackrel{\text{def}}{=} \lim\limits_{w \to b-0} \int\limits_{[a, w]} f \, d\lambda $$
+\end{Definition}
+
+\begin{Definition}{Равномерная сходимость несобственных интегралов}{}
+Пусть $I(y) = \int\limits_{[a, b)} f(x, y) \, d\lambda$ сходится для всех $y \in Y$. Говорят, что этот интеграл сходится \textbf{равномерно по параметру $y$}, если интегралы по урезанным отрезкам равномерно сходятся к $I(y)$:
+$$ \int\limits_{[a, w]} f(x, y) \, d\lambda \rightrightarrows_{w \to b-0} I(y) $$
+Эквивалентное определение через "хвост" интеграла:
+$$ \forall \varepsilon > 0 \quad \exists \Delta > 0 \quad \forall \delta \in (b-\Delta, b) \quad \forall y \in Y \implies \left| \int\limits_{[\delta, b)} f(x,y) \, d\lambda \right| < \varepsilon $$
+\end{Definition}
+
+\begin{Example}
+Рассмотрим интеграл $\int\limits_{[0, +\infty)} e^{-xy} \, d\lambda$.
+Вычислим его "хвост" на отрезке $[\delta, +\infty)$:
+$$ \int\limits_{[\delta, +\infty)} e^{-xy} \, dx = \left. -\frac{1}{y} e^{-xy} \right|_{\delta}^{+\infty} = \frac{e^{-\delta y}}{y} $$
+\begin{itemize}
+    \item Пусть $y \in [1, +\infty)$. Тогда $\frac{e^{-\delta y}}{y} \le e^{-\delta y} \le e^{-\delta}$. Выбирая достаточно большое $\delta$, мы сделаем хвост меньше $\varepsilon$ независимо от $y$. Значит, интеграл \textbf{сходится равномерно}.
+    \item Пусть $y \in (0, +\infty)$. На этом множестве равномерной сходимости нет. Если мы возьмём малую точку $y = \frac{1}{\delta}$, хвост будет равен:
+    $$ \frac{e^{-\delta \cdot (1/\delta)}}{1/\delta} = \delta e^{-1} $$
+    Для любого $\varepsilon$ можно найти такое маленькое $\delta$, что хвост станет сколь угодно большим, что нарушает определение равномерной сходимости.
+\end{itemize}
+\end{Example}
+
+
+
+\section{§ Признаки равномерной сходимости несобственных интегралов}
+
+\begin{Theorem}{Признак Вейерштрасса}{}
+Пусть для функции $f(x,y)$ существует мажоранта $g(x) \in L^1([a,b), \lambda)$, такая что $|f(x,y)| \le g(x)$ для почти всех $x$ и для всех $y \in Y$. \\
+Тогда несобственный интеграл $\int\limits_{[a,b)} f(x,y) \, d\lambda$ сходится равномерно на множестве $Y$.
+\end{Theorem}
+\begin{Proof}
+Очевидно вытекает из оценки "хвоста" интеграла: $\left| \int\limits_{[\delta, b)} f(x,y) \, d\lambda \right| \le \int\limits_{[\delta, b)} g(x) \, d\lambda$. Так как $g$ суммируема, хвост стремится к нулю независимо от $y$.
+\end{Proof}
+
+\begin{Theorem}{Критерий Коши}{}
+Интеграл $\int\limits_{[a,b)} f(x,y) \, d\lambda$ сходится равномерно на $Y$ тогда и только тогда, когда:
+$$ \forall \varepsilon > 0 \quad \exists \Delta > 0 \quad \forall \delta', \delta'' \in (b-\Delta, b) \quad \forall y \in Y \implies \left| \int\limits_{[\delta', \delta'')} f(x,y) \, d\lambda \right| < \varepsilon $$
+\end{Theorem}
+
+\begin{Theorem}{Признаки Абеля и Дирихле}{}
+Пусть функции $f(x,y)$ и $g(x,y)$ непрерывны по $x$ на $[a, b)$ при каждом $y \in Y$, причём функция $g(x,y)$ \textbf{монотонна} по $x$ при каждом фиксированном $y$.
+Интеграл $\int\limits_{[a,b)} f(x,y)g(x,y) \, d\lambda$ сходится равномерно на $Y$, если выполняется одно из двух условий:
+
+\textbf{1. Признак Дирихле:}
+\begin{itemize}
+    \item Интеграл от $f$ равномерно ограничен: $\exists C > 0 : \left| \int\limits_{[a,\xi)} f(x,y) \, d\lambda \right| \le C \quad \forall \xi \in [a, b), \forall y \in Y$.
+    \item Функция $g(x,y) \rightrightarrows 0$ при $x \to b-0$ равномерно по $y$.
+\end{itemize}
+
+\textbf{2. Признак Абеля:}
+\begin{itemize}
+    \item Интеграл $\int\limits_{[a,b)} f(x,y) \, d\lambda$ сходится равномерно на $Y$.
+    \item Функция $g(x,y)$ равномерно ограничена по совокупности переменных: $\exists M > 0 : |g(x,y)| \le M$.
+\end{itemize}
+\end{Theorem}
+
+\begin{Proof}[Доказательство признака Абеля]
+Покажем равномерную сходимость с помощью критерия Коши. Зададим $\varepsilon > 0$. \\
+В силу непрерывности $f$ и $g$, а также монотонности $g$ по $x$, мы можем применить ко второй интегральной теореме о среднем (теореме Бонне). Для любых $\delta', \delta''$ существует точка $\xi \in [\delta', \delta'']$, такая что:
+$$ \int\limits_{\delta'}^{\delta''} f(x,y) g(x,y) \, dx = g(\delta', y) \int\limits_{\delta'}^{\xi} f(x,y) \, dx + g(\delta'', y) \int\limits_{\xi}^{\delta''} f(x,y) \, dx $$
+Так как интеграл от $f$ сходится равномерно, по критерию Коши существует такое $\Delta > 0$, что для любых отрезков внутри $(b-\Delta, b)$ модули интегралов от $f$ строго меньше $\frac{\varepsilon}{2M}$. \\
+Тогда, используя равномерную ограниченность $|g| \le M$:
+$$ \left| \int\limits_{\delta'}^{\delta''} f(x,y) g(x,y) \, dx \right| \le M \cdot \frac{\varepsilon}{2M} + M \cdot \frac{\varepsilon}{2M} = \varepsilon $$
+Равномерная сходимость по критерию Коши доказана.
+\end{Proof}
+
+
+\section{§ Теоремы о перестановке пределов}
+
+\begin{Theorem}{О перестановке двух пределов}{}
+Пусть задана функция $f: X \times Y \to \mathbb{R}$, где $X, Y$ — метрические пространства. Пусть существуют пределы:
+\begin{enumerate}
+    \item $\forall y \in Y \quad \exists \lim\limits_{x \to x_0} f(x,y) = h(y)$
+    \item $\forall x \in X \quad \exists \lim\limits_{y \to y_0} f(x,y) = \xi(x)$
+\end{enumerate}
+Если \textbf{хотя бы один} из этих двух пределов является \textbf{равномерным} (по другой переменной), то двойные пределы совпадают:
+$$ \lim\limits_{y \to y_0} h(y) = \lim\limits_{x \to x_0} \xi(x) $$
+\textit{(То есть предельные переходы можно менять местами: $\lim\limits_{y \to y_0} \lim\limits_{x \to x_0} f(x,y) = \lim\limits_{x \to x_0} \lim\limits_{y \to y_0} f(x,y)$).}
+\end{Theorem}
+
+\begin{Proof}
+Пусть второй предел является равномерным: $f(x,y) \rightrightarrows \xi(x)$ при $y \to y_0$ равномерно по $x$.
+
+\textbf{А) Докажем, что существует предел $\lim\limits_{y \to y_0} h(y) = A$.} \\
+Зададим $\varepsilon > 0$. Из равномерной сходимости по критерию Коши следует, что существует проколотая окрестность $\mathring{U}_\delta(y_0)$, такая что для любых $y', y'' \in \mathring{U}_\delta(y_0)$ и для всех $x \in X$:
+$$ |f(x, y') - f(x, y'')| < \varepsilon $$
+Так как это неравенство верно для любого $x$, перейдём в нём к пределу при $x \to x_0$. Поскольку $\lim_{x \to x_0} f(x,y) = h(y)$, предельный переход сохраняет нестрогое неравенство:
+$$ |h(y') - h(y'')| \le \varepsilon $$
+В силу критерия Коши для функции $h(y)$, предел существует. Обозначим $\lim_{y \to y_0} h(y) = A$.
+
+\textbf{Б) Докажем, что $\lim\limits_{x \to x_0} \xi(x) = A$.} \\
+Рассмотрим модуль разности и применим неравенство треугольника:
+$$ |\xi(x) - A| = |\xi(x) - f(x,y) + f(x,y) - h(y) + h(y) - A| \le |\xi(x) - f(x,y)| + |f(x,y) - h(y)| + |h(y) - A| $$
+Нам нужно сделать все три слагаемых меньше $\frac{\varepsilon}{3}$. 
+1) Так как $\lim_{y \to y_0} h(y) = A$, существует окрестность $U_1(y_0)$, где $|h(y) - A| < \frac{\varepsilon}{3}$.
+2) Так как $f(x,y) \rightrightarrows \xi(x)$, существует окрестность $U_2(y_0)$, где $|f(x,y) - \xi(x)| < \frac{\varepsilon}{3}$ для \textbf{всех} $x$. \\
+Зафиксируем какую-нибудь одну точку $\bar{y} \in U_1(y_0) \cap U_2(y_0)$. Первое и третье слагаемые для неё уже меньше $\frac{\varepsilon}{3}$.
+3) Для этой фиксированной $\bar{y}$ существует $\lim_{x \to x_0} f(x,\bar{y}) = h(\bar{y})$. Следовательно, существует окрестность $U(x_0)$, такая что для всех $x \in U(x_0)$ второе слагаемое $|f(x,\bar{y}) - h(\bar{y})| < \frac{\varepsilon}{3}$.
+Складывая оценки, для всех $x \in U(x_0)$ получаем $|\xi(x) - A| < \varepsilon$. Предел доказан.
+\end{Proof}
+
+\begin{Theorem}{Предельный переход под знаком несобственного интеграла}{}
+Пусть $Y$ — метрическое пространство, $f: [a, b) \times Y \to \mathbb{R}$. Если:
+\begin{enumerate}
+    \item Для почти всех $x \in [a, b)$ существует $\lim\limits_{y \to y_0} f(x,y) = g(x)$.
+    \item Функция $g \in L^1_{loc}([a,b))$, и для любого $t \in [a, b)$ предел интеграла равен интегралу предела: $\lim\limits_{y \to y_0} \int\limits_{[a,t]} f(x,y) \, d\lambda = \int\limits_{[a,t]} g(x) \, d\lambda$.
+    \item Интеграл $\int\limits_{[a,b)} f(x,y) \, d\lambda$ сходится \textbf{равномерно} на $Y$.
+\end{enumerate}
+Тогда предельный переход правомерен:
+$$ \lim\limits_{y \to y_0} \int\limits_{[a,b)} f(x,y) \, d\lambda = \int\limits_{[a,b)} g(x) \, d\lambda $$
+\end{Theorem}
+
+\begin{Proof}
+Рассмотрим функцию $H_1(t,y) = \int\limits_{[a,t]} f(x,y) \, d\lambda$. 
+По условию 2, существует предел $\lim\limits_{y \to y_0} H_1(t,y) = \int\limits_{[a,t]} g(x) \, d\lambda \equiv H_2(t)$.
+По условию 3 (равномерная сходимость интеграла), существует предел $\lim\limits_{t \to b-0} H_1(t,y) = \int\limits_{[a,b)} f(x,y) \, d\lambda \equiv H_3(y)$, причём этот предел \textbf{равномерный} по параметру $y$.
+Мы находимся в условиях теоремы о перестановке пределов. Так как один из пределов ($H_3$) равномерный, мы имеем право их переставить:
+$$ \lim\limits_{y \to y_0} H_3(y) = \lim\limits_{t \to b-0} H_2(t) \implies \lim\limits_{y \to y_0} \int\limits_{[a,b)} f(x,y) \, d\lambda = \lim\limits_{t \to b-0} \int\limits_{[a,t]} g(x) \, d\lambda = \int\limits_{[a,b)} g(x) \, d\lambda $$
+\end{Proof}
+
+
+\section{§ Вычисление интеграла Дирихле}
+
+Продемонстрируем мощь этих теорем, вычислив знаменитый интеграл Дирихле.
+Рассмотрим функцию с параметром $y \ge 0$:
+$$ I(y) = \int\limits_0^{+\infty} e^{-xy} \frac{\sin x}{x} \, dx $$
+Очевидно, что исходный интеграл Дирихле равен $I(0) = \lim\limits_{y \to +0} I(y)$. 
+Чтобы внести предел под знак интеграла, проверим признак Абеля:
+\begin{itemize}
+    \item Интеграл $\int\limits_0^{+\infty} \frac{\sin x}{x} \, dx$ сходится (это классический факт). Он не зависит от $y$, значит сходится "равномерно".
+    \item Функция $e^{-xy}$ при $y \ge 0$ монотонно убывает по $x$ и равномерно ограничена: $|e^{-xy}| \le 1$.
+\end{itemize}
+По признаку Абеля интеграл $I(y)$ сходится \textbf{равномерно} при $y \ge 0$. Следовательно, функция $I(y)$ непрерывна в нуле, и мы имеем право написать: $I(0) = \lim\limits_{y \to +0} I(y)$.
+
+Вычислим производную $I'(y)$. Формально дифференцируя по параметру $y$:
+$$ I'(y) = \int\limits_0^{+\infty} \left(e^{-xy} \frac{\sin x}{x}\right)'_y \, dx = -\int\limits_0^{+\infty} e^{-xy} \sin x \, dx $$
+Правомерно ли это? Для любого отрезка $[\delta, +\infty)$, где $\delta > 0$, производная мажорируется: $|e^{-xy} \sin x| \le e^{-xy} \le e^{-\delta x} \in L^1(0, +\infty)$. Значит, при $y > 0$ дифференцировать можно.
+
+Вычисляем полученный интеграл $I'(y)$ двукратным интегрированием по частям:
+$$ I'(y) = -\frac{1}{1+y^2} $$
+Интегрируем обратно по $y$, чтобы найти $I(y)$:
+$$ I(y) = -\operatorname{arctg}(y) + C, \quad y \ge 0 $$
+Чтобы найти константу $C$, устремим $y \to +\infty$. Оценим исходный интеграл:
+$$ |I(y)| \le \int\limits_0^{+\infty} \left| e^{-xy} \frac{\sin x}{x} \right| \, dx \le \int\limits_0^{+\infty} e^{-xy} \, dx = \left. -\frac{1}{y} e^{-xy} \right|_0^{+\infty} = \frac{1}{y} $$
+При $y \to +\infty$ оценка $\frac{1}{y} \to 0$, следовательно $\lim\limits_{y \to +\infty} I(y) = 0$.
+Подставим это в наше уравнение:
+$$ 0 = -\operatorname{arctg}(+\infty) + C \implies 0 = -\frac{\pi}{2} + C \implies C = \frac{\pi}{2} $$
+Таким образом, $I(y) = \frac{\pi}{2} - \operatorname{arctg}(y)$.
+Искомый интеграл Дирихле:
+$$ \int\limits_0^{+\infty} \frac{\sin x}{x} \, dx = I(0) = \frac{\pi}{2} - 0 = \frac{\pi}{2} $$
+
+
+\section{§ Интегрирование несобственного интеграла по параметру}
+
+\begin{Theorem}{Об интегрировании интеграла с параметром}{}
+Пусть $f: [a, b) \times Y \to \mathbb{R}$, $f \in L^1_{loc}([a,b))$ для любого $y \in Y$. Пусть $(Y, \mathcal{U}, \nu)$ — измеримое пространство с мерой $\nu(Y) < +\infty$.
+Обозначим:
+$$ I(x) = \int\limits_Y f(x,y) \, d\nu(y) \quad \text{и} \quad \mathcal{J}(y) = \int\limits_{[a,b)} f(x,y) \, dx $$
+Предположим, что функция $f$ суммируема по $Y$ для любого $x$, и несобственный интеграл $\mathcal{J}(y)$ сходится \textbf{равномерно} на $Y$. Тогда интеграл $I(x)$ интегрируем на $[a,b)$, и порядки интегрирования можно менять:
+$$ \int\limits_{[a,b)} I(x) \, dx = \int\limits_Y \mathcal{J}(y) \, d\nu(y) \quad \left( \text{т.е. } \int\limits_{[a,b)} \int\limits_Y f(x,y) \, d\nu \, dx = \int\limits_Y \int\limits_{[a,b)} f(x,y) \, dx \, d\nu \right) $$
+\end{Theorem}
+
+\begin{Proof}[Доказательство]
+Обозначим интегралы по урезанным отрезкам: $J_w(y) = \int\limits_a^w f(x,y) \, dx$. \\
+Из определения равномерной сходимости несобственного интеграла следует, что $J_w(y) \rightrightarrows \mathcal{J}(y)$ на множестве $Y$ при $w \to b-0$. \\
+Так как отрезок $[a, w]$ конечен, мы можем применить классическую теорему Фубини для перестановки конечных интегралов:
+$$ \int\limits_a^w I(x) \, dx = \int\limits_a^w \left( \int\limits_Y f(x,y) \, d\nu \right) dx = \int\limits_Y \left( \int\limits_a^w f(x,y) \, dx \right) d\nu = \int\limits_Y J_w(y) \, d\nu $$
+Перейдём к пределу в обеих частях равенства при $w \to b-0$.
+С левой стороны получаем несобственный интеграл по определению:
+$$ \lim\limits_{w \to b-0} \int\limits_a^w I(x) \, dx = \int\limits_{[a,b)} I(x) \, dx $$
+С правой стороны стоит предел: $\lim\limits_{w \to b-0} \int\limits_Y J_w(y) \, d\nu$. Так как последовательность функций $J_w(y)$ сходится равномерно к $\mathcal{J}(y)$, и мера пространства конечна ($\nu(Y) < +\infty$), мы имеем право внести предел под знак интеграла по теореме о равномерном предельном переходе:
+$$ \lim\limits_{w \to b-0} \int\limits_Y J_w(y) \, d\nu = \int\limits_Y \left( \lim\limits_{w \to b-0} J_w(y) \right) d\nu = \int\limits_Y \mathcal{J}(y) \, d\nu $$
+Приравнивая пределы, получаем требуемое равенство.
+\end{Proof}
+
+
+
+\section{§ Примеры применения интегралов с параметром}
+
+\begin{Example}[ Вычисление интеграла Лапласа (окончание)]
+Рассмотрим интеграл $K(y) = \int\limits_0^{+\infty} \frac{\cos(yx)}{1+x^2} \, dx$.
+В предыдущих лекциях мы показали, что $K(y)$ непрерывна на $\mathbb{R}$, и $K(0) = \frac{\pi}{2}$.
+
+\textbf{1. Дифференцирование по параметру:}
+Формально продифференцируем по $y$:
+$$ K'(y) = -\int\limits_0^{+\infty} \frac{x \sin(yx)}{1+x^2} \, dx $$
+Обоснуем законность дифференцирования. Подынтегральная функция не имеет интегрируемой мажоранты на всей оси $(0, +\infty)$, не зависящей от $y$. Однако воспользуемся признаком Дирихле:
+$$ \left| \int\limits_a^A \sin(yx) \, dx \right| = \left| \frac{-\cos(yx)}{y} \right|_a^A \le \frac{2}{y} \le \frac{2}{y_0} $$
+Для любого $y \in [y_0, +\infty)$, где $y_0 > 0$, эта величина равномерно ограничена. Функция $\frac{x}{1+x^2}$ монотонно стремится к нулю. Значит, по признаку Дирихле, интеграл сходится \textbf{равномерно локально} на луче $[y_0, +\infty)$. Это позволяет дифференцировать под знаком интеграла при $y > 0$.
+
+\textbf{2. Составление дифференциального уравнения:}
+Преобразуем $K'(y)$ алгебраически (прибавим и вычтем $x$ в числителе):
+$$ K'(y) = -\int\limits_0^{+\infty} \frac{x^2 \sin(yx)}{x(1+x^2)} \, dx = -\int\limits_0^{+\infty} \frac{(x^2+1-1) \sin(yx)}{x(1+x^2)} \, dx = -\int\limits_0^{+\infty} \frac{\sin(yx)}{x} \, dx + \int\limits_0^{+\infty} \frac{\sin(yx)}{x(1+x^2)} \, dx $$
+Первый интеграл — это интеграл Дирихле, равный $\frac{\pi}{2}$ (при $y > 0$).
+Продифференцируем полученное выражение ещё раз по $y$:
+$$ K''(y) = 0 + \int\limits_0^{+\infty} \frac{x \cos(yx)}{x(1+x^2)} \, dx = \int\limits_0^{+\infty} \frac{\cos(yx)}{1+x^2} \, dx = K(y) $$
+Мы получили линейное дифференциальное уравнение второго порядка: $K''(y) - K(y) = 0$.
+
+\textbf{3. Решение:}
+Фундаментальная система решений: $K(y) = C_1 e^y + C_2 e^{-y}$.
+Так как исходный интеграл ограничен: $|K(y)| \le \int\limits_0^{+\infty} \frac{1}{1+x^2} dx = \frac{\pi}{2}$, то при $y \to +\infty$ должно выполняться $C_1 = 0$.
+Так как $K(0) = \frac{\pi}{2}$, получаем $C_2 = \frac{\pi}{2}$.
+Итого, $K(y) = \frac{\pi}{2} e^{-y}$ для $y \ge 0$. В силу чётности косинуса, функция $K(y)$ чётная, поэтому окончательный ответ на всей оси:
+$$ \int\limits_0^{+\infty} \frac{\cos(yx)}{1+x^2} \, dx = \frac{\pi}{2} e^{-|y|} $$
+\end{Example}
+
+
+\begin{Theorem}{Интегралы Френеля}{}
+Справедливо следующее равенство для несобственных интегралов:
+$$ \int\limits_0^{+\infty} \cos(x^2) \, dx = \int\limits_0^{+\infty} \sin(x^2) \, dx = \frac{1}{2}\sqrt{\frac{\pi}{2}} $$
+\end{Theorem}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2, >=latex]
+    \definecolor{darktext}{HTML}{154360}
+    \definecolor{colorCos}{HTML}{2874A6}
+    \definecolor{colorSin}{HTML}{E67E22}
+
+    % Оси
+    \draw[->, thick, darktext] (-0.5, 0) -- (6, 0) node[right] {$x$};
+    \draw[->, thick, darktext] (0, -1.5) -- (0, 1.5) node[above] {$y$};
+
+    % Графики функций (пересчет в градусы для PGF)
+    \draw[thick, colorCos, samples=200, domain=0:5.5] plot (\x, {cos(\x*\x * 180/pi)});
+    \draw[thick, colorSin, samples=200, domain=0:5.5] plot (\x, {sin(\x*\x * 180/pi)});
+
+    % Подписи
+    \node[colorCos, font=\bfseries] at (2.5, 1.2) {$\cos(x^2)$};
+    \node[colorSin, font=\bfseries] at (1.5, -1.2) {$\sin(x^2)$};
+
+    % Пояснение
+    \node[darktext, align=left, anchor=west] at (0, -2.4) {
+        \small Осцилляции становятся всё чаще при $x \to \infty$. \\
+        \small Площади соседних «полуволн» почти уничтожают друг друга, \\
+        \small что и обеспечивает сходимость несобственного интеграла.
+    };
+\end{tikzpicture}
+\end{center}
+
+\begin{Proof}
+Вычислим первый интеграл. Сделаем замену переменной $x^2 = t \implies 2x \, dx = dt \implies dx = \frac{dt}{2\sqrt{t}}$.
+Тогда интеграл примет вид:
+$$ I_c = \int\limits_0^{+\infty} \cos(x^2) \, dx = \frac{1}{2} \int\limits_0^{+\infty} \frac{\cos t}{\sqrt{t}} \, dt $$
+Воспользуемся известным тождеством (из интеграла Эйлера-Пуассона):
+$$ \frac{1}{\sqrt{t}} = \frac{2}{\sqrt{\pi}} \int\limits_0^{+\infty} e^{-tx^2} \, dx $$
+Подставим это в наш интеграл:
+$$ I_c = \frac{1}{2} \int\limits_0^{+\infty} \cos t \left( \frac{2}{\sqrt{\pi}} \int\limits_0^{+\infty} e^{-tx^2} \, dx \right) dt = \frac{1}{\sqrt{\pi}} \int\limits_0^{+\infty} \int\limits_0^{+\infty} e^{-tx^2} \cos t \, dx \, dt $$
+Поменяем порядок интегрирования (по теореме Фубини/Тонелли):
+$$ I_c = \frac{1}{\sqrt{\pi}} \int\limits_0^{+\infty} dx \left( \int\limits_0^{+\infty} e^{-tx^2} \cos t \, dt \right) $$
+Внутренний интеграл — это табличный интеграл Лапласа (вычисляется двукратным интегрированием по частям):
+$$ \int\limits_0^{+\infty} e^{-tx^2} \cos t \, dt = \frac{x^2}{(x^2)^2 + 1^2} = \frac{x^2}{x^4 + 1} $$
+Возвращаемся к внешнему интегралу:
+$$ I_c = \frac{1}{\sqrt{\pi}} \int\limits_0^{+\infty} \frac{x^2}{x^4 + 1} \, dx $$
+Для вычисления этого рационального интеграла применим изящный трюк. Заметим, что замена $x = \frac{1}{u} \implies dx = -\frac{du}{u^2}$ даёт:
+$$ \int\limits_0^{+\infty} \frac{x^2}{x^4 + 1} \, dx = \int\limits_{+\infty}^0 \frac{1/u^2}{1/u^4 + 1} \left( -\frac{du}{u^2} \right) = \int\limits_0^{+\infty} \frac{1}{u^4 + 1} \, du $$
+Тогда удвоенный интеграл $I_c$ можно записать как сумму:
+$$ 2 \sqrt{\pi} I_c = \int\limits_0^{+\infty} \frac{x^2}{x^4+1} dx + \int\limits_0^{+\infty} \frac{1}{x^4+1} dx = \int\limits_0^{+\infty} \frac{x^2 + 1}{x^4 + 1} \, dx = \int\limits_0^{+\infty} \frac{1 + 1/x^2}{x^2 + 1/x^2} \, dx $$
+Заметим, что числитель является дифференциалом функции $\left(x - \frac{1}{x}\right)$, так как $d\left(x - \frac{1}{x}\right) = \left(1 + \frac{1}{x^2}\right) dx$. А знаменатель можно свернуть как полный квадрат: $x^2 + \frac{1}{x^2} = \left(x - \frac{1}{x}\right)^2 + 2$. 
+
+Сделаем замену $z = x - \frac{1}{x}$. При $x \to +0$ имеем $z \to -\infty$, а при $x \to +\infty$ имеем $z \to +\infty$:
+$$ 2 \sqrt{\pi} I_c = \int\limits_{-\infty}^{+\infty} \frac{dz}{z^2 + 2} = \left. \frac{1}{\sqrt{2}} \operatorname{arctg}\left(\frac{z}{\sqrt{2}}\right) \right|_{-\infty}^{+\infty} = \frac{1}{\sqrt{2}} \left( \frac{\pi}{2} - \left(-\frac{\pi}{2}\right) \right) = \frac{\pi}{\sqrt{2}} $$
+Отсюда находим окончательный ответ:
+$$ I_c = \frac{1}{2\sqrt{\pi}} \frac{\pi}{\sqrt{2}} = \frac{1}{2} \sqrt{\frac{\pi}{2}} $$
+Интеграл от $\sin(x^2)$ вычисляется абсолютно аналогично, только внутренний интеграл даст $\frac{1}{x^4+1}$, что алгебраически приведет к точно такому же ответу.
 \end{Proof}
 
 \end{document}

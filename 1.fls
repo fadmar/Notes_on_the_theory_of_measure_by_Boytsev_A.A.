@@ -1,8 +1,8 @@
-PWD d:/VS projects/LaTeX/мера
+PWD d:/VS projects/LaTeX/Notes on the theory of measure by Boytsev A. A
 INPUT c:/texlive/2026/texmf.cnf
 INPUT c:/texlive/2026/texmf-dist/web2c/texmf.cnf
 INPUT c:/texlive/2026/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT d:/VS projects/LaTeX/мера/1.tex
+INPUT d:/VS projects/LaTeX/Notes on the theory of measure by Boytsev A. A/1.tex
 OUTPUT 1.log
 INPUT c:/texlive/2026/texmf-dist/tex/latex/base/article.cls
 INPUT c:/texlive/2026/texmf-dist/tex/latex/base/article.cls
@@ -176,6 +176,18 @@ INPUT c:/texlive/2026/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/ti
 INPUT c:/texlive/2026/texmf-dist/tex/generic/pgf/modules/pgfmoduledecorations.code.tex
 INPUT c:/texlive/2026/texmf-dist/tex/generic/pgf/libraries/decorations/pgflibrarydecorations.pathreplacing.code.tex
 INPUT c:/texlive/2026/texmf-dist/tex/generic/pgf/libraries/decorations/pgflibrarydecorations.pathreplacing.code.tex
+INPUT c:/texlive/2026/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarycalc.code.tex
+INPUT c:/texlive/2026/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarycalc.code.tex
+INPUT c:/texlive/2026/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryintersections.code.tex
+INPUT c:/texlive/2026/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryintersections.code.tex
+INPUT c:/texlive/2026/texmf-dist/tex/generic/pgf/libraries/pgflibraryintersections.code.tex
+INPUT c:/texlive/2026/texmf-dist/tex/generic/pgf/libraries/pgflibraryintersections.code.tex
+INPUT c:/texlive/2026/texmf-dist/tex/generic/pgf/libraries/pgflibraryfpu.code.tex
+INPUT c:/texlive/2026/texmf-dist/tex/generic/pgf/libraries/pgflibraryfpu.code.tex
+INPUT c:/texlive/2026/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarypatterns.meta.code.tex
+INPUT c:/texlive/2026/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarypatterns.meta.code.tex
+INPUT c:/texlive/2026/texmf-dist/tex/generic/pgf/libraries/pgflibrarypatterns.meta.code.tex
+INPUT c:/texlive/2026/texmf-dist/tex/generic/pgf/libraries/pgflibrarypatterns.meta.code.tex
 INPUT c:/texlive/2026/texmf-dist/tex/latex/xcharter/XCharter.sty
 INPUT c:/texlive/2026/texmf-dist/tex/latex/xcharter/XCharter.sty
 INPUT c:/texlive/2026/texmf-dist/tex/generic/iftex/iftex.sty
@@ -349,6 +361,9 @@ INPUT c:/texlive/2026/texmf-dist/tex/latex/amsfonts/umsb.fd
 INPUT c:/texlive/2026/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
 INPUT c:/texlive/2026/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
 INPUT c:/texlive/2026/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm
+INPUT c:/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map
+INPUT c:/texlive/2026/texmf-dist/fonts/enc/dvips/xcharter/xch_4difzd.enc
+INPUT c:/texlive/2026/texmf-dist/fonts/enc/dvips/xcharter/xch_fz6tql.enc
 OUTPUT 1.toc
 INPUT c:/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmr17.tfm
 INPUT c:/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm
@@ -362,9 +377,6 @@ INPUT c:/texlive/2026/texmf-dist/tex/latex/cyrillic/t2acmss.fd
 INPUT c:/texlive/2026/texmf-dist/tex/latex/cyrillic/t2acmss.fd
 INPUT c:/texlive/2026/texmf-dist/tex/latex/cyrillic/t2acmss.fd
 INPUT c:/Users/markf/.texlive2026/texmf-var/fonts/tfm/lh/lh-t2a/lasx1200.tfm
-INPUT c:/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map
-INPUT c:/texlive/2026/texmf-dist/fonts/enc/dvips/xcharter/xch_4difzd.enc
-INPUT c:/texlive/2026/texmf-dist/fonts/enc/dvips/xcharter/xch_fz6tql.enc
 INPUT c:/texlive/2026/texmf-dist/tex/latex/xcharter/TS1XCharter-TLF.fd
 INPUT c:/texlive/2026/texmf-dist/tex/latex/xcharter/TS1XCharter-TLF.fd
 INPUT c:/texlive/2026/texmf-dist/tex/latex/xcharter/TS1XCharter-TLF.fd
@@ -391,6 +403,11 @@ INPUT c:/texlive/2026/texmf-dist/fonts/tfm/public/xcharter/XCharter-Bold-tlf-t2a
 INPUT c:/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT c:/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmbx8.tfm
 INPUT c:/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmbx6.tfm
+INPUT c:/texlive/2026/texmf-dist/fonts/tfm/public/xcharter/XCharter-Roman-tlf-t2a.tfm
+INPUT c:/texlive/2026/texmf-dist/fonts/tfm/public/xcharter/XCharter-Bold-tlf-t2a.tfm
+INPUT c:/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
+INPUT c:/texlive/2026/texmf-dist/fonts/tfm/public/xcharter/XCharter-Bold-tlf-t2a.tfm
+INPUT c:/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmbx5.tfm
 INPUT 1.aux
 INPUT ./1.out
 INPUT ./1.out
@@ -404,8 +421,10 @@ INPUT c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
 INPUT c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb
 INPUT c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb
 INPUT c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb
+INPUT c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
 INPUT c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb
 INPUT c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb
+INPUT c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb
 INPUT c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb
 INPUT c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb
 INPUT c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb

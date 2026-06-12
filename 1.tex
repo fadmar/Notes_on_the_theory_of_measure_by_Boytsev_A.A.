@@ -4,13 +4,25 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T2A]{fontenc}
 \usepackage[russian]{babel}
-
+\usepackage{mathrsfs}
 \usepackage{tikz}
+\usepackage{esvect}
 \usetikzlibrary{hobby, arrows.meta}
 \usetikzlibrary{decorations.pathreplacing}
 \usetikzlibrary{calc,intersections,decorations.pathreplacing,patterns.meta}
 % Современный шрифт, поддерживающий кириллицу (Charter)
 \usepackage{XCharter}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{} % Очищаем стандартные колонтитулы
+\fancyhead[L]{Бойцев А. А.} % Левый верхний колонтитул
+\fancyfoot[C]{\thepage} % Номер страницы внизу по центру
+% Переопределяем стиль plain, чтобы на странице с оглавлением тоже был колонтитул
+\fancypagestyle{plain}{
+    \fancyhf{}
+    \fancyhead[L]{Бойцев А. А.}
+    \fancyfoot[C]{\thepage}
+}
 
 % Математика
 \usepackage{amsmath, amsfonts, amssymb, amsthm}
@@ -111,7 +123,8 @@
 \begin{document}
 Если заметили ошибку пишите в tg: @fadmar
 \tableofcontents
-\section{§ Система множеств, алгебра, $\sigma$-алгебра, кольца}
+\section{Системы множеств}
+\subsection{§ Система множеств, алгебра, $\sigma$-алгебра, кольца}
 
 \begin{Definition}{Симметричная система}{}
 Система множеств $\mathcal{U}$ называется \textbf{симметричной}, если из того, что $A \in \mathcal{U}$, следует, что $A^c \in \mathcal{U}$ (где $A^c$ — дополнение множества $A$).
@@ -223,7 +236,7 @@ $$ \bigcup_{n=1}^{\infty} [n, n+1] = [1, +\infty) $$
 2) Очевидно (из определений кольца и алгебры).
 \end{Proof}
 
-\section{§ Полукольцо и его свойства}
+\subsection{§ Полукольцо и его свойства}
 
 \begin{Definition}{Полукольцо}{}
 Система подмножеств $\mathcal{P}$ множества $X$ называется \textbf{полукольцом}, если:
@@ -400,7 +413,7 @@ $$ P_1 \cup P_2 = (P_1 \setminus P_2) \cup (P_1 \cap P_2) \cup (P_2 \setminus P_
 Все эти элементы лежат в полукольце и попарно не пересекаются.
 \end{Proof}
 
-\section{§ Объём и его свойства}
+\subsection{§ Объём и его свойства}
 
 \begin{Definition}{Объём}{}
 Функция $\varphi : \mathcal{P} \to [0, +\infty]$ называется \textbf{объёмом}, если:
@@ -633,7 +646,7 @@ $$ \varphi(P) = \sum\limits_{i=1}^n \sum\limits_{j=1}^{m_i} \varphi(Q_{ij}) \le 
 \end{tikzpicture}
 \end{center}
 
-\section{§ Произведение полуколец и объёмов}
+\subsection{§ Произведение полуколец и объёмов}
 
 \begin{Definition}{Произведение полуколец}{}
 Пусть $\mathcal{P}$ и $\mathcal{Q}$ — полукольца. \textbf{Произведением} полуколец $\mathcal{P}$ и $\mathcal{Q}$ назовём систему множеств:
@@ -770,8 +783,8 @@ $$ \nu(P \times Q) = \varphi(P)\psi(Q) = \left( \sum\limits_{i=1}^{I} \varphi(\t
 $$ \sum\limits_{k=1}^n \nu(P_k \times Q_k) = \sum\limits_{k=1}^n \varphi(P_k)\psi(Q_k) = \sum\limits_{k=1}^n \sum\limits_{\text{клетки } (i, j) \in P_k \times Q_k} \varphi(\tilde{P}_i)\psi(\tilde{Q}_j) $$
 Поскольку исходное объединение прямоугольников было дизъюнктным и в точности покрывало всё множество $P \times Q$, каждая пара $(i, j)$ учитывается в правой сумме ровно один раз. Значит, суммы абсолютно идентичны. Аддитивность доказана.
 \end{Proof}
-
-\section{§ Мера и её свойства}
+\section{Мера}
+\subsection{§ Мера и её свойства}
 
 \begin{Definition}{Мера}{}
 Объём $\varphi: \mathcal{P} \to [0, +\infty]$ называется \textbf{мерой}, если для любой последовательности непересекающихся множеств $P, P_1, P_2, \dots \in \mathcal{P}$ выполняется свойство \textbf{счётной аддитивности}:
@@ -897,7 +910,7 @@ $$ 0 = \lim\limits_{n \to \infty} \varphi(B_n) = \varphi(A) - \lim\limits_{n \to
 
 \setcounter{section}{4}
 
-\section{§ Внешняя мера и её свойства}
+\subsection{§ Внешняя мера и её свойства}
 
 Глобальная идея: погрузим множество в не более чем счётное семейство множеств, которое можно измерить. 
 $$ \text{Мера на скудной системе} \xrightarrow{\text{строим}} \text{Внешнюю меру} \xrightarrow{\text{сужаем}} \text{Мера на большей системе множеств} $$
@@ -1037,7 +1050,7 @@ $$ \tau(E \cap B) + \tau(E \setminus B) \le \tau(E) $$
 Тогда $1 = \tau(\mathbb{R} \cap A) + \tau(\mathbb{R} \setminus A) \implies 1 = 1 + 1 \implies 1 = 2$. Противоречие. Значит, $A \notin \mathcal{U}_\tau$.
 \end{Example}
 
-\section{§ Процесс Каратеодори (Продолжение меры)}
+\subsection{§ Процесс Каратеодори (Продолжение меры)}
 
 \begin{Definition}{Внешняя мера, порождённая мерой}{}
 Пусть $\mu_0$ — мера на полукольце $\mathcal{P}$. \textbf{Внешней мерой, порождённой $\mu_0$}, назовём функцию:
@@ -1118,7 +1131,7 @@ $$ \mu^*(E) + \varepsilon > \mu^*(E \cap P) + \mu^*(E \setminus P) $$
 В данном случае множество $X$ нельзя покрыть элементами конечной меры, поэтому эта мера \textbf{не является $\sigma$-конечной}. Система измеримых множеств $\mathcal{U}_{\mu^*} = 2^X$.
 \end{Example}
 
-\section{§ Свойства стандартного продолжения}
+\subsection{§ Свойства стандартного продолжения}
 
 \begin{Theorem}{Свойства продолжения меры}{}
 Пусть $\mu_0$ — мера на полукольце $\mathcal{P}$. Пусть $\mu$ — её стандартное продолжение (по Каратеодори) на $\sigma$-алгебру $\mathcal{U}$, а $\nu$ — какое-либо другое продолжение $\mu_0$ на некоторую $\sigma$-алгебру $\mathcal{U}_0$. Тогда:
@@ -1166,7 +1179,7 @@ $$ \nu(A) = \lim\limits_{n \to \infty} \nu(A \cap S_n) = \lim\limits_{n \to \inf
 \end{Proof}
 
 
-\section{§ Классы множеств и аппроксимация меры}
+\subsection{§ Классы множеств и аппроксимация меры}
 
 \begin{Definition}{Множества типа $\mathcal{U}_\sigma$ и $\mathcal{U}_\delta$}{}
 Пусть $\mathcal{U}$ — некоторая система множеств.
@@ -1240,8 +1253,8 @@ $$ \mu(C \setminus A) = \mu(C) - \mu(A) = 0 $$
 $$ \mu(C \setminus B) \le \mu(N) = 0 \implies \mu(C \setminus B) = 0 $$
 Что и требовалось доказать.
 \end{Proof}
-
-\section{§ Мера Лебега и её свойства}
+\section{Мера Лебега}
+\subsection{§ Мера Лебега и её свойства}
 
 \begin{Definition}{Мера Лебега в $\mathbb{R}^n$}{}
 \textbf{Мерой Лебега} в $\mathbb{R}^n$ называется стандартное продолжение (по Каратеодори) $\lambda_n$ объёма с полукольца многомерных ячеек $\mathcal{P}^n$.
@@ -1275,7 +1288,7 @@ $$ \lambda_n([a, b)) \le \sum\limits_{i=1}^{\infty} \lambda_n([a_i, b_i)) + \var
 Так как $\varepsilon > 0$ было выбрано произвольно ($\varepsilon \downarrow 0$), получаем $\lambda_n([a, b)) \le \sum\limits_{i=1}^{\infty} \lambda_n([a_i, b_i))$. Счётная полуаддитивность доказана, значит объём является мерой.
 \end{Proof}
 
-\section{§ Свойства меры Лебега и измеримых множеств}
+\subsection{§ Свойства меры Лебега и измеримых множеств}
 
 \begin{Theorem}{Базовые свойства измеримых множеств}{}
 \begin{enumerate}
@@ -1364,7 +1377,7 @@ $$ \lambda_1(C) \le \lambda_1(C_i) = \left(\frac{2}{3}\right)^i \xrightarrow{i \
 3) Существует биекция между элементами множества Кантора и множеством всех двоичных последовательностей бесконечной длины, мощность которого равна континууму.
 \end{Proof}
 
-\section{§ Неизмеримые множества}
+\subsection{§ Неизмеримые множества}
 
 \begin{Theorem}{Множество Витали}{}
 Любое множество положительной меры Лебега содержит неизмеримое подмножество.
@@ -1393,7 +1406,7 @@ $$ 0 < \lambda_n(A) \le \lambda_n(W) = \sum\limits_{k=1}^{\infty} \lambda_n(r_k 
 
 \noindent \textbf{Замечание (О гладких преобразованиях):} Отказаться совсем от гладкости $\Phi$ как достаточного условия сохранения измеримости (см. свойство 7) нельзя. Классический контрпример строится на базе функции Кантора (лестницы Кантора) $\varphi$. Можно построить непрерывную (но не абсолютно непрерывную) функцию, которая отображает множество меры нуль на множество положительной меры (содержащее неизмеримое подмножество $E$). Тогда $e = \varphi^{-1}(E)$ является подмножеством множества меры нуль, следовательно $\lambda(e) = 0$ (измеримо), но его образ $E$ — неизмерим. Вывод: простой непрерывности недостаточно.
 
-\section{§ Измеримые функции и их свойства}
+\subsection{§ Измеримые функции и их свойства}
 
 Идея интеграла Лебега отличается от интеграла Римана тем, что мы разбиваем не ось $X$, а ось $Y$. 
 
@@ -1551,7 +1564,7 @@ $$ E(f > a) = \{ x \in E : f(x) > a \} = \bigcup\limits_{i=1}^{\infty} \{ x \in 
 По условию функция $f$ измерима на каждом $E_i$, следовательно, каждое множество $E_i(f > a)$ измеримо. Так как $\sigma$-алгебра замкнута относительно счётных объединений, итоговое множество $E(f > a)$ измеримо.
 \end{Proof}
 
-\section{§ Замкнутость измеримых функций}
+\subsection{§ Замкнутость измеримых функций}
 
 \begin{Theorem}{Замкнутость относительно предельного перехода}{}
 Пусть $\varphi_n$ — последовательность измеримых функций. Тогда:
@@ -1582,7 +1595,7 @@ $$ X\left(g < \frac{1}{2}\right) = [0, 1) \quad \text{и} \quad X\left(h < \frac
 Оба полученных множества измеримы (принадлежат борелевской оболочке), что подтверждает теорему.
 \end{Example}
 
-\section{§ Арифметические свойства измеримых функций}
+\subsection{§ Арифметические свойства измеримых функций}
 
 \begin{Theorem}{Суперпозиция измеримых и непрерывной функции}{}
 Пусть $f_1, \dots, f_n : X \to \mathbb{R}$ — измеримые функции, а функция $\varphi : Y \to \mathbb{R}$ (где $Y \subset \mathbb{R}^n$) является непрерывной ($\varphi \in C(Y)$). 
@@ -1629,7 +1642,7 @@ $$ 0 \cdot (\pm \infty) = (\pm \infty) \cdot 0 = 0, \quad \frac{x}{\pm \infty} =
 Остальные пункты доказываются аналогично.
 \end{Proof}
 
-\section{§ Простые функции и аппроксимация}
+\subsection{§ Простые функции и аппроксимация}
 
 \begin{Definition}{Простая функция}{}
 Измеримая функция называется \textbf{простой}, если множество её значений конечно.
@@ -1726,7 +1739,7 @@ $$ h_n(x) = \max(g_1(x), \dots, g_n(x)) $$
 Разложим функцию на положительную и отрицательную части: $f = f_+ - f_-$, где $f_+ = \max(f, 0)$ и $f_- = \max(-f, 0)$. Применим теорему об аппроксимации к каждой из них по отдельности, а затем вычтем приближения.
 \end{Proof}
 
-\section{§ Сходимость почти всюду и по мере}
+\subsection{§ Сходимость почти всюду и по мере}
 
 Пусть $(X, \mathcal{U}, \mu)$ — пространство с мерой.
 Обозначим $L^0(X, \mu)$ — пространство измеримых \textbf{почти всюду конечных} функций.
@@ -1884,8 +1897,8 @@ $$ \mu\left( X\left(|f_n - f| \ge \frac{1}{k}\right) \right) < \frac{1}{2^k} $$
 \textbf{2)} Аналогично, переходя к подпоследовательности, сходящейся почти всюду. Предельный переход сохраняет нестрогие неравенства для числовых последовательностей.
 \end{Proof}
 
-
-\section{§ Интеграл по мере Лебега и его свойства}
+\section{Интеграл по мере Лебега}
+\subsection{§ Интеграл по мере Лебега и его свойства}
 
 \begin{Definition}{Интеграл от простой функции}{}
 Пусть задана измеримая \textbf{неотрицательная простая функция} $g$, и пусть $\{A_i\}_{i=1}^n$ — некоторое допустимое разбиение для $g$, где $a_i$ — значения функции $g$ на множестве $A_i$. Тогда интеграл от функции $g$ по мере $\mu$ определяется как:
@@ -1964,7 +1977,7 @@ $$ \int\limits_E |f| \, d\mu \le \int\limits_E C \, d\mu = C \cdot \mu(E) = C \c
 Если функция неограничена, то любая простая функция $h \le f$ всё равно принимает лишь конечное число значений, а значит она ограничена. Тогда $\int\limits_E h \, d\mu = 0$. Так как супремум множества нулей равен нулю, интеграл равен нулю.
 \end{Proof}
 
-\section{§ Предельный переход под знаком интеграла}
+\subsection{§ Предельный переход под знаком интеграла}
 
 \begin{Theorem}{Леви (О монотонной сходимости)}{}
 Пусть $f_n$ — последовательность \textbf{неотрицательных} измеримых функций на $X$, которая монотонно возрастает ($f_{n+1} \ge f_n$) и поточечно сходится к функции $f$. 
@@ -2173,7 +2186,7 @@ $$ \int\limits_X g_n \, d\mu \le \int\limits_X f_n \, d\mu \le C $$
 Переходя к пределу, получаем $\int\limits_X f \, d\mu \le C$.
 \end{Proof}
 
-\section{§ Интегралы, зависящие от параметра}
+\subsection{§ Интегралы, зависящие от параметра}
 
 Рассмотрим интеграл вида:
 $$ I(y) = \int\limits_X f(x, y) \, d\mu(x) $$
@@ -2198,7 +2211,7 @@ $$ B(\alpha, \beta) = \frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha+\beta)} $
 \end{Definition}
 
 
-\subsection*{1. Равномерная сходимость семейства функций}
+\subsection{§ Равномерная сходимость семейства функций}
 
 \begin{Definition}{Равномерная сходимость по параметру}{}
 Пусть задана функция $f: X \times Y \to \mathbb{R}$, и $x_0$ — предельная (или внутренняя) точка $X$.
@@ -2246,7 +2259,7 @@ $$ \lim\limits_{y \to y_0} I(y) = \lim\limits_{y \to y_0} \int\limits_X f(x,y) \
 Что и означает непрерывность функции $I(y)$.
 \end{Proof}
 
-\subsection*{2. Случай суммируемой мажоранты}
+\subsection{§ Случай суммируемой мажоранты}
 
 Требование конечности меры $\mu(X)$ и строгой равномерной сходимости часто бывает слишком жёстким. Мощной альтернативой выступает применение теоремы Лебега.
 
@@ -2338,7 +2351,7 @@ $$ I(0) = \int\limits_0^{+\infty} e^{-x^2} \, dx = \frac{\sqrt{\pi}}{2} \quad \t
 \end{Example}
 
 
-\section{§ Интеграл по произведению мер}
+\subsection{§ Интеграл по произведению мер}
 
 Пусть заданы два пространства с мерами: $(X, \mathcal{U}, \mu)$ и $(Y, \mathcal{V}, \nu)$. \\
 Рассмотрим прямое произведение пространств $X \times Y$. Множество $\mathcal{U} \otimes \mathcal{V} = \{ A \times B \mid A \in \mathcal{U}, B \in \mathcal{V} \}$ является полукольцом (мы доказывали это ранее).
@@ -2554,7 +2567,7 @@ $$ \int\limits_{X \times Y} f_n \, d(\mu \times \nu) = \int\limits_X \left( \int
 Теорема Фубини доказана.
 \end{Proof}
 
-\section{§ Интеграл Лебега и интеграл Римана}
+\subsection{§ Интеграл Лебега и интеграл Римана}
 
 \begin{Theorem}{Связь интегралов Римана и Лебега}{}
 Если функция $f(x)$ интегрируема по Риману на отрезке $[a, b]$ (то есть $f \in R[a,b]$), то она суммируема по мере Лебега на этом отрезке ($f \in L^1([a,b], \lambda)$), и их значения совпадают:
@@ -2616,7 +2629,7 @@ $$ \int\limits_{[a,b]} \overline{f} \, d\lambda = \int\limits_{[a,b]} \underline
 $$ (R) \int\limits_a^b f \, dx = (L) \int\limits_{[a, b)} f \, d\lambda $$
 \end{Theorem}
 
-\subsection*{Несобственные интегралы Лебега}
+\subsection{§ Несобственные интегралы Лебега}
 
 \begin{Definition}{Несобственный интеграл Лебега}{}
 Говорят, что $f \in L^1_{loc}([a,b))$ (локально суммируема), если $f \in L^1([a, w])$ для любого $w < b$. 
@@ -2645,7 +2658,7 @@ $$ \int\limits_{[\delta, +\infty)} e^{-xy} \, dx = \left. -\frac{1}{y} e^{-xy} \
 
 
 
-\section{§ Признаки равномерной сходимости несобственных интегралов}
+\subsection{§ Признаки равномерной сходимости несобственных интегралов}
 
 \begin{Theorem}{Признак Вейерштрасса}{}
 Пусть для функции $f(x,y)$ существует мажоранта $g(x) \in L^1([a,b), \lambda)$, такая что $|f(x,y)| \le g(x)$ для почти всех $x$ и для всех $y \in Y$. \\
@@ -2688,7 +2701,7 @@ $$ \left| \int\limits_{\delta'}^{\delta''} f(x,y) g(x,y) \, dx \right| \le M \cd
 \end{Proof}
 
 
-\section{§ Теоремы о перестановке пределов}
+\subsection{§ Теоремы о перестановке пределов}
 
 \begin{Theorem}{О перестановке двух пределов}{}
 Пусть задана функция $f: X \times Y \to \mathbb{R}$, где $X, Y$ — метрические пространства. Пусть существуют пределы:
@@ -2742,7 +2755,7 @@ $$ \lim\limits_{y \to y_0} H_3(y) = \lim\limits_{t \to b-0} H_2(t) \implies \lim
 \end{Proof}
 
 
-\section{§ Вычисление интеграла Дирихле}
+\subsection{§ Вычисление интеграла Дирихле}
 
 Продемонстрируем мощь этих теорем, вычислив знаменитый интеграл Дирихле.
 Рассмотрим функцию с параметром $y \ge 0$:
@@ -2772,8 +2785,8 @@ $$ 0 = -\operatorname{arctg}(+\infty) + C \implies 0 = -\frac{\pi}{2} + C \impli
 Искомый интеграл Дирихле:
 $$ \int\limits_0^{+\infty} \frac{\sin x}{x} \, dx = I(0) = \frac{\pi}{2} - 0 = \frac{\pi}{2} $$
 
-
-\section{§ Интегрирование несобственного интеграла по параметру}
+\section{Интегрирование по параметру}
+\subsection{§ Интегрирование несобственного интеграла по параметру}
 
 \begin{Theorem}{Об интегрировании интеграла с параметром}{}
 Пусть $f: [a, b) \times Y \to \mathbb{R}$, $f \in L^1_{loc}([a,b))$ для любого $y \in Y$. Пусть $(Y, \mathcal{U}, \nu)$ — измеримое пространство с мерой $\nu(Y) < +\infty$.
@@ -2798,7 +2811,7 @@ $$ \lim\limits_{w \to b-0} \int\limits_Y J_w(y) \, d\nu = \int\limits_Y \left( \
 
 
 
-\section{§ Примеры применения интегралов с параметром}
+\subsection{§ Примеры применения интегралов с параметром}
 
 \begin{Example}[ Вычисление интеграла Лапласа (окончание)]
 Рассмотрим интеграл $K(y) = \int\limits_0^{+\infty} \frac{\cos(yx)}{1+x^2} \, dx$.
@@ -2886,5 +2899,696 @@ $$ 2 \sqrt{\pi} I_c = \int\limits_{-\infty}^{+\infty} \frac{dz}{z^2 + 2} = \left
 $$ I_c = \frac{1}{2\sqrt{\pi}} \frac{\pi}{\sqrt{2}} = \frac{1}{2} \sqrt{\frac{\pi}{2}} $$
 Интеграл от $\sin(x^2)$ вычисляется абсолютно аналогично, только внутренний интеграл даст $\frac{1}{x^4+1}$, что алгебраически приведет к точно такому же ответу.
 \end{Proof}
+
+
+
+\subsection{§ Интеграл Фруллани}
+
+Рассмотрим несобственный интеграл вида:
+$$ I = \int\limits_0^{+\infty} \frac{f(ax) - f(bx)}{x} \, dx, \quad a, b > 0 $$
+
+Справедливы следующие три случая (в зависимости от поведения функции):
+\begin{enumerate}
+    \item Если $f \in C([0, +\infty))$ и существует конечный предел $f(+\infty) = \lim\limits_{x \to +\infty} f(x) \in \mathbb{R}$, то:
+    $$ I = (f(0) - f(+\infty)) \ln\frac{b}{a} $$
+    \item Если $f \in C([0, +\infty))$ и интеграл $\int\limits_A^{+\infty} \frac{f(x)}{x} \, dx$ сходится при $A > 0$, то:
+    $$ I = f(0) \ln\frac{b}{a} $$
+    \item Если $f \in C(0, +\infty)$, предел $f(+\infty) \in \mathbb{R}$ существует, и интеграл $\int\limits_0^A \frac{f(x)}{x} \, dx$ сходится, то:
+    $$ I = -f(+\infty) \ln\frac{b}{a} $$
+\end{enumerate}
+
+\begin{Proof}[Доказательство (Случай 1)]
+\textbf{Метод 1: Через двойной интеграл.} \\
+Предположим дополнительно, что $f \in C^1([0, +\infty))$. Запишем разность в числителе как интеграл от производной:
+$$ \frac{f(ax) - f(bx)}{x} = \frac{1}{x} \int\limits_{bx}^{ax} f'(u) \, du = \left[ u = tx, \, du = x \, dt \right] = \frac{1}{x} \int\limits_b^a f'(tx) x \, dt = \int\limits_b^a f'(tx) \, dt $$
+Подставим это в исходный интеграл и поменяем порядок интегрирования (по теореме Фубини):
+\begin{align*}
+    I &= \int\limits_0^{+\infty} \left( \int\limits_b^a f'(tx) \, dt \right) dx = \int\limits_b^a dt \int\limits_0^{+\infty} f'(tx) \, dx = \int\limits_b^a dt \left. \left( \frac{f(tx)}{t} \right) \right|_{x=0}^{+\infty} \\
+    &= \int\limits_b^a \frac{f(+\infty) - f(0)}{t} \, dt = (f(+\infty) - f(0)) (\ln a - \ln b) = (f(0) - f(+\infty)) \ln\frac{b}{a}
+\end{align*}
+
+\textbf{Метод 2: Через теорему о среднем (работает без требования $f \in C^1$).} \\
+Рассмотрим интеграл по отрезку $[\delta_1, \delta_2]$ и разобьём его на два:
+$$ \int\limits_{\delta_1}^{\delta_2} \frac{f(ax) - f(bx)}{x} \, dx = \int\limits_{\delta_1}^{\delta_2} \frac{f(ax)}{x} \, dx - \int\limits_{\delta_1}^{\delta_2} \frac{f(bx)}{x} \, dx $$
+Сделаем замены $t = ax$ в первом интеграле и $t = bx$ во втором:
+$$ \dots = \int\limits_{a\delta_1}^{a\delta_2} \frac{f(t)}{t} \, dt - \int\limits_{b\delta_1}^{b\delta_2} \frac{f(t)}{t} \, dt = \int\limits_{a\delta_1}^{b\delta_1} \frac{f(t)}{t} \, dt - \int\limits_{a\delta_2}^{b\delta_2} \frac{f(t)}{t} \, dt $$
+Применим первую теорему о среднем для каждого из интегралов (так как функция $1/t$ сохраняет знак, а $f(t)$ непрерывна). Существуют такие $\xi_1 \in [a\delta_1, b\delta_1]$ и $\xi_2 \in [a\delta_2, b\delta_2]$, что:
+$$ \dots = f(\xi_1) \int\limits_{a\delta_1}^{b\delta_1} \frac{dt}{t} - f(\xi_2) \int\limits_{a\delta_2}^{b\delta_2} \frac{dt}{t} = f(\xi_1) \ln\frac{b}{a} - f(\xi_2) \ln\frac{b}{a} $$
+При $\delta_1 \to +0$ точка $\xi_1 \to +0$. При $\delta_2 \to +\infty$ точка $\xi_2 \to +\infty$.
+Устремляя пределы, получаем:
+$$ I = f(0) \ln\frac{b}{a} - f(+\infty) \ln\frac{b}{a} = (f(0) - f(+\infty)) \ln\frac{b}{a} $$
+\end{Proof}
+
+
+\subsection{§ Гамма- и Бета-функции (Эйлеровы интегралы)}
+
+\begin{Definition}{Интегралы Эйлера}{}
+\begin{itemize}
+    \item \textbf{Гамма-функция (Интеграл Эйлера 2-го рода):} $\Gamma(\alpha) = \int\limits_0^{+\infty} x^{\alpha-1} e^{-x} \, dx$.
+    \item \textbf{Бета-функция (Интеграл Эйлера 1-го рода):} $B(\alpha, \beta) = \int\limits_0^1 x^{\alpha-1} (1-x)^{\beta-1} \, dx$.
+\end{itemize}
+\end{Definition}
+
+\textbf{Основные свойства:}
+\begin{enumerate}
+    \item Сходимость и непрерывность: $\Gamma \in C(0, +\infty)$ и $B \in C((0, +\infty)^2)$.
+    \item Рекуррентное соотношение: $\Gamma(\alpha + 1) = \alpha \Gamma(\alpha)$ для $\alpha > 0$.
+    \item Обобщение факториала: $\Gamma(n + 1) = n!$ для натуральных $n$.
+    \item Значение в полуцелой точке: $\Gamma(1/2) = \sqrt{\pi}$.
+    \item Симметричность Бета-функции: $B(\alpha, \beta) = B(\beta, \alpha)$.
+    \item Рекуррентность для Бета-функции: $B(\alpha+1, \beta) = \frac{\alpha}{\alpha+\beta} B(\alpha, \beta)$.
+\end{enumerate}
+
+\begin{Theorem}{Связь Гамма- и Бета-функций}{}
+Для любых $\alpha, \beta > 0$ справедливо:
+$$ B(\alpha, \beta) = \frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha+\beta)} $$
+\end{Theorem}
+
+\begin{Proof}
+Рассмотрим произведение двух Гамма-функций (переменные интегрирования независимы):
+$$ \Gamma(\alpha)\Gamma(\beta) = \int\limits_0^{+\infty} x^{\alpha-1} e^{-x} \, dx \cdot \int\limits_0^{+\infty} y^{\beta-1} e^{-y} \, dy = \int\limits_0^{+\infty} \int\limits_0^{+\infty} x^{\alpha-1} y^{\beta-1} e^{-(x+y)} \, dx \, dy $$
+Сделаем замену переменной $y = u - x$. Так как $y \ge 0$, то $u \ge x$. При фиксированном $x$, пределы для $u$ будут от $x$ до $+\infty$. $dy = du$.
+$$ \dots = \int\limits_0^{+\infty} dx \int\limits_x^{+\infty} x^{\alpha-1} (u-x)^{\beta-1} e^{-u} \, du $$
+Поменяем порядок интегрирования на плоскости $(x, u)$. Область интегрирования: $0 \le x < +\infty$ и $u \ge x$. Это эквивалентно $0 \le u < +\infty$ и $0 \le x \le u$:
+$$ \dots = \int\limits_0^{+\infty} du \int\limits_0^u x^{\alpha-1} (u-x)^{\beta-1} e^{-u} \, dx $$
+Сделаем вторую замену: пусть $x = u \cdot p$. Тогда $dx = u \, dp$. При $x$ от $0$ до $u$, параметр $p$ меняется от $0$ до $1$.
+\begin{align*}
+    \dots &= \int\limits_0^{+\infty} du \int\limits_0^1 (up)^{\alpha-1} (u - up)^{\beta-1} e^{-u} u \, dp \\
+    &= \int\limits_0^{+\infty} u^{(\alpha-1)+(\beta-1)+1} e^{-u} \, du \cdot \int\limits_0^1 p^{\alpha-1} (1-p)^{\beta-1} \, dp \\
+    &= \left( \int\limits_0^{+\infty} u^{\alpha+\beta-1} e^{-u} \, du \right) \cdot B(\alpha, \beta) = \Gamma(\alpha+\beta) \cdot B(\alpha, \beta)
+\end{align*}
+Разделив на $\Gamma(\alpha+\beta)$, получаем требуемую формулу.
+\end{Proof}
+
+\begin{Lemma}{Интегральное представление Бета-функции}{}
+$$ B(\alpha, \beta) = \int\limits_0^{+\infty} \frac{u^{\alpha-1}}{(1+u)^{\alpha+\beta}} \, du $$
+\textit{Доказательство:} Достаточно в определении $\int_0^1 x^{\alpha-1}(1-x)^{\beta-1} dx$ сделать замену переменной $x = \frac{u}{1+u}$.
+\end{Lemma}
+
+\begin{Lemma}{Формула дополнения Эйлера (Упражнение)}{}
+Для любого $\alpha \in (0, 1)$ справедливо:
+$$ \Gamma(\alpha)\Gamma(1-\alpha) = \frac{\pi}{\sin(\pi \alpha)} $$
+\end{Lemma}
+
+\begin{Proof}[Доказательство (Упражнение)]
+По формуле связи Бета- и Гамма-функций:
+$$ \Gamma(\alpha)\Gamma(1-\alpha) = \Gamma(1) \cdot B(\alpha, 1-\alpha) = 1 \cdot B(\alpha, 1-\alpha) $$
+Применим интегральное представление Бета-функции для параметров $\alpha$ и $\beta = 1-\alpha$. Заметим, что сумма степеней в знаменателе $\alpha + \beta = 1$:
+$$ B(\alpha, 1-\alpha) = \int\limits_0^{+\infty} \frac{u^{\alpha-1}}{1+u} \, du $$
+Для вычисления этого несобственного интеграла классически применяется метод контурного интегрирования (ТФКП). 
+Рассмотрим функцию комплексного переменного $f(z) = \frac{z^{\alpha-1}}{1+z}$ и контур интегрирования в виде "замочной скважины" (keyhole contour), обходящий положительную полуось и имеющий вырез в нуле. Внутри контура функция имеет единственный простой полюс в точке $z = -1 = e^{i\pi}$.
+Вычет в этом полюсе равен:
+$$ \operatorname{Res}_{z=-1} f(z) = \lim\limits_{z \to -1} (z+1) \frac{z^{\alpha-1}}{1+z} = (-1)^{\alpha-1} = (e^{i\pi})^{\alpha-1} = e^{i\pi\alpha - i\pi} = -e^{i\pi\alpha} $$
+По основной теореме о вычетах, интеграл по замкнутому контуру равен $2\pi i \sum \operatorname{Res}$. Интегралы по большой и малой окружностям стремятся к нулю. Интегралы по "берегам" разреза на положительной полуоси дают:
+$$ \int\limits_0^{+\infty} \frac{x^{\alpha-1}}{1+x} \, dx - \int\limits_0^{+\infty} \frac{(x e^{2\pi i})^{\alpha-1}}{1+x} \, dx = 2\pi i (-e^{i\pi\alpha}) $$
+$$ \left(1 - e^{2\pi i (\alpha-1)}\right) I = -2\pi i e^{i\pi\alpha} \implies \left(1 - e^{2\pi i \alpha}\right) I = -2\pi i e^{i\pi\alpha} $$
+Разделим обе части на $e^{i\pi\alpha}$:
+$$ \left(e^{-i\pi\alpha} - e^{i\pi\alpha}\right) I = -2\pi i \implies -2i \sin(\pi \alpha) I = -2\pi i \implies I = \frac{\pi}{\sin(\pi \alpha)} $$
+Что и требовалось доказать.
+\end{Proof}
+
+
+
+\section{§ Ряды Фурье. Поточечная сходимость}
+
+\begin{Definition}{Тригонометрический ряд Фурье}{}
+Для функции $f \in L^1([-\pi, \pi])$ \textbf{тригонометрическим рядом Фурье} по системе функций $\{1, \cos(kx), \sin(kx)\}$ называется ряд:
+$$ f(x) \sim \frac{a_0(f)}{2} + \sum\limits_{k=1}^{\infty} \left( a_k(f) \cos(kx) + b_k(f) \sin(kx) \right) $$
+\end{Definition}
+
+Напомним, что проекция вектора на ортогональный базис $e_i$ вычисляется по формуле $\alpha^i = \frac{\langle f, e_i \rangle}{\langle e_i, e_i \rangle}$.
+Вычислим скалярные произведения базисных функций (интегралы от квадратов):
+$$ \int\limits_{-\pi}^\pi 1^2 \, dx = 2\pi, \quad \int\limits_{-\pi}^\pi \sin^2(kx) \, dx = \int\limits_{-\pi}^\pi \cos^2(kx) \, dx = \pi \quad (k \neq 0) $$
+Все попарные скалярные произведения (интегралы от произведений разных функций) равны нулю:
+$$ \int\limits_{-\pi}^\pi \sin(kx)\sin(mx) \, dx = 0, \quad \int\limits_{-\pi}^\pi \cos(kx)\cos(mx) \, dx = 0 \quad (k \neq m) $$
+$$ \int\limits_{-\pi}^\pi \sin(kx)\cos(mx) \, dx = 0 $$
+Отсюда получаем \textbf{ортонормированную систему}: $\left\{ \frac{1}{\sqrt{2\pi}}, \frac{1}{\sqrt{\pi}}\cos(kx), \frac{1}{\sqrt{\pi}}\sin(kx) \right\}$.
+Формулы для коэффициентов Фурье:
+$$ a_k(f) = \frac{1}{\pi} \int\limits_{-\pi}^\pi f(x) \cos(kx) \, dx, \quad b_k(f) = \frac{1}{\pi} \int\limits_{-\pi}^\pi f(x) \sin(kx) \, dx $$
+
+\begin{Definition}{Комплексная форма ряда Фурье}{}
+Запишем частичную сумму ряда $T_n(f)$ и применим формулы Эйлера $\cos(kx) = \frac{e^{ikx} + e^{-ikx}}{2}$ и $\sin(kx) = \frac{e^{ikx} - e^{-ikx}}{2i}$. Заметим, что $\frac{1}{i} = -i$.
+\begin{align*}
+    T_n(f) &= \frac{a_0(f)}{2} + \sum\limits_{k=1}^n \left( a_k(f) \cos(kx) + b_k(f) \sin(kx) \right) \\
+    &= \frac{a_0(f)}{2} + \sum\limits_{k=1}^n \left( a_k(f) \frac{e^{ikx} + e^{-ikx}}{2} - i b_k(f) \frac{e^{ikx} - e^{-ikx}}{2} \right) \\
+    &= \frac{a_0(f)}{2} + \sum\limits_{k=1}^n e^{ikx} \left( \frac{a_k(f) - i b_k(f)}{2} \right) + e^{-ikx} \left( \frac{a_k(f) + i b_k(f)}{2} \right) \\
+    &= \sum\limits_{k=-n}^n c_k(f) e^{ikx}
+\end{align*}
+Где комплексные коэффициенты вычисляются по единой формуле:
+$$ c_k(f) = \frac{1}{2\pi} \int\limits_{-\pi}^\pi f(x) e^{-ikx} \, dx $$
+При этом система $\left\{ \frac{e^{ikx}}{\sqrt{2\pi}} \right\}$ является ортонормированной.
+\end{Definition}
+
+\begin{Definition}{Ядро Дирихле}{}
+Подставим коэффициенты $c_k$ в формулу частичной суммы $T_n(f)$:
+$$ T_n(f) = \sum\limits_{k=-n}^n \frac{1}{2\pi} \int\limits_{-\pi}^\pi f(t) e^{-ikt} \, dt \cdot e^{ikx} = \frac{1}{2\pi} \int\limits_{-\pi}^\pi f(t) \sum\limits_{k=-n}^n e^{ik(x-t)} \, dt $$
+
+Рассмотрим функцию $D_n(p) = \sum\limits_{k=-n}^n e^{ikp}$. Свернём её как геометрическую прогрессию со знаменателем $e^{ip}$:
+\begin{align*}
+    D_n(p) &= \frac{e^{-inp} \left( 1 - e^{ip(2n+1)} \right)}{1 - e^{ip}} = \frac{e^{-inp} - e^{ip(n+1)}}{1 - e^{ip}} \\
+    &= \frac{e^{ip/2} \left( e^{-i(n+1/2)p} - e^{i(n+1/2)p} \right)}{e^{ip/2} \left( e^{-ip/2} - e^{ip/2} \right)} = \frac{\sin\left(p(n+\frac{1}{2})\right)}{\sin\left(\frac{p}{2}\right)}
+\end{align*}
+Формула справедлива, если $e^{ip} \neq 1$, то есть $p \neq 2\pi k$. 
+Если $p = 2\pi k$, то каждый член суммы равен $1$, и $D_n(p) = 2n+1$.
+Функция $\frac{1}{2\pi} D_n(p)$ называется \textbf{ядром Дирихле}.
+\end{Definition}
+
+\textbf{Свойства ядра Дирихле:}
+\begin{enumerate}
+    \item Ядро Дирихле — $2\pi$-периодичная функция.
+    \item Ядро Дирихле — чётная функция.
+    \item $\frac{1}{2\pi} \int\limits_{-\pi}^\pi D_n(p) \, dp = 1$.
+\end{enumerate}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0, >=latex]
+    \definecolor{darktext}{HTML}{154360}
+    \definecolor{colorKernel}{HTML}{2874A6}
+    
+    % Оси
+    \draw[->, thick, darktext] (-4.5, 0) -- (4.5, 0) node[right] {$p$};
+    \draw[->, thick, darktext] (0, -2.5) -- (0, 3.5) node[above] {$D_n(p)$};
+    
+    % График ядра Дирихле для n=3 (2n+1 = 7)
+    \draw[thick, colorKernel, samples=300, domain=-4:4] 
+        plot (\x, { sin(3.5 * \x * 180/pi) / (sin(0.5 * \x * 180/pi) + 0.0001) });
+        
+    % Выделение центрального пика
+    \draw[dashed, darktext] (0,0) -- (0, 3.2);
+    \node[left, darktext] at (-0.8, 3.2) {$2n+1$};
+    
+    % Подписи ПИ
+    \draw[darktext] (3.14, 0) -- (3.14, -0.1) node[below] {$\pi$};
+    \draw[darktext] (-3.14, 0) -- (-3.14, -0.1) node[below] {$-\pi$};
+
+    \node[darktext, font=\bfseries] at (2.5, 2.5) {$D_3(p) = \frac{\sin(3.5p)}{\sin(0.5p)}$};
+\end{tikzpicture}
+\end{center}
+
+\begin{Lemma}{Римана-Лебега}{}
+Если $f \in L([a, b])$, то $\int\limits_a^b f(x) e^{i\lambda x} \, dx \xrightarrow{\lambda \to \infty} 0$. (Аналогично для $\cos$ и $\sin$).
+\end{Lemma}
+
+\begin{Proof}
+\textbf{а)} Пусть $f = \text{const}$, и длина отрезка $b-a < +\infty$.
+$$ \int\limits_a^b \text{const} \cdot e^{i\lambda x} \, dx = \text{const} \cdot \left. \frac{e^{i\lambda x}}{i\lambda} \right|_a^b = \text{const} \cdot \frac{e^{i\lambda b} - e^{i\lambda a}}{i\lambda} \xrightarrow{\lambda \to \infty} 0 $$
+\textbf{б)} Функция $f \in L([a,b]) \iff f e^{i\lambda x} \in L([a,b])$, так как модуль $|f e^{i\lambda x}| = |f|$. \\
+\textbf{в)} Зададим $\varepsilon > 0$. По теореме об интегрируемости на множестве конечной меры, существует отрезок $[\delta_1, \delta_2]$ (где $\delta_2 - \delta_1 < +\infty$), такой что:
+$$ \left| \int\limits_a^b f e^{i\lambda x} \, dx - \int\limits_{\delta_1}^{\delta_2} f e^{i\lambda x} \, dx \right| < \varepsilon $$
+Существует простая (ступенчатая) функция $g$, такая что $\int\limits_{\delta_1}^{\delta_2} |f - g| \, dx < \varepsilon$. Тогда:
+$$ \left| \int\limits_{\delta_1}^{\delta_2} f e^{i\lambda x} \, dx - \int\limits_{\delta_1}^{\delta_2} g e^{i\lambda x} \, dx \right| \le \int\limits_{\delta_1}^{\delta_2} |f - g| \, dx < \varepsilon $$
+По пункту (а), интеграл от простой функции $\int\limits_{\delta_1}^{\delta_2} g e^{i\lambda x} \, dx \xrightarrow{\lambda \to \infty} 0$. Собирая оценки, получаем требуемое утверждение.
+\end{Proof}
+
+\noindent \textbf{NB (Кандидат на сумму ряда):} \\
+Пусть существуют односторонние пределы $f(x_0 \pm 0) = \lim\limits_{x \to x_0 \pm 0} f(x) \in \mathbb{R}$. \\
+Тогда \textbf{кандидатом на сумму} ряда Фурье в точке $x_0$ является среднее арифметическое: $\frac{f(x_0 - 0) + f(x_0 + 0)}{2}$.
+
+Вернемся к частичной сумме. Сделаем замену переменной $x - t = p$:
+$$ T_n(f) = \frac{1}{2\pi} \int\limits_{x-\pi}^{x+\pi} f(x-p) D_n(p) \, dp $$
+Если функция $f$ является $2\pi$-периодической, то интеграл по любому отрезку длиной $2\pi$ совпадает с интегралом по $[-\pi, \pi]$:
+$$ T_n(f) = \frac{1}{2\pi} \int\limits_{-\pi}^\pi f(x-p) D_n(p) \, dp \quad \text{или} \quad T_n(f) = \frac{1}{2\pi} \int\limits_{-\pi}^\pi f(t) D_n(x-t) \, dt $$
+
+
+
+\subsection{§ Принцип локализации и сходимость ряда Фурье}
+
+Вспомним формулу для частичной суммы ряда Фурье $2\pi$-периодичной функции $f$:
+$$ T_n(f)(x) = \frac{1}{2\pi} \int\limits_{-\pi}^\pi f(x-p) D_n(p) \, dp $$
+Так как ядро Дирихле $D_n(p)$ является чётной функцией, мы можем преобразовать интеграл по симметричному отрезку $[-\pi, \pi]$ к интегралу по отрезку $[0, \pi]$:
+$$ T_n(f)(x) = \frac{1}{2\pi} \int\limits_0^\pi \left( f(x-p) + f(x+p) \right) D_n(p) \, dp = \frac{1}{\pi} \int\limits_0^\pi \frac{f(x-p) + f(x+p)}{2} D_n(p) \, dp $$
+
+\begin{center}
+\begin{tikzpicture}[scale=1.5, >=latex]
+    \definecolor{darktext}{HTML}{154360}
+    \definecolor{colorSin}{HTML}{2874A6}
+    \definecolor{colorLine}{HTML}{E67E22}
+
+    % Оси
+    \draw[->, thick, darktext] (-0.2, 0) -- (2.5, 0) node[right] {$x$};
+    \draw[->, thick, darktext] (0, -0.2) -- (0, 1.8) node[above] {$y$};
+
+    % Графики
+    \draw[thick, colorSin, samples=100, domain=0:1.57] plot (\x, {sin(\x * 180/pi)});
+    \draw[thick, darktext] (0,0) -- (1.57, 1.57) node[above] {$y=x$};
+    \draw[thick, colorLine] (0,0) -- (1.57, 1) node[right] {$y=\frac{2}{\pi}x$};
+
+    % Подписи ПИ/2
+    \draw[dashed, darktext] (1.57, 0) -- (1.57, 1.57);
+    \node[below, darktext] at (1.57, 0) {$\frac{\pi}{2}$};
+    \node[left, darktext] at (0, 1) {$1$};
+
+    \node[darktext, align=left, anchor=west] at (2.5, 0.8) {
+        Полезное двустороннее неравенство: \\
+        Для всех $x \in \left[0, \frac{\pi}{2}\right]$ справедливо: \\
+        $\frac{2x}{\pi} \le \sin x \le x$ \\
+        Отсюда следует оценка для дробей: \\
+        $\frac{\pi}{2x} \ge \frac{1}{\sin x} \ge \frac{1}{x}$
+    };
+\end{tikzpicture}
+\end{center}
+
+\begin{Definition}{Условие Дини}{}
+Говорят, что функция $f$ удовлетворяет \textbf{условию Дини} в точке $x_0$, если существует такое $\delta > 0$, что интеграл:
+$$ \int\limits_0^\delta \frac{|f(x_0-p) - f(x_0-0)| + |f(x_0+p) - f(x_0+0)|}{p} \, dp $$
+сходится (абсолютно). \\
+\textbf{NB:} Если функция $f$ кусочно-непрерывна и дифференцируема, то она автоматически удовлетворяет условиям Дини (так как числитель имеет порядок $O(p)$ по Тейлору, и $p$ сокращается).
+\end{Definition}
+
+\begin{Theorem}{Достаточное условие сходимости ряда Фурье}{}
+Пусть $f \in L^1([-\pi, \pi])$ и в точке $x_0$ функция удовлетворяет условию Дини. Тогда тригонометрический ряд Фурье функции $f$ сходится в точке $x_0$ к среднему значению односторонних пределов:
+$$ \lim\limits_{n \to \infty} T_n(f)(x_0) = \frac{f(x_0+0) + f(x_0-0)}{2} $$
+\end{Theorem}
+
+\begin{Proof}
+Из свойств ядра Дирихле известно, что $\frac{1}{2\pi} \int_{-\pi}^\pi D_n(p) \, dp = 1$. В силу чётности: $\frac{1}{\pi} \int_0^\pi D_n(p) \, dp = 1$.
+Умножим целевое значение (кандидата на сумму) на эту единицу и вычтем из частичной суммы $T_n(f)(x_0)$:
+\begin{flalign*}
+    & T_n(f)(x_0) - \frac{f(x_0-0) + f(x_0+0)}{2}= \frac{1}{\pi} \int\limits_0^\pi \frac{f(x_0-p) + f(x_0+p)}{2} D_n(p) \, dp & \\ 
+    & - \frac{1}{\pi} \int\limits_0^\pi \frac{f(x_0-0) + f(x_0+0)}{2} D_n(p) \, dp & \\
+    & = \frac{1}{\pi} \int\limits_0^\pi \frac{f(x_0-p) - f(x_0-0) + f(x_0+p) - f(x_0+0)}{2} D_n(p) \, dp &
+\end{flalign*}
+Подставим явную формулу ядра Дирихле $D_n(p) = \frac{\sin(p(n+1/2))}{\sin(p/2)}$:
+$$ \dots = \frac{1}{\pi} \int\limits_0^\pi \underbrace{\left( \frac{f(x_0-p) - f(x_0-0) + f(x_0+p) - f(x_0+0)}{2 \sin(p/2)} \right)}_{g(p)} \sin\left(p\left(n+\frac{1}{2}\right)\right) \, dp $$
+Рассмотрим функцию $g(p)$ в квадратных скобках. В окрестности нуля $\sin(p/2) \sim p/2$. Благодаря условию Дини, особенность в нуле интегрируема, следовательно функция $g(p)$ суммируема на отрезке $[0, \pi]$ (т.е. $g \in L^1[0, \pi]$).
+Тогда интеграл представляет собой коэффициент Фурье для суммируемой функции $g(p)$. По \textbf{лемме Римана-Лебега}, при $n \to \infty$ этот интеграл стремится к $0$. 
+Следовательно, предел разности равен нулю, и теорема доказана.
+\end{Proof}
+
+\begin{Example}[ Разложение функции $f(x) = x^2$ и вычисление суммы ряда]
+Построим ряд Фурье для $f(x) = x^2$ на отрезке $[-\pi, \pi]$.
+Функция чётная, следовательно все коэффициенты при синусах равны нулю: $b_k(f) = 0$ для всех $k$.
+Найдём нулевой коэффициент:
+$$ a_0(f) = \frac{2}{\pi} \int\limits_0^\pi x^2 \, dx = \frac{2}{\pi} \left. \frac{x^3}{3} \right|_0^\pi = \frac{2\pi^2}{3} $$
+Вычислим коэффициенты $a_k$ (дважды интегрируя по частям):
+\begin{align*}
+    a_k(f) &= \frac{2}{\pi} \int\limits_0^\pi x^2 \cos(kx) \, dx = \left[ u=x^2, \, dv=\cos(kx)dx \implies du=2xdx, \, v=\frac{\sin(kx)}{k} \right] \\
+    &= \frac{2}{\pi} \left( \left. x^2 \frac{\sin(kx)}{k} \right|_0^\pi - \int\limits_0^\pi 2x \frac{\sin(kx)}{k} \, dx \right) = 0 - \frac{4}{\pi k} \int\limits_0^\pi x \sin(kx) \, dx \\
+    &= \left[ u=x, \, dv=\sin(kx)dx \implies du=dx, \, v=-\frac{\cos(kx)}{k} \right] \\
+    &= -\frac{4}{\pi k} \left( \left. -x \frac{\cos(kx)}{k} \right|_0^\pi + \int\limits_0^\pi \frac{\cos(kx)}{k} \, dx \right) = -\frac{4}{\pi k} \left( -\frac{\pi \cos(\pi k)}{k} + 0 \right) = \frac{4 (-1)^k}{k^2}
+\end{align*}
+Итоговый ряд Фурье:
+$$ x^2 = \frac{\pi^2}{3} + \sum\limits_{k=1}^{\infty} \frac{4(-1)^k}{k^2} \cos(kx) \quad \text{для } x \in [-\pi, \pi] $$
+Подставим в это равенство точку $x = \pi$:
+$$ \pi^2 = \frac{\pi^2}{3} + \sum\limits_{k=1}^{\infty} \frac{4(-1)^k}{k^2} \cos(\pi k) = \frac{\pi^2}{3} + \sum\limits_{k=1}^{\infty} \frac{4(-1)^k}{k^2} (-1)^k = \frac{\pi^2}{3} + 4 \sum\limits_{k=1}^{\infty} \frac{1}{k^2} $$
+Выразим сумму:
+$$ 4 \sum\limits_{k=1}^{\infty} \frac{1}{k^2} = \pi^2 - \frac{\pi^2}{3} = \frac{2\pi^2}{3} \implies \sum\limits_{k=1}^{\infty} \frac{1}{k^2} = \frac{\pi^2}{6} $$
+\end{Example}
+
+
+\subsection{§ Ряды Фурье на произвольном отрезке}
+
+\textbf{NB:} Пусть функция $f$ задана на произвольном симметричном отрезке $[-L, L]$ и суммируема на нём ($f \in L^1(-L, L)$). 
+Для сведения к стандартному отрезку $[-\pi, \pi]$ сделаем линейную замену переменной $x = \frac{L y}{\pi}$ (где $y \in [-\pi, \pi]$). 
+Тогда тригонометрический ряд Фурье примет вид:
+$$ f(x) \sim \frac{a_0(f)}{2} + \sum\limits_{k=1}^{\infty} \left( a_k(f) \cos\left(\frac{\pi k x}{L}\right) + b_k(f) \sin\left(\frac{\pi k x}{L}\right) \right) = \sum\limits_{k=-\infty}^{\infty} C_k(f) e^{i \frac{\pi k x}{L}} $$
+Формулы для вычисления коэффициентов соответственно масштабируются:
+$$ a_k(f) = \frac{1}{L} \int\limits_{-L}^L f(x) \cos\left(\frac{\pi k x}{L}\right) \, dx, \quad b_k(f) = \frac{1}{L} \int\limits_{-L}^L f(x) \sin\left(\frac{\pi k x}{L}\right) \, dx $$
+$$ C_k(f) = \frac{1}{2L} \int\limits_{-L}^L f(x) e^{-i \frac{\pi k x}{L}} \, dx $$
+
+
+\subsection{§ Преобразование Фурье}
+
+\begin{Definition}{Преобразование Фурье}{}
+Пусть функция абсолютно интегрируема на всей числовой оси, т.е. $f \in L^1(\mathbb{R})$. \textbf{Преобразованием Фурье} функции $f$ называется функция $\mathcal{F}[f](z)$, зависящая от вещественного параметра $z \in \mathbb{R}$:
+$$ \mathcal{F}[f](z) = \frac{1}{\sqrt{2\pi}} \int\limits_{-\infty}^{+\infty} f(x) e^{-i z x} \, dx $$
+\end{Definition}
+
+\begin{Theorem}{Свойства преобразования Фурье}{}
+\begin{enumerate}
+    \item Корректность определения (интеграл сходится абсолютно).
+    \item Преобразование Фурье является непрерывной функцией: $\mathcal{F}[f] \in C(\mathbb{R})$.
+    \item $\mathcal{F}[f](z) \xrightarrow{z \to \pm\infty} 0$ (Асимптотическое затухание по лемме Римана-Лебега).
+    \item Дифференцирование образа: $\mathcal{F}[x \cdot f(x)](z) = -i \left( \mathcal{F}[f](z) \right)'$ (если $x f(x) \in L^1(\mathbb{R})$).
+    \item Линейность: $\mathcal{F}[\alpha f + \beta g] = \alpha\mathcal{F}[f] + \beta\mathcal{F}[g]$.
+    \item Образ производной: $\mathcal{F}[f'](z) = i z \mathcal{F}[f](z)$.
+    \item Образ свёртки: $\mathcal{F}[f * g](z) = \mathcal{F}[f](z) \cdot \mathcal{F}[g](z) \cdot \sqrt{2\pi}$.
+\end{enumerate}
+\end{Theorem}
+
+\begin{Proof}[Доказательства]
+\textbf{1) Корректность:} Модуль подынтегральной функции равен $|f(x) e^{-izx}| = |f(x)|$. Так как $f \in L^1(\mathbb{R})$, то по признаку Вейерштрасса интеграл сходится абсолютно и равномерно по $z$. Следовательно, $\mathcal{F}[f](z)$ корректно определена.
+
+\textbf{2) Непрерывность:} Так как подынтегральная функция $f(x)e^{-izx}$ непрерывна по параметру $z$, а интеграл мажорируется суммируемой функцией $|f(x)|$ не зависящей от $z$, то по теореме Лебега о предельном переходе интеграл с параметром является непрерывной функцией от $z$.
+
+\textbf{3) Затухание:} Это прямое следствие уже доказанной Леммы Римана-Лебега для интегралов на всей оси. Колебания $e^{-izx}$ при $z \to \infty$ становятся столь частыми, что площади полуволн взаимно уничтожаются, давая в пределе 0.
+
+\textbf{4) Дифференцирование образа:} Продифференцируем интеграл Фурье по параметру $z$. Так как производная $\left(e^{-izx}\right)'_z = -ix e^{-izx}$, а функция $x f(x)$ суммируема по условию (это даёт нам суммируемую мажоранту $|xf(x)|$), дифференцирование под знаком интеграла правомерно:
+$$ \left( \mathcal{F}[f](z) \right)'_z = \frac{1}{\sqrt{2\pi}} \int\limits_{-\infty}^{+\infty} f(x) (-ix) e^{-i z x} \, dx = -i \cdot \frac{1}{\sqrt{2\pi}} \int\limits_{-\infty}^{+\infty} (x f(x)) e^{-i z x} \, dx = -i \mathcal{F}[x \cdot f](z) $$
+
+\textbf{5) Линейность:} Очевидно вытекает из линейности интеграла Лебега.
+
+\textbf{6) Образ производной:} Проинтегрируем формулу по частям, положив $u = e^{-izx}$ и $dv = f'(x) dx$ (откуда $du = -iz e^{-izx} dx$, $v = f(x)$). Так как $f \in L^1$ и мы берем интеграл по всей оси, разумно предполагать $f(x) \to 0$ при $x \to \pm\infty$:
+$$ \mathcal{F}[f'](z) = \frac{1}{\sqrt{2\pi}} \left( \left. f(x) e^{-izx} \right|_{-\infty}^{+\infty} - \int\limits_{-\infty}^{+\infty} f(x) (-iz) e^{-izx} \, dx \right) = 0 + iz \frac{1}{\sqrt{2\pi}} \int\limits_{-\infty}^{+\infty} f(x) e^{-izx} \, dx = iz \mathcal{F}[f](z) $$
+
+\textbf{7) Образ свёртки:} Напомним, что свёртка функций $f * g(x) = \int_{\mathbb{R}} f(y)g(x-y) dy$. Запишем преобразование Фурье от неё:
+$$ \mathcal{F}[f*g](z) = \frac{1}{\sqrt{2\pi}} \int\limits_{-\infty}^{+\infty} \left( \int\limits_{-\infty}^{+\infty} f(y)g(x-y) dy \right) e^{-izx} \, dx $$
+По теореме Фубини (абсолютная интегрируемость обеспечена условием $f,g \in L^1$), поменяем порядок интегрирования:
+$$ \dots = \frac{1}{\sqrt{2\pi}} \int\limits_{-\infty}^{+\infty} f(y) \left( \int\limits_{-\infty}^{+\infty} g(x-y) e^{-izx} \, dx \right) dy $$
+Сделаем замену во внутреннем интеграле: $t = x - y \implies x = y + t$, $dx = dt$:
+$$ \dots = \frac{1}{\sqrt{2\pi}} \int\limits_{-\infty}^{+\infty} f(y) \left( \int\limits_{-\infty}^{+\infty} g(t) e^{-iz(y+t)} \, dt \right) dy $$
+Разделим экспоненту $e^{-iz(y+t)} = e^{-izy} e^{-izt}$ и вынесем независимые множители:
+$$ \dots = \sqrt{2\pi} \left( \frac{1}{\sqrt{2\pi}} \int\limits_{-\infty}^{+\infty} f(y) e^{-izy} \, dy \right) \cdot \left( \frac{1}{\sqrt{2\pi}} \int\limits_{-\infty}^{+\infty} g(t) e^{-izt} \, dt \right) = \sqrt{2\pi} \mathcal{F}[f](z) \cdot \mathcal{F}[g](z) $$
+Свойство доказано.
+\end{Proof}
+
+
+\subsection{§ Обратное преобразование Фурье}
+
+Напомним, что для функции $f \in L^1(\mathbb{R})$ прямое преобразование Фурье задаётся как:
+$$ \mathcal{F}[f](z) = \frac{1}{\sqrt{2\pi}} \int\limits_{-\infty}^{+\infty} f(t) e^{-i z t} \, dt, \quad z \in \mathbb{R} $$
+
+\begin{Definition}{Обратное преобразование Фурье}{}
+Обратным преобразованием Фурье называется интеграл (понимаемый в смысле главного значения Коши — $v.p.$):
+$$ f(x) \sim \mathcal{F}^{-1}[\mathcal{F}[f]](x) = v.p. \frac{1}{\sqrt{2\pi}} \int\limits_{-\infty}^{+\infty} \mathcal{F}[f](z) e^{i z x} \, dz $$
+\end{Definition}
+
+\begin{Theorem}{Достаточное условие сходимости обратного преобразования Фурье}{}
+Если функция $f \in L^1(\mathbb{R})$ и удовлетворяет \textbf{условию Дини} в точке $x_0$, то обратное преобразование Фурье сходится в этой точке к среднему арифметическому односторонних пределов функции:
+$$ v.p. \frac{1}{\sqrt{2\pi}} \int\limits_{-\infty}^{+\infty} \mathcal{F}[f](z) e^{i z x_0} \, dz = \frac{f(x_0+0) + f(x_0-0)}{2} $$
+\end{Theorem}
+
+
+\section{§ Криволинейные интегралы}
+
+\begin{Definition}{Криволинейный интеграл 1-го рода}{}
+Пусть $\gamma: [a,b] \to \mathbb{R}^n$ — кусочно-гладкая кривая, и на ней задана непрерывная скалярная функция $f \in C(\gamma)$. \textbf{Криволинейным интегралом первого рода} называется:
+$$ \int\limits_\gamma f(\vv{x}) \, dl = \int\limits_a^b f(\gamma(t)) |\gamma'(t)| \, dt $$
+\textbf{NB (В координатах):} Если $\gamma(t) = (x_1(t), \dots, x_n(t))$, то:
+$$ \int\limits_\gamma f(x_1, \dots, x_n) \, dl = \int\limits_a^b f(x_1(t), \dots, x_n(t)) \sqrt{\sum\limits_{i=1}^n (x_i'(t))^2} \, dt $$
+\end{Definition}
+
+\textbf{Физический смысл:} 
+Если $f \equiv 1$, то интеграл равен $\int_\gamma dl = \text{длина}(\gamma)$.
+Если $f(\vv{x}) > 0$ описывает линейную плотность кривой, то интеграл даёт массу этой кривой.
+
+\begin{Definition}{Криволинейный интеграл 2-го рода}{}
+Пусть $\gamma: [a,b] \to \mathbb{R}^n$ — кусочно-гладкая кривая, на которой задано векторное поле $\vv{P} = (P_1, \dots, P_n)$, где $P_i \in C(\gamma)$. \textbf{Криволинейным интегралом второго рода} называется интеграл от скалярного произведения:
+$$ \int\limits_\gamma \langle \vv{P}, d\vv{l} \rangle = \int\limits_\gamma \sum\limits_{i=1}^n P_i(\vv{x}) \, dx_i = \int\limits_a^b \langle \vv{P}(\gamma(t)), \gamma'(t) \rangle \, dt $$
+\textbf{NB (В координатах):} 
+$$ \int\limits_\gamma \sum\limits_{i=1}^n P_i \, dx_i = \int\limits_a^b \sum\limits_{i=1}^n P_i(x_1(t), \dots, x_n(t)) x_i'(t) \, dt $$
+\end{Definition}
+
+\textbf{Связь между интегралами:} Вектор касательной единичной длины есть $\vv{\tau} = \frac{\gamma'}{|\gamma'|}$. Тогда скалярное произведение $\langle \vv{P}, \gamma' \rangle dt = \langle \vv{P}, \vv{\tau} \rangle |\gamma'| dt = \langle \vv{P}, \vv{\tau} \rangle dl$. Следовательно:
+$$ \int\limits_\gamma \langle \vv{P}, d\vv{l} \rangle = \int\limits_\gamma \langle \vv{P}, \vv{\tau} \rangle \, dl $$
+Физический смысл криволинейного интеграла 2-го рода — \textbf{работа} векторного поля $\vv{P}$ при перемещении частицы вдоль кривой $\gamma$.
+
+\textbf{Свойства криволинейных интегралов:}
+\begin{enumerate}
+    \item Значения интегралов не зависят от параметризации кривой.
+    \item Оба интеграла линейны по подынтегральной функции и аддитивны по пути интегрирования ($\int_{\gamma_1 \cup \gamma_2} = \int_{\gamma_1} + \int_{\gamma_2}$).
+    \item \textbf{Ориентация:} Криволинейный интеграл 1-го рода \textbf{не зависит} от направления обхода кривой ($\int_{\gamma^-} f dl = \int_\gamma f dl$), а интеграл 2-го рода \textbf{меняет знак} при смене направления обхода ($\int_{\gamma^-} P dx = -\int_\gamma P dx$).
+\end{enumerate}
+
+
+\subsection{§ Формула Грина}
+
+\begin{Theorem}{Формула Грина}{}
+Пусть $\mathscr{D} \subset \mathbb{R}^2$ — односвязная область, ограниченная кусочно-гладким контуром $\partial\mathscr{D}$. Пусть функции $P(x,y), Q(x,y)$ непрерывны в замыкании области ($P, Q \in C(\text{cl}(\mathscr{D}))$), а их частные производные $\frac{\partial Q}{\partial x}, \frac{\partial P}{\partial y}$ непрерывны внутри $\mathscr{D}$.
+Тогда циркуляция векторного поля по границе области равна двойному интегралу по самой области (при обходе $\partial\mathscr{D}$ против часовой стрелки):
+$$ \oint\limits_{\partial\mathscr{D}} P \, dx + Q \, dy = \iint\limits_{\mathscr{D}} \left( \frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y} \right) dx \, dy $$
+\end{Theorem}
+
+\noindent \textbf{NB (Связь с дифференциальными формами):} Формула Грина — частный случай обобщенной теоремы Стокса $\int_{\partial\mathscr{D}} \omega = \int_{\mathscr{D}} d\omega$. Для 1-формы $\omega = P dx + Q dy$ её внешний дифференциал:
+\begin{align*}
+    d\omega &= d(P \, dx + Q \, dy) = \left(\frac{\partial P}{\partial x} dx + \frac{\partial P}{\partial y} dy\right) \wedge dx + \left(\frac{\partial Q}{\partial x} dx + \frac{\partial Q}{\partial y} dy\right) \wedge dy \\
+    &= \frac{\partial P}{\partial x} \underbrace{dx \wedge dx}_{=0} + \frac{\partial P}{\partial y} \underbrace{dy \wedge dx}_{=-dx \wedge dy} + \frac{\partial Q}{\partial x} dx \wedge dy + \frac{\partial Q}{\partial y} \underbrace{dy \wedge dy}_{=0} \\
+    &= \left( \frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y} \right) dx \wedge dy
+\end{align*}
+
+\begin{Proof}
+Сначала докажем теорему для \textbf{простой области} (которую можно задать как графиками по $x$, так и по $y$):
+$$ \mathscr{D} = \{ (x,y) : x \in [a,b], \, \varphi(x) \le y \le \psi(x) \} = \{ (x,y) : y \in [c,d], \, \chi(y) \le x \le \eta(y) \} $$
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2, >=latex]
+    \definecolor{darktext}{HTML}{154360}
+    \definecolor{colorArea}{HTML}{AED6F1}
+    \definecolor{colorPath}{HTML}{2874A6}
+    
+    % Оси
+    \draw[->, thick, darktext] (-0.5, 0) -- (4, 0) node[right] {$x$};
+    \draw[->, thick, darktext] (0, -0.5) -- (0, 3.5) node[above] {$y$};
+    
+    % Область
+    \fill[colorArea] (1, 1) to[out=20, in=160] (3, 1.2) -- (3, 2.5) to[out=170, in=10] (1, 2.8) -- cycle;
+    
+    % Границы
+    \draw[ultra thick, colorPath, ->] (1, 1) to[out=20, in=160] node[below, darktext] {$\varphi(x)$} (3, 1.2);
+    \draw[ultra thick, colorPath, ->] (3, 1.2) -- (3, 2.5);
+    \draw[ultra thick, colorPath, ->] (3, 2.5) to[out=170, in=10] node[above, darktext] {$\psi(x)$} (1, 2.8);
+    \draw[ultra thick, colorPath, ->] (1, 2.8) -- (1, 1);
+    
+    % Проекции
+    \draw[dashed, darktext] (1, 0) node[below] {$a$} -- (1, 1);
+    \draw[dashed, darktext] (3, 0) node[below] {$b$} -- (3, 1.2);
+    \draw[dashed, darktext] (0, 1) node[left] {$c$} -- (1, 1);
+    \draw[dashed, darktext] (0, 2.8) node[left] {$d$} -- (1, 2.8);
+
+    \node[darktext] at (2, 1.8) {$\mathscr{D}$};
+\end{tikzpicture}
+\end{center}
+
+Рассмотрим только интеграл, содержащий функцию $P(x,y)$. Вычислим двойной интеграл по области $\mathscr{D}$:
+\begin{align*}
+    -\iint\limits_{\mathscr{D}} \frac{\partial P}{\partial y} \, dx \, dy &= - \int\limits_a^b dx \int\limits_{\varphi(x)}^{\psi(x)} \frac{\partial P}{\partial y} \, dy = - \int\limits_a^b \left( P(x, \psi(x)) - P(x, \varphi(x)) \right) dx \\
+    &= \int\limits_b^a P(x, \psi(x)) \, dx + \int\limits_a^b P(x, \varphi(x)) \, dx
+\end{align*}
+Заметим, что криволинейный интеграл по замкнутому контуру $\partial\mathscr{D}$ состоит из 4 участков: нижняя кривая (вперед), правая вертикаль (вверх), верхняя кривая (назад), левая вертикаль (вниз). 
+На вертикальных отрезках $x = \text{const} \implies dx = 0$, поэтому интегралы по ним равны нулю.
+Оставшиеся два интеграла в точности описывают обход верхней и нижней границы в правильном направлении:
+$$ \dots = \int\limits_{\text{верх}} P \, dx + \int\limits_{\text{низ}} P \, dx = \oint\limits_{\partial\mathscr{D}} P(x,y) \, dx $$
+Аналогично, расписав двойной интеграл от $\frac{\partial Q}{\partial x}$ по границам $y \in [c, d]$ от $\chi(y)$ до $\eta(y)$, получим $\oint_{\partial\mathscr{D}} Q \, dy$. Складывая результаты, получаем формулу Грина.
+
+Если область $\mathscr{D}$ имеет сложную форму, но её можно разбить на конечное число простых подобластей, то формула Грина применяется к каждой из них. Интегралы по внутренним разрезам проходятся дважды в противоположных направлениях и взаимно уничтожаются, оставляя только интеграл по внешнему контуру. 
+Если контур не кусочно-гладкий, его можно сколь угодно точно приблизить ломаной.
+\end{Proof}
+
+\noindent \textbf{NB (Связь с ТФКП - Теорема Коши):} Формула Грина моментально доказывает основную теорему Коши для аналитических функций. Пусть $f(z) = u(x,y) + i v(x,y)$. Интеграл по замкнутому контуру $\gamma$:
+\begin{align*}
+    \oint\limits_\gamma f(z) \, dz &= \oint\limits_\gamma (u + iv)(dx + idy) = \oint\limits_\gamma (u \, dx - v \, dy) + i \oint\limits_\gamma (v \, dx + u \, dy) \\
+    &= \iint\limits_{\mathscr{D}} \left( -\frac{\partial v}{\partial x} - \frac{\partial u}{\partial y} \right) dx \, dy + i \iint\limits_{\mathscr{D}} \left( \frac{\partial u}{\partial x} - \frac{\partial v}{\partial y} \right) dx \, dy
+\end{align*}
+Так как $f(z)$ аналитична, выполняются условия Коши-Римана: $\frac{\partial u}{\partial x} = \frac{\partial v}{\partial y}$ и $\frac{\partial u}{\partial y} = -\frac{\partial v}{\partial x}$. Оба двойных интеграла тождественно обращаются в нуль. Значит, $\oint_\gamma f(z) dz = 0$.
+
+
+\subsection{§ Условия независимости криволинейного интеграла от пути}
+
+В физике и анализе бывают ситуации, когда для векторного поля $(P, Q)$ в области $\mathscr{D}$ интеграл между двумя любыми точками $(x_0, y_0)$ и $(x_1, y_1)$ даёт одинаковое значение независимо от выбранной кривой $\gamma$. В этом случае говорят, что \textbf{интеграл не зависит от пути интегрирования}.
+
+\begin{Theorem}{Эквивалентные условия независимости интеграла от пути}{}
+Следующие три условия эквивалентны:
+\begin{enumerate}
+    \item Интеграл $\int Pdx + Qdy$ не зависит от пути, по которому мы идём (для любых кусочно-гладких ломаных).
+    \item Интеграл по любой замкнутой ломаной равен нулю: $\oint Pdx + Qdy = 0$.
+    \item Векторное поле является полным дифференциалом некоторой скалярной функции $U(x,y)$: $\exists U : dU = P \, dx + Q \, dy$ (то есть $U'_x = P$ и $U'_y = Q$). Такая функция $U$ называется \textbf{потенциалом}.
+\end{enumerate}
+\end{Theorem}
+
+\begin{Proof} ($1 \implies 2 \implies 3 \implies 1$) \\
+\textbf{($1 \implies 2$):} Возьмём замкнутую кривую, выберем на ней две точки. Два пути между ними дадут равные интегралы. Развернув один путь, получим интеграл по замкнутому контуру равный нулю.
+
+\textbf{($2 \implies 3$):} Фиксируем точку $(x_0, y_0)$ и определим функцию $U(x,y) = \int\limits_{(x_0,y_0)}^{(x,y)} Pdx + Qdy$. Так как интеграл не зависит от пути (следствие п.2), функция $U$ корректно определена.
+Найдем её частную производную по $x$. Рассмотрим приращение $U(x+\Delta x, y) - U(x,y)$. 
+В качестве пути от $(x,y)$ до $(x+\Delta x, y)$ выберем горизонтальный отрезок. На нём $dy = 0$.
+\begin{center}
+\begin{tikzpicture}[scale=1.2, >=latex]
+    \definecolor{darktext}{HTML}{154360}
+    \definecolor{colorPath}{HTML}{2874A6}
+    
+    \draw[fill=darktext] (0,0) circle (1.5pt) node[below] {$(x_0, y_0)$};
+    \draw[fill=darktext] (2,2) circle (1.5pt) node[above left] {$(x, y)$};
+    \draw[fill=darktext] (4,2) circle (1.5pt) node[above right] {$(x+\Delta x, y)$};
+    
+    \draw[thick, colorPath, ->] (0,0) to[out=45, in=225] (2,2);
+    \draw[thick, colorPath, ->] (0,0) to[out=10, in=250] (4,2);
+    \draw[ultra thick, colorPath, ->] (2,2) -- node[above, darktext] {$\Delta x$} (4,2);
+\end{tikzpicture}
+\end{center}
+По теореме о среднем для определённого интеграла существует точка $\xi \in [x, x+\Delta x]$, такая что:
+$$ U(x+\Delta x, y) - U(x, y) = \int\limits_{(x,y)}^{(x+\Delta x, y)} P(t,y) \, dt = P(\xi, y) \cdot \Delta x $$
+Разделим на $\Delta x$ и устремим $\Delta x \to 0$. Точка $\xi \to x$. В силу непрерывности $P$, получаем $\frac{\partial U}{\partial x} = P(x,y)$. Аналогично $\frac{\partial U}{\partial y} = Q(x,y)$. Значит, $dU = Pdx + Qdy$.
+
+\textbf{($3 \implies 1$):} Если $\exists U$, то вдоль любой кривой $\gamma: t \in [a, b]$ мы интегрируем полный дифференциал:
+$$ \int\limits_\gamma P \, dx + Q \, dy = \int\limits_a^b \left( \frac{\partial U}{\partial x} x'(t) + \frac{\partial U}{\partial y} y'(t) \right) dt = \int\limits_a^b \frac{dU(\gamma(t))}{dt} \, dt = U(\gamma(b)) - U(\gamma(a)) $$
+Значение интеграла зависит только от начальной и конечной точек кривой (Обобщенная формула Ньютона-Лейбница).
+\end{Proof}
+
+\begin{Theorem}{Критерий потенциальности поля}{}
+Пусть функции $P, Q \in C^1(\mathscr{D})$, где $\mathscr{D}$ — область. 
+Для того чтобы векторное поле $(P, Q)$ было потенциальным (существовал потенциал $U$), \textbf{необходимо}, а если область $\mathscr{D}$ \textbf{односвязна}, то и \textbf{достаточно} выполнения равенства:
+$$ \frac{\partial P}{\partial y} = \frac{\partial Q}{\partial x} $$
+\end{Theorem}
+
+\begin{Proof}
+\textbf{Необходимость ($\Rightarrow$):} Если поле потенциально, то $\exists U$, причём $U'_x = P$ и $U'_y = Q$. Продифференцируем ещё раз: $\frac{\partial P}{\partial y} = \frac{\partial^2 U}{\partial y \partial x}$ и $\frac{\partial Q}{\partial x} = \frac{\partial^2 U}{\partial x \partial y}$. По теореме Шварца смешанные производные непрерывной функции равны, следовательно $\frac{\partial P}{\partial y} = \frac{\partial Q}{\partial x}$.
+
+\textbf{Достаточность ($\Leftarrow$):} Пусть $\mathscr{D}$ — односвязная область и $\frac{\partial P}{\partial y} = \frac{\partial Q}{\partial x}$. 
+Возьмём произвольный замкнутый кусочно-гладкий контур $\gamma \subset \mathscr{D}$. Так как область односвязна, контур $\gamma$ стягивается в точку и является границей некоторой подобласти $G \subset \mathscr{D}$. 
+Применим к этому контуру формулу Грина:
+$$ \oint\limits_\gamma P \, dx + Q \, dy = \iint\limits_{G} \underbrace{\left( \frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y} \right)}_{= 0} dx \, dy = 0 $$
+Так как интеграл по любому замкнутому контуру равен нулю, то по доказанной выше эквивалентной теореме (п.2 $\implies$ п.3), поле является потенциальным.
+\end{Proof}
+
+
+
+\begin{Example}[ Важный контрпример к критерию потенциальности]
+Рассмотрим векторное поле на проколотой плоскости $\mathbb{R}^2 \setminus \{(0,0)\}$:
+$$ P(x,y) = \frac{-y}{x^2+y^2}, \quad Q(x,y) = \frac{x}{x^2+y^2} $$
+Проверим выполнение необходимого условия (равенство перекрёстных производных):
+\begin{align*}
+    \frac{\partial P}{\partial y} &= \frac{-1 \cdot (x^2+y^2) - (-y) \cdot 2y}{(x^2+y^2)^2} = \frac{-x^2 - y^2 + 2y^2}{(x^2+y^2)^2} = \frac{y^2-x^2}{(x^2+y^2)^2} \\
+    \frac{\partial Q}{\partial x} &= \frac{1 \cdot (x^2+y^2) - x \cdot 2x}{(x^2+y^2)^2} = \frac{x^2 + y^2 - 2x^2}{(x^2+y^2)^2} = \frac{y^2-x^2}{(x^2+y^2)^2}
+\end{align*}
+Действительно, $\frac{\partial P}{\partial y} = \frac{\partial Q}{\partial x}$ всюду в области определения.
+Однако, вычислим циркуляцию этого поля по единичной окружности $\gamma$ (где $x^2+y^2=1$). 
+Параметризуем: $x = \cos\varphi$, $y = \sin\varphi$, $dx = -\sin\varphi \, d\varphi$, $dy = \cos\varphi \, d\varphi$, $\varphi \in [0, 2\pi]$:
+\begin{align*}
+    \oint\limits_\gamma P \, dx + Q \, dy &= \oint\limits_\gamma \frac{-y \, dx + x \, dy}{x^2+y^2} = \int\limits_0^{2\pi} \frac{-\sin\varphi(-\sin\varphi) + \cos\varphi(\cos\varphi)}{1} \, d\varphi \\
+    &= \int\limits_0^{2\pi} (\sin^2\varphi + \cos^2\varphi) \, d\varphi = \int\limits_0^{2\pi} 1 \, d\varphi = 2\pi
+\end{align*}
+\begin{center}
+\begin{tikzpicture}[scale=1.5, >=latex]
+    \definecolor{darktext}{HTML}{154360}
+    \definecolor{colorPath}{HTML}{2874A6}
+    \definecolor{colorHole}{HTML}{E74C3C}
+
+    % Оси
+    \draw[->, thick, darktext] (-1.5, 0) -- (1.5, 0) node[right] {$x$};
+    \draw[->, thick, darktext] (0, -1.5) -- (0, 1.5) node[above] {$y$};
+
+    % Выколотая точка
+    \filldraw[colorHole] (0,0) circle (2pt);
+    \draw[colorHole, thick] (-0.1, -0.1) -- (0.1, 0.1);
+    \draw[colorHole, thick] (-0.1, 0.1) -- (0.1, -0.1);
+
+    % Контуры интегрирования
+    \draw[ultra thick, colorPath, ->] (0,0) circle (1cm);
+    \draw[thick, colorPath, ->] (0,0) circle (0.5cm);
+
+    \node[darktext, align=left, anchor=west] at (1.5, 0.5) {
+        Интеграл равен $2\pi \ne 0$. \\
+        Поле \textbf{не является} потенциальным! \\
+        Причина: начало координат выколото, \\
+        область \textbf{не является односвязной}.
+    };
+\end{tikzpicture}
+\end{center}
+\end{Example}
+
+
+\section{§ Поверхностные интегралы}
+
+Пусть задана параметризованная поверхность $S$ в $\mathbb{R}^3$:
+$$ S = \left\{ \begin{matrix} x = x(u,v) \\ y = y(u,v) \\ z = z(u,v) \end{matrix} \right., \quad \text{где } (u,v) \in \mathscr{D} \subset \mathbb{R}^2 $$
+
+\begin{Definition}{Гладкая поверхность}{}
+Поверхность в $\mathbb{R}^3$ называется \textbf{непрерывно дифференцируемой}, если задающие её функции принадлежат классу $C^1(\mathscr{D})$. \\
+Поверхность называется \textbf{гладкой}, если ранг матрицы Якоби всюду равен 2:
+$$ \operatorname{rg} \begin{pmatrix} x'_u & x'_v \\ y'_u & y'_v \\ z'_u & z'_v \end{pmatrix} = 2 $$
+Это означает, что векторы частных производных (касательные векторы) $\vv{r}_u$ и $\vv{r}_v$ линейно независимы.
+\end{Definition}
+
+Уравнение касательной плоскости в точке $(x_0, y_0, z_0)$ (при $u=u_0, v=v_0$) задаётся условием компланарности вектора смещения и двух касательных векторов:
+$$ \begin{vmatrix} x - x(u_0, v_0) & y - y(u_0, v_0) & z - z(u_0, v_0) \\ x'_u & y'_u & z'_u \\ x'_v & y'_v & z'_v \end{vmatrix} = 0 $$
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2, >=latex]
+    % --- Определение цветов внутри рисунка ---
+    \definecolor{darktext}{HTML}{154360}      % Темно-синий
+    \definecolor{colorArea}{HTML}{AED6F1}      % Светло-голубой для D
+    \definecolor{colorSurface}{HTML}{D2B4DE}   % Сиреневый для S
+    \definecolor{colorVector}{HTML}{E67E22}    % Оранжевый для касательных
+    \definecolor{colorNormal}{HTML}{2874A6}    % Насыщенный синий для нормали
+
+    % --- Плоскость параметров D ---
+    \begin{scope}[shift={(-4, 0)}]
+        \draw[->, thick, color=darktext] (-0.5, 0) -- (2.5, 0) node[right] {$u$};
+        \draw[->, thick, color=darktext] (0, -0.5) -- (0, 2.5) node[above] {$v$};
+        \filldraw[fill=colorArea, draw=darktext, thick] (0.5, 0.5) rectangle (2, 2);
+        \filldraw[color=darktext] (1.2, 1.2) circle (1.5pt) node[below right] {$(u_0, v_0)$};
+        \node[color=darktext] at (1.25, 2.3) {Область $\mathcal{D}$};
+    \end{scope}
+
+    % Стрелка отображения
+    \draw[->, ultra thick, color=darktext, dashed] (-1, 1.5) to[out=30, in=150] node[above] {$S(u,v)$} (1, 1.5);
+
+    % --- Поверхность S ---
+    \begin{scope}[shift={(3, 0)}]
+        \draw[->, thick, color=darktext] (0,0,0) -- (3,0,0) node[right] {$y$};
+        \draw[->, thick, color=darktext] (0,0,0) -- (0,3,0) node[above] {$z$};
+        \draw[->, thick, color=darktext] (0,0,0) -- (0,0,3.5) node[below left] {$x$};
+
+        % Сетка поверхности
+        \filldraw[fill=colorSurface, draw=darktext, thick, fill opacity=0.8] 
+            (0, 1, 2) to[out=20, in=180] (1.5, 1.5, 1) to[out=0, in=200] (3, 2, 2) 
+            to[out=-60, in=60] (2.5, 0.5, 3) to[out=200, in=0] (1, 0, 3) 
+            to[out=180, in=-60] cycle;
+            
+        % Координатные линии
+        \draw[color=darktext, thin] (0.5, 0.6, 2.2) to[out=20, in=190] (2.8, 1.3, 2.2);
+        \draw[color=darktext, thin] (1, 1.2, 1.3) to[out=-50, in=70] (1.8, 0.2, 2.8);
+
+        % Точка и касательные векторы
+        \coordinate (P) at (1.5, 0.9, 2);
+        \filldraw[color=darktext] (P) circle (1.5pt);
+        
+        \draw[->, ultra thick, color=colorVector] (P) -- ++(1.48, 0.58, 0) node[right, text=darktext] {$\vv{r}'_u$};
+        \draw[->, ultra thick, color=colorVector] (P) -- ++(0.3, -0.8, 1) node[below, text=darktext] {$\vv{r}'_v$};
+        
+        % Исправленная строка вектора нормали:
+        \draw[->, ultra thick, color=colorNormal] (P) -- ++(0.3, 1.5, -0.5) node[left, text=darktext] {$\vv{n} = \vv{r}'_u \times \vv{r}'_v$};
+        
+        \node[color=darktext] at (3.5, 2.5, 1) {Образ $S$};
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+
+\subsection{Вычисление нормали к поверхности}
+Вектор нормали $\vv{n}$ перпендикулярен касательной плоскости, а значит, является векторным произведением касательных векторов $\vv{r}'_u$ и $\vv{r}'_v$:
+$$ \vv{n} = \begin{vmatrix} \mathbf{i} & \mathbf{j} & \mathbf{k} \\ x'_u & y'_u & z'_u \\ x'_v & y'_v & z'_v \end{vmatrix} = \mathbf{i} \begin{vmatrix} y'_u & z'_u \\ y'_v & z'_v \end{vmatrix} - \mathbf{j} \begin{vmatrix} x'_u & z'_u \\ x'_v & z'_v \end{vmatrix} + \mathbf{k} \begin{vmatrix} x'_u & y'_u \\ x'_v & y'_v \end{vmatrix} = \left( \begin{vmatrix} y'_u & z'_u \\ y'_v & z'_v \end{vmatrix}, \begin{vmatrix} z'_u & x'_u \\ z'_v & x'_v \end{vmatrix}, \begin{vmatrix} x'_u & y'_u \\ x'_v & y'_v \end{vmatrix} \right) $$
+
+Вычислим длину вектора нормали $|\vv{n}|$. Воспользуемся геометрическим смыслом векторного произведения (площадь параллелограмма) и тригонометрическим тождеством:
+\begin{align*}
+    |\vv{n}| &= |\vv{r}'_u \times \vv{r}'_v| = |\vv{r}'_u| |\vv{r}'_v| \sin\theta = |\vv{r}'_u| |\vv{r}'_v| \sqrt{1 - \cos^2\theta} \\
+    &= |\vv{r}'_u| |\vv{r}'_v| \sqrt{1 - \frac{\langle \vv{r}'_u, \vv{r}'_v \rangle^2}{|\vv{r}'_u|^2 |\vv{r}'_v|^2}} = \sqrt{|\vv{r}'_u|^2 |\vv{r}'_v|^2 - \langle \vv{r}'_u, \vv{r}'_v \rangle^2}
+\end{align*}
+\textbf{NB (Первая квадратичная форма):} Традиционно скалярные произведения базисных векторов обозначают через коэффициенты первой квадратичной формы:
+$$ E = |\vv{r}'_u|^2, \quad G = |\vv{r}'_v|^2, \quad F = \langle \vv{r}'_u, \vv{r}'_v \rangle $$
+Тогда фундаментальная формула для модуля нормали (якобиана перехода к площади поверхности) имеет вид:
+$$ |\vv{n}| = \sqrt{EG - F^2} $$
+
+\begin{Definition}{Ориентируемость поверхности}{}
+Гладкая поверхность $\Sigma$ называется \textbf{ориентируемой (двусторонней)}, если при непрерывном обходе любой точки по любому замкнутому контуру на поверхности единичный вектор нормали $\frac{\vv{n}}{|\vv{n}|}$ возвращается в исходную точку с тем же направлением. 
+Иначе поверхность называется односторонней (классический пример — лента Мёбиуса).
+\end{Definition}
+
+\subsection{Поверхностный интеграл 1-го рода}
+
+\begin{Definition}{Поверхностный интеграл 1-го рода}{}
+Пусть $\Sigma$ — гладкая поверхность, заданная параметрически над областью $\mathscr{D}$, и на ней задана непрерывная скалярная функция $f \in C(\Sigma)$. 
+\textbf{Поверхностным интегралом 1-го рода} называется:
+$$ \iint\limits_\Sigma f(x,y,z) \, dS \stackrel{\text{def}}{=} \iint\limits_{\mathscr{D}} f(x(u,v), y(u,v), z(u,v)) \sqrt{EG - F^2} \, du \, dv $$
+\end{Definition}
+\textbf{Физический смысл:}
+\begin{itemize}
+    \item Если $f \equiv 1$, то $\iint_\Sigma dS$ даёт \textbf{площадь} поверхности $\Sigma$.
+    \item Если $f(x,y,z) > 0$ — поверхностная плотность, то интеграл даёт \textbf{массу} поверхности.
+\end{itemize}
+
+\subsection{Поверхностный интеграл 2-го рода}
+
+\begin{Definition}{Поверхностный интеграл 2-го рода}{}
+Пусть $\Sigma$ — \textbf{ориентированная} двусторонняя поверхность с заданным полем единичных нормалей $\vv{n}^\circ = \frac{\vv{n}}{|\vv{n}|}$. Пусть на поверхности задано непрерывное векторное поле $\vv{a} = (P, Q, R)$.
+\textbf{Поверхностным интегралом 2-го рода} называется интеграл от скалярного произведения поля на нормаль:
+$$ \iint\limits_\Sigma \langle \vv{a}, \vv{n}^\circ \rangle \, dS = \iint\limits_\Sigma P \, dy \wedge dz + Q \, dz \wedge dx + R \, dx \wedge dy $$
+(В классической записи значок $\wedge$ часто опускают, записывая просто $dy dz$).
+\end{Definition}
+\textbf{Физический смысл:} Этот интеграл выражает \textbf{поток} векторного поля $\vv{a}$ через заданную сторону поверхности $\Sigma$.
+
+В координатах плоскости параметров $(u, v)$ интеграл 2-го рода вычисляется через якобианы:
+$$ \iint\limits_\Sigma P \, dy dz + Q \, dz dx + R \, dx dy = \iint\limits_{\mathscr{D}} \left( P \begin{vmatrix} y'_u & z'_u \\ y'_v & z'_v \end{vmatrix} + Q \begin{vmatrix} z'_u & x'_u \\ z'_v & x'_v \end{vmatrix} + R \begin{vmatrix} x'_u & y'_u \\ x'_v & y'_v \end{vmatrix} \right) du \, dv $$
+(Знак перед интегралом зависит от того, согласуется ли выбранная ориентация нормали $\vv{n}$ с условием задачи).
+
 
 \end{document}

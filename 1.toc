@@ -1,27 +1,50 @@
 \babel@toc {russian}{}\relax 
-\contentsline {section}{\numberline {1}§ Система множеств, алгебра, $\sigma $-алгебра, кольца}{2}{section.1}%
-\contentsline {section}{\numberline {2}§ Полукольцо и его свойства}{5}{section.2}%
-\contentsline {section}{\numberline {3}§ Объём и его свойства}{8}{section.3}%
-\contentsline {section}{\numberline {4}§ Произведение полуколец и объёмов}{11}{section.4}%
-\contentsline {section}{\numberline {5}§ Мера и её свойства}{15}{section.5}%
-\contentsline {section}{\numberline {5}§ Внешняя мера и её свойства}{19}{section.5}%
-\contentsline {section}{\numberline {6}§ Процесс Каратеодори (Продолжение меры)}{23}{section.6}%
-\contentsline {section}{\numberline {7}§ Свойства стандартного продолжения}{26}{section.7}%
-\contentsline {section}{\numberline {8}§ Классы множеств и аппроксимация меры}{28}{section.8}%
-\contentsline {section}{\numberline {9}§ Мера Лебега и её свойства}{31}{section.9}%
-\contentsline {section}{\numberline {10}§ Свойства меры Лебега и измеримых множеств}{32}{section.10}%
-\contentsline {section}{\numberline {11}§ Неизмеримые множества}{35}{section.11}%
-\contentsline {section}{\numberline {12}§ Измеримые функции и их свойства}{36}{section.12}%
-\contentsline {section}{\numberline {13}§ Замкнутость измеримых функций}{39}{section.13}%
-\contentsline {section}{\numberline {14}§ Арифметические свойства измеримых функций}{40}{section.14}%
-\contentsline {section}{\numberline {15}§ Простые функции и аппроксимация}{42}{section.15}%
-\contentsline {section}{\numberline {16}§ Сходимость почти всюду и по мере}{44}{section.16}%
-\contentsline {section}{\numberline {17}§ Интеграл по мере Лебега и его свойства}{47}{section.17}%
-\contentsline {section}{\numberline {18}§ Предельный переход под знаком интеграла}{51}{section.18}%
-\contentsline {section}{\numberline {19}§ Интегралы, зависящие от параметра}{58}{section.19}%
-\contentsline {section}{\numberline {20}§ Интеграл по произведению мер}{64}{section.20}%
-\contentsline {section}{\numberline {21}§ Интеграл Лебега и интеграл Римана}{68}{section.21}%
-\contentsline {section}{\numberline {22}§ Признаки равномерной сходимости несобственных интегралов}{71}{section.22}%
-\contentsline {section}{\numberline {23}§ Теоремы о перестановке пределов}{73}{section.23}%
-\contentsline {section}{\numberline {24}§ Вычисление интеграла Дирихле}{75}{section.24}%
-\contentsline {section}{\numberline {25}§ Интегрирование несобственного интеграла по параметру}{76}{section.25}%
+\contentsline {section}{\numberline {1}Системы множеств}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}§ Система множеств, алгебра, $\sigma $-алгебра, кольца}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}§ Полукольцо и его свойства}{6}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}§ Объём и его свойства}{9}{subsection.1.3}%
+\contentsline {subsection}{\numberline {3.4}§ Произведение полуколец и объёмов}{12}{subsection.3.4}%
+\contentsline {section}{\numberline {4}Мера}{15}{section.4}%
+\contentsline {subsection}{\numberline {4.1}§ Мера и её свойства}{15}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}§ Внешняя мера и её свойства}{20}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}§ Процесс Каратеодори (Продолжение меры)}{24}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}§ Свойства стандартного продолжения}{27}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}§ Классы множеств и аппроксимация меры}{29}{subsection.4.5}%
+\contentsline {section}{\numberline {5}Мера Лебега}{32}{section.5}%
+\contentsline {subsection}{\numberline {5.1}§ Мера Лебега и её свойства}{32}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}§ Свойства меры Лебега и измеримых множеств}{33}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}§ Неизмеримые множества}{36}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}§ Измеримые функции и их свойства}{37}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}§ Замкнутость измеримых функций}{40}{subsection.5.5}%
+\contentsline {subsection}{\numberline {5.6}§ Арифметические свойства измеримых функций}{41}{subsection.5.6}%
+\contentsline {subsection}{\numberline {5.7}§ Простые функции и аппроксимация}{43}{subsection.5.7}%
+\contentsline {subsection}{\numberline {5.8}§ Сходимость почти всюду и по мере}{45}{subsection.5.8}%
+\contentsline {section}{\numberline {6}Интеграл по мере Лебега}{48}{section.6}%
+\contentsline {subsection}{\numberline {6.1}§ Интеграл по мере Лебега и его свойства}{48}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}§ Предельный переход под знаком интеграла}{51}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}§ Интегралы, зависящие от параметра}{59}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}§ Равномерная сходимость семейства функций}{60}{subsection.6.4}%
+\contentsline {subsection}{\numberline {6.5}§ Случай суммируемой мажоранты}{61}{subsection.6.5}%
+\contentsline {subsection}{\numberline {6.6}§ Интеграл по произведению мер}{65}{subsection.6.6}%
+\contentsline {subsection}{\numberline {6.7}§ Интеграл Лебега и интеграл Римана}{69}{subsection.6.7}%
+\contentsline {subsection}{\numberline {6.8}§ Несобственные интегралы Лебега}{71}{subsection.6.8}%
+\contentsline {subsection}{\numberline {6.9}§ Признаки равномерной сходимости несобственных интегралов}{72}{subsection.6.9}%
+\contentsline {subsection}{\numberline {6.10}§ Теоремы о перестановке пределов}{73}{subsection.6.10}%
+\contentsline {subsection}{\numberline {6.11}§ Вычисление интеграла Дирихле}{75}{subsection.6.11}%
+\contentsline {section}{\numberline {7}Интегрирование по параметру}{77}{section.7}%
+\contentsline {subsection}{\numberline {7.1}§ Интегрирование несобственного интеграла по параметру}{77}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}§ Примеры применения интегралов с параметром}{78}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}§ Интеграл Фруллани}{81}{subsection.7.3}%
+\contentsline {subsection}{\numberline {7.4}§ Гамма- и Бета-функции (Эйлеровы интегралы)}{83}{subsection.7.4}%
+\contentsline {section}{\numberline {8}§ Ряды Фурье. Поточечная сходимость}{86}{section.8}%
+\contentsline {subsection}{\numberline {8.1}§ Принцип локализации и сходимость ряда Фурье}{89}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}§ Ряды Фурье на произвольном отрезке}{92}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}§ Преобразование Фурье}{93}{subsection.8.3}%
+\contentsline {subsection}{\numberline {8.4}§ Обратное преобразование Фурье}{95}{subsection.8.4}%
+\contentsline {section}{\numberline {9}§ Криволинейные интегралы}{96}{section.9}%
+\contentsline {subsection}{\numberline {9.1}§ Формула Грина}{97}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}§ Условия независимости криволинейного интеграла от пути}{99}{subsection.9.2}%
+\contentsline {section}{\numberline {10}§ Поверхностные интегралы}{102}{section.10}%
+\contentsline {subsection}{\numberline {10.1}Вычисление нормали к поверхности}{103}{subsection.10.1}%
+\contentsline {subsection}{\numberline {10.2}Поверхностный интеграл 1-го рода}{104}{subsection.10.2}%
+\contentsline {subsection}{\numberline {10.3}Поверхностный интеграл 2-го рода}{104}{subsection.10.3}%
